@@ -1,11 +1,11 @@
-// src/pages/LoginPage.tsx
 import React from 'react';
-import AuthForm from '../components/AuthForm';
+import LoginForm from '../components/LoginForm';
 
 const LoginPage: React.FC = () => {
   return (
     <div>
-      <AuthForm isSignUp={false} />
+      <LoginForm />
+      <p>Don't have an account? <a href="/signup">Sign Up</a></p>
     </div>
   );
 };
