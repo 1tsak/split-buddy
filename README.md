@@ -85,6 +85,93 @@ split-buddy/
 - The application features a responsive and visually appealing user interface built with React.
 - Users can easily navigate through the app and perform various expense sharing tasks on both desktop and mobile devices.
 
+## Firebase Firestore Collections and Schemas
+
+### Users Collection
+
+```
+users/{userId}
+{
+  "email": "user@example.com",
+  "displayName": "John Doe",
+  "photoURL": "https://example.com/avatar.jpg",
+  "createdAt": "2023-06-01T12:00:00Z",
+  "updatedAt": "2023-06-01T12:00:00Z"
+}
+```
+
+### Groups Collection
+
+```
+groups/{groupId}
+{
+  "name": "Roommates",
+  "description": "Shared expenses for our apartment",
+  "createdBy": "userId1",
+  "members": [
+    "userId1",
+    "userId2",
+    "userId3"
+  ],
+  "createdAt": "2023-06-01T12:00:00Z",
+  "updatedAt": "2023-06-01T12:00:00Z"
+}
+```
+
+### Expenses Collection
+
+```
+groups/{groupId}/expenses/{expenseId}
+{
+  "title": "Rent Payment",
+  "amount": 1000,
+  "category": "Housing",
+  "createdBy": "userId1",
+  "createdAt": "2023-06-01T12:00:00Z",
+  "updatedAt": "2023-06-01T12:00:00Z",
+  "splits": [
+    {
+      "userId": "userId1",
+      "amount": 500,
+      "paid": true
+    },
+    {
+      "userId": "userId2",
+      "amount": 250,
+      "paid": false
+    },
+    {
+      "userId": "userId3",
+      "amount": 250,
+      "paid": false
+    }
+  ]
+}
+```
+
+### Notifications Collection
+
+```
+users/{userId}/notifications/{notificationId}
+{
+  "title": "New Expense Added",
+  "message": "A new expense 'Rent Payment' has been added to the 'Roommates' group.",
+  "read": false,
+  "createdAt": "2023-06-01T12:00:00Z"
+}
+```
+
+### Balances Collection
+
+```
+groups/{groupId}/balances/{userId}
+{
+  "userId": "userId2",
+  "balance": -250,
+  "updatedAt": "2023-06-01T12:00:00Z"
+}
+```
+
 ## Evaluation Criteria
 
 The Split Buddy project can be used to assess the following skills:
