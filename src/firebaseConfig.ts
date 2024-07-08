@@ -1,5 +1,9 @@
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyB6YKFV3luacTIgBxb1zh0BO-3iOF-l2W0",
   authDomain: "split-buddy-101.firebaseapp.com",
@@ -10,5 +14,9 @@ const firebaseConfig = {
   measurementId: "G-VZMV106E53"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+export { auth, db, storage };
