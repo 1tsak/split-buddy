@@ -106,4 +106,14 @@ The Split Buddy project can be used to assess the following skills:
    - Code quality, readability, and maintainability
    - Deployment of the full-stack application using Firebase Hosting
 
+## UI/UX
+[Signup](https://dribbble.com/shots/6579270-Sign-up-Form-Splito)
+[login] (https://dribbble.com/shots/12096139-Splito-Landing-Page)
+[overall ui] (https://dribbble.com/shots/6707811-Expenses-Dashboard-Splito)
+The above ui is for reference purpose only and break the overall ui into respective pages and components like
+1. Ui for groups
+2. ui for maintaining each group
+3. ui for activity i.e notifications
+4. And ui for each group expense and balance dashboard etc
+
 # project submission date: 12 July 2024
