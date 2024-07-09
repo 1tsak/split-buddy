@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import { Button, TextField, Box, Typography, IconButton, InputAdornment, CircularProgress, LinearProgress } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { auth, storage } from '../firebaseConfig';
+import { auth } from '../firebaseConfig';
 
 const SignUpForm: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -11,25 +8,32 @@ const SignUpForm: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [displayName, setDisplayName] = useState('');
-  const [profileImage, setProfileImage] = useState<File | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   const handleShowPasswordToggle = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const handleProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      setProfileImage(event.target.files[0]);
-    }
+  const validatePassword = (password: string): boolean => {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar;
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError('');
     setLoading(true);
+
+    if (!validatePassword(password)) {
+      setError('Password must be at least 8 characters long and include uppercase, lowercase, numeric, and special characters.');
+      setLoading(false);
+      return;
+    }
 
     if (password !== confirmPassword) {
       setError('Passwords do not match');
@@ -39,143 +43,95 @@ const SignUpForm: React.FC = () => {
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      if (profileImage) {
-        const storageRef = ref(storage, `profileImages/${userCredential.user.uid}`);
-        const uploadTask = uploadBytesResumable(storageRef, profileImage);
-        uploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setUploadProgress(progress);
-          },
-          (error) => {
-            setError(error.message);
-            setLoading(false);
-          },
-          async () => {
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            await updateProfile(userCredential.user, {
-              displayName,
-              photoURL: downloadURL,
-            });
-            setLoading(false);
-          }
-        );
-      } else {
-        await updateProfile(userCredential.user, { displayName });
-        setLoading(false);
-      }
+      const defaultProfileImageUrl = 'https://example.com/default-profile-image.png'; // Set your default profile image URL here
+      await updateProfile(userCredential.user, {
+        displayName,
+        photoURL: defaultProfileImageUrl,
+      });
+      setLoading(false);
     } catch (error) {
-      setError(error.message);
+      setError((error as Error).message);
       setLoading(false);
     }
   };
 
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '100%',
-        maxWidth: 400,
-        margin: '0 auto',
-        padding: 3,
-        boxShadow: 3,
-        borderRadius: 2,
-      }}
-    >
-      <Typography variant="h5" gutterBottom>
-        Sign Up
-      </Typography>
-      <TextField
-        label="Display Name"
-        variant="outlined"
-        fullWidth
-        required
-        value={displayName}
-        onChange={(e) => setDisplayName(e.target.value)}
-        sx={{ mb: 2 }}
-      />
-      <TextField
-        label="Email"
-        type="email"
-        variant="outlined"
-        fullWidth
-        required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        sx={{ mb: 2 }}
-      />
-      <TextField
-        label="Password"
-        type={showPassword ? 'text' : 'password'}
-        variant="outlined"
-        fullWidth
-        required
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        sx={{ mb: 2 }}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={handleShowPasswordToggle}>
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
-      <TextField
-        label="Confirm Password"
-        type={showPassword ? 'text' : 'password'}
-        variant="outlined"
-        fullWidth
-        required
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        sx={{ mb: 2 }}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={handleShowPasswordToggle}>
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
-      <Button
-        variant="contained"
-        component="label"
-        sx={{ mb: 2 }}
-      >
-        Upload Profile Image
-        <input
-          type="file"
-          hidden
-          accept="image/*"
-          onChange={handleProfileImageChange}
-        />
-      </Button>
-      {uploadProgress > 0 && (
-        <Box sx={{ width: '100%', mb: 2 }}>
-          <Typography variant="body2" color="textSecondary">{`Upload progress: ${Math.round(uploadProgress)}%`}</Typography>
-          <LinearProgress variant="determinate" value={uploadProgress} />
-        </Box>
-      )}
-      {error && (
-        <Typography color="error" sx={{ mb: 2 }}>
-          {error}
-        </Typography>
-      )}
-      <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading}>
-        {loading ? <CircularProgress size={24} /> : 'Sign Up'}
-      </Button>
-      <p>Already have an account? <a href="/login">Log In</a></p>
-    </Box>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold text-center text-gray-800">Sign Up</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Display Name</label>
+            <input
+              type="text"
+              required
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              className="w-full px-4 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Password</label>
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              />
+              <button
+                type="button"
+                onClick={handleShowPasswordToggle}
+                className="absolute right-3 top-2"
+              >
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full px-4 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              />
+              <button
+                type="button"
+                onClick={handleShowPasswordToggle}
+                className="absolute right-3 top-2"
+              >
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
+          </div>
+          {error && <p className="text-sm text-red-600">{error}</p>}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full px-4 py-2 font-bold text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+          >
+            {loading ? 'Signing up...' : 'Sign Up'}
+          </button>
+          <p className="text-center">
+            Already have an account? <a href="/login" className="text-indigo-600">Log In</a>
+          </p>
+        </form>
+      </div>
+    </div>
   );
 };
 
