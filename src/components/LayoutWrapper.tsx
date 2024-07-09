@@ -5,9 +5,9 @@ import Navbar from "./NavBar";
 
 const LayoutWrapper: React.FC = () => {
   return (
-    <div>
+    <div className=" h-full flex flex-col">
       <Navbar />
-      <main>
+      <main className="flex-1">
         <Outlet />
       </main>
     </div>
