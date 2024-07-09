@@ -88,6 +88,7 @@ const LoginForm: React.FC = () => {
       <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading}>
         {loading ? <CircularProgress size={24} /> : 'Log In'}
       </Button>
+      <p>Don't have an account? <a href="/signup">Sign Up</a></p>
     </Box>
   );
 };

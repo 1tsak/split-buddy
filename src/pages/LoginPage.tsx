@@ -5,7 +5,7 @@ const LoginPage: React.FC = () => {
   return (
     <div>
       <LoginForm />
-      <p>Don't have an account? <a href="/signup">Sign Up</a></p>
+     
     </div>
   );
 };
