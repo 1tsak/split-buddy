@@ -1,10 +1,10 @@
-import React from "react";
 import { Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LayoutWrapper from "./components/LayoutWrapper";
+import HomePage from "./pages/HomePage";
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
         </Route>
       </Route>
-      <Route path="/" element={<LoginPage />} />
+      <Route path="/" element={<HomePage/>} />
     </Routes>
   );
 }
