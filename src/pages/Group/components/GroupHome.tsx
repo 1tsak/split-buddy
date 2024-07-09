@@ -11,8 +11,13 @@ const GroupHome = () => {
     setExpenses(sampleExpenses);
   }, []);
   return (
-    <div className="">
-      <ExpensesGraph expenses={expenses} />
+    <div className="flex flex-col p-5">
+      <div className="flex">
+        <div className="rounded-md bg-slate-100 p-5">
+          
+        </div>
+        <ExpensesGraph expenses={expenses} />
+      </div>
     </div>
   );
 };
