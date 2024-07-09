@@ -5,6 +5,7 @@ import DashboardPage from "./pages/DashboardPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LayoutWrapper from "./components/LayoutWrapper";
 import HomePage from "./pages/HomePage";
+import GroupPage from "./pages/Group/GroupPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<LayoutWrapper />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/group/:gId" element={<GroupPage />} />
         </Route>
       </Route>
       <Route path="/" element={<HomePage/>} />
