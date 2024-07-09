@@ -29,7 +29,6 @@ export interface Expense {
 }
 
 export interface Split {
-  id: string;
   userId: string;
   amount: number;
   paid: boolean;
