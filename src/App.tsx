@@ -6,6 +6,7 @@ import DashboardPage from "./pages/DashboardPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LayoutWrapper from "./components/LayoutWrapper";
 
+
 function App() {
   return (
     <Routes>
