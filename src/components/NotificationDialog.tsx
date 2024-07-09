@@ -1,32 +1,68 @@
-// src/Dialog.js
-type DialogProps ={
-    isOpen:boolean,
-    setIsOpen:any,
-    title:string,
-    children:any
-}
+import React, { useState, useEffect } from 'react';
+import { db } from '../firebaseConfig.ts';
+import { collection, getDocs } from 'firebase/firestore';
 
-const Dialog:React.FC<DialogProps> = ({ isOpen, title, children ,setIsOpen}) => {
+type Notification = {
+  createdAt: string;
+  title: string;
+  message: string;
+};
 
-    const handleClose = () => {
-        setIsOpen(false);
-    };
+type DialogProps = {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  title: string;
+};
 
-    const handleContentClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation();
-    };
+const Dialog: React.FC<DialogProps> = ({ isOpen, title, setIsOpen }) => {
+  const [notificationList, setNotificationList] = useState<Notification[]>([]);
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  const handleContentClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
+
+  const fetchNotice = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'Notifications'));
+      const dataList = querySnapshot.docs.map((doc) => doc.data() as Notification);
+      console.log(dataList);
+      setNotificationList(dataList);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Handle error state here if needed
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchNotice();
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
+
   return (
-    <div className="fixed inset-0 flex items-start justify-end z-50" onClick={handleClose}>
-      <div className="bg-white rounded-lg mt-12 mr-12 overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full" onClick={handleContentClick}>
-        <div className="bg-white px-4 pt-5 pb-4  sm:pb-4">
+    <div className="fixed h-[80vh] my-auto inset-0 flex items-start justify-end z-50 overflow-y-scroll" onClick={handleClose}>
+      <div className="bg-white rounded-lg mr-12 overflow-hidden shadow-md transform transition-all w-[400px]" onClick={handleContentClick}>
+        <div className="bg-white pt-5 pb-4  sm:pb-4">
           <div className="sm:flex sm:items-start">
-            <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+            <div className="mt-3 sm:mt-0 sm:ml-4 sm:text-left">
               <h3 className="text-lg leading-6 font-medium text-gray-900">
                 {title}
               </h3>
               <div className="mt-2">
-                {children}
+                {notificationList.length > 0 &&
+                  notificationList.map((notice, index) => (
+                    <div className={index < notificationList.length-1 ?"border-b-2":""} key={index}>
+                     
+                      <p>Title: {notice.title}</p>
+                      <p>Message: {notice.message}</p>
+                    </div>
+                  ))}
               </div>
             </div>
           </div>
