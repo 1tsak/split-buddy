@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { Expense } from "../../../utils/types";
-import { sampleExpenses } from "../../../data/sampleExpenses";
+import { sampleExpenses } from "../../../data/sampleExpenses.ts";
 import ExpensesGraph from "../components/ExpensesGraph";
 import { FaPlus } from "react-icons/fa6";
 import useGroup from "../../../hooks/useGroup";

@@ -8,6 +8,7 @@ import GroupPage from "./pages/Group/GroupPage";
 import GroupProvider from "./context/GroupProvider";
 import HomePage from "./pages/HomePage";
 
+import GroupHomePage from "./pages/GroupHomePage";
 
 function App() {
   return (
@@ -25,6 +26,9 @@ function App() {
               </GroupProvider>
             }
           />
+          <Route path="/group" element={<GroupHomePage />} />
+            <Route path="/group/:gId" element={<GroupPage/>}>
+          </Route>
         </Route>
       </Route>
       <Route path="/" element={<HomePage/>} />
