@@ -6,7 +6,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import LayoutWrapper from "./components/LayoutWrapper";
 import HomePage from "./pages/HomePage";
 import GroupPage from "./pages/Group/GroupPage";
-import HomePage from "./pages/HomePage";
 
 function App() {
   return (
