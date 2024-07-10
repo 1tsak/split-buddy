@@ -6,8 +6,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { MdOutlinePeopleAlt } from 'react-icons/md';
 
-export default function FormDialog() {
+export default function NewGroupModal() {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -20,45 +21,42 @@ export default function FormDialog() {
 
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open form dialog
+      <Button className='text-center flex  items-center gap-2 bg-main text-white p-2 rounded-lg'  onClick={handleClickOpen}>
+      <MdOutlinePeopleAlt className='text-lg'/>
+        Add New Group
       </Button>
       <Dialog
         open={open}
         onClose={handleClose}
+        fullWidth={true}
         PaperProps={{
           component: 'form',
           onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries((formData as any).entries());
-            const email = formJson.email;
-            console.log(email);
+            const groupName = formJson.groupName;
+            console.log(groupName);
             handleClose();
           },
         }}
       >
-        <DialogTitle>Subscribe</DialogTitle>
+        <DialogTitle>Create New Group</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
-          </DialogContentText>
           <TextField
             autoFocus
             required
             margin="dense"
             id="name"
-            name="email"
-            label="Email Address"
-            type="email"
+            name="groupName"
+            label="Enter New Group Name"
+            type='text'
             fullWidth
-            variant="standard"
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Subscribe</Button>
+          <Button type="submit">Create</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>
