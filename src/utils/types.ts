@@ -30,7 +30,6 @@ export interface Expense {
 }
 
 export interface Split {
-  id: string;
   userId: string;
   amount: number;
   paid: boolean;
@@ -49,4 +48,9 @@ export interface Balance {
   userId: string;
   balance: number;
   updatedAt: string;
+}
+
+export interface GroupContextType {
+  groupData: Group | null;
+  setGroup: (group: Group) => void;
 }
