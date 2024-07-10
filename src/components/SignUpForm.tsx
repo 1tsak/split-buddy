@@ -58,7 +58,7 @@ const SignUpForm: React.FC = () => {
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const defaultProfileImageUrl = "https://example.com/default-profile-image.png"; // Set your default profile image URL here
+      const defaultProfileImageUrl = "https://example.com/default-profile-image.png"; 
       await updateProfile(userCredential.user, {
         displayName: `${firstName} ${lastName}`,
         photoURL: defaultProfileImageUrl,
