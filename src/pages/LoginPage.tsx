@@ -1,3 +1,6 @@
+
+
+
 import React, { useState } from "react";
 import LoginForm from "../components/LoginForm";
 import SignUpForm from "../components/SignUpForm";
@@ -25,13 +28,10 @@ const LoginPage: React.FC = () => {
       <div className="w-[25%] flex flex-col justify-center items-center shadow-lg shadow-slate-500 h-[70vh] bg-white z-[10] rounded-[16px] absolute top-1/2 left-[17%] transform  -translate-y-1/2">
         {login ? <LoginForm /> : <SignUpForm />}
         <div className="absolute bottom-10">
-        {login ? "Dont have an account" : "have an account?"}
-        <button
-          onClick={toggleForm}
-          className="mt-4 p-2 text-[#576cce]"
-        >
-          {login ? " Signup" : "Login"}
-        </button>
+          {login ? "Don't have an account?" : "Have an account?"}
+          <button onClick={toggleForm} className="mt-4 p-2 text-[#576cce]">
+            {login ? " Signup" : "Login"}
+          </button>
         </div>
       </div>
     </div>

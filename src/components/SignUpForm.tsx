@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../firebaseConfig";
+import { signUp, updateUserProfile } from "../services/firebaseAuth";
+import { createUserDocument } from "../services/firestore";
+import { User } from "../utils/types";
 
 const SignUpForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -57,12 +58,26 @@ const SignUpForm: React.FC = () => {
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const defaultProfileImageUrl = "https://example.com/default-profile-image.png"; 
-      await updateProfile(userCredential.user, {
-        displayName: `${firstName} ${lastName}`,
+      const userCredential = await signUp(email, password);
+      const defaultProfileImageUrl = "https://example.com/default-profile-image.png";
+      const displayName = `${firstName} ${lastName}`;
+
+      await updateUserProfile(userCredential.user, {
+        displayName,
         photoURL: defaultProfileImageUrl,
       });
+
+      const newUser: User = {
+        id: userCredential.user.uid,
+        email,
+        displayName,
+        photoURL: defaultProfileImageUrl,
+        createdAt: "", // Placeholder, will be set by Firestore serverTimestamp()
+        updatedAt: ""  // Placeholder, will be set by Firestore serverTimestamp()
+      };
+
+      await createUserDocument(newUser);
+
       setLoading(false);
     } catch (error) {
       setError((error as Error).message);
@@ -71,7 +86,7 @@ const SignUpForm: React.FC = () => {
   };
 
   return (
-    <div className="p-16">
+    <div className="w-full max-w-md mx-auto p-4 md:p-8 lg:p-16">
       <h1 className="text-2xl font-bold mb-2">Welcome!</h1>
       <p className="text-gray-600 mb-6">
         You'll need a valid email to confirm your registration.
