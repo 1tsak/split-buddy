@@ -72,6 +72,7 @@ const SignUpForm: React.FC = () => {
         email,
         displayName,
         photoURL: defaultProfileImageUrl,
+        groupsIn: [],
         createdAt: "", // Placeholder, will be set by Firestore serverTimestamp()
         updatedAt: ""  // Placeholder, will be set by Firestore serverTimestamp()
       };
