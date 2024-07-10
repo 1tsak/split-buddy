@@ -28,8 +28,11 @@ const Dialog: React.FC<DialogProps> = ({ isOpen, title, setIsOpen }) => {
   const fetchNotice = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, 'Notifications'));
-      const dataList = querySnapshot.docs.map((doc) => doc.data() as Notification);
-      console.log(dataList);
+      const dataList = querySnapshot.docs.map((doc) => {
+      
+        return doc.data() as Notification;
+      });
+    
       setNotificationList(dataList);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -51,7 +54,7 @@ const Dialog: React.FC<DialogProps> = ({ isOpen, title, setIsOpen }) => {
         <div className="bg-white pt-5 pb-4  sm:pb-4">
           <div className="sm:flex sm:items-start">
             <div className="mt-3 sm:mt-0 sm:ml-4 sm:text-left">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
+              <h3 className="text-lg leading-6 font-medium text-gray-900 underline">
                 {title}
               </h3>
               <div className="mt-2">
@@ -59,8 +62,12 @@ const Dialog: React.FC<DialogProps> = ({ isOpen, title, setIsOpen }) => {
                   notificationList.map((notice, index) => (
                     <div className={index < notificationList.length-1 ?"border-b-2":""} key={index}>
                      
-                      <p>Title: {notice.title}</p>
-                      <p>Message: {notice.message}</p>
+                      <div>
+                        <p className='text-gray-400'>{notice.title}</p>
+                        <p></p>
+                      </div>
+                      {/* {notice.createdAt.toString()} */}
+                      <p className=''>{notice.message}</p>
                     </div>
                   ))}
               </div>
