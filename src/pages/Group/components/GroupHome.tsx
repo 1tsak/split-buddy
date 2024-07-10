@@ -4,15 +4,18 @@ import { Expense } from "../../../utils/types";
 import { sampleExpenses } from "../../../data/sampleExpenses";
 import ExpensesGraph from "../components/ExpensesGraph";
 import { FaPlus } from "react-icons/fa6";
+import useGroup from "../../../hooks/useGroup";
 
 const GroupHome = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const { groupData } = useGroup();
   useEffect(() => {
     // For now, we use sample data
     setExpenses(sampleExpenses);
   }, []);
   return (
     <div className="flex flex-col p-5 ">
+      
       <div className="flex px-2 justify-between items-center gap-5">
         <div className="font-light">
           <h2 className="text-lg font-semibold my-1 text-gray-700">Expenses</h2>
