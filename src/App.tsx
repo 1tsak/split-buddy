@@ -1,4 +1,3 @@
-import React from "react";
 import { Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
@@ -7,6 +6,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import LayoutWrapper from "./components/LayoutWrapper";
 import GroupPage from "./pages/Group/GroupPage";
 import GroupProvider from "./context/GroupProvider";
+import HomePage from "./pages/HomePage";
 
 function App() {
   return (
@@ -26,7 +26,7 @@ function App() {
           />
         </Route>
       </Route>
-      <Route path="/" element={<LoginPage />} />
+      <Route path="/" element={<HomePage/>} />
     </Routes>
   );
 }

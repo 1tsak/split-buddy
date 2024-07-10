@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import Sider from "./components/Sider";
-
 import GroupHome from "./components/GroupHome";
 import useGroup from "../../hooks/useGroup";
 import { useEffect } from "react";
