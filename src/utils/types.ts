@@ -48,3 +48,8 @@ export interface Balance {
   balance: number;
   updatedAt: string;
 }
+
+export interface GroupContextType {
+  groupData: Group | null;
+  setGroup: (group: Group) => void;
+}
