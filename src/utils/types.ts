@@ -12,7 +12,6 @@ export interface Group {
   name: string;
   description: string;
   createdBy: string;
-  admin: string;
   members: string[];
   createdAt: string;
   updatedAt: string;
