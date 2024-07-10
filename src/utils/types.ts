@@ -36,10 +36,10 @@ export interface Split {
 }
 
 export interface Notification {
-  id: string;
   title: string;
   message: string;
   createdAt: string;
+  groupId: string;
 }
 
 export interface Balance {
