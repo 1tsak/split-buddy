@@ -1,181 +1,171 @@
-import React, { useState } from 'react';
-import { Button, TextField, Box, Typography, IconButton, InputAdornment, CircularProgress, LinearProgress } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { auth, storage } from '../firebaseConfig';
+import React, { useState } from "react";
+import { signUp, updateUserProfile } from "../services/firebaseAuth";
+import { createUserDocument } from "../services/firestore";
+import { User } from "../utils/types";
 
 const SignUpForm: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [showPassword, setShowPassword] = useState(false);
-  const [displayName, setDisplayName] = useState('');
-  const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [error, setError] = useState('');
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
 
-  const handleShowPasswordToggle = () => {
-    setShowPassword((prev) => !prev);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      setProfileImage(event.target.files[0]);
-    }
+  const validatePassword = (password: string): boolean => {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    return (
+      password.length >= minLength &&
+      hasUpperCase &&
+      hasLowerCase &&
+      hasNumber &&
+      hasSpecialChar
+    );
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    setError('');
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
     setLoading(true);
 
+    const { firstName, lastName, email, password, confirmPassword } = formData;
+
+    if (!validatePassword(password)) {
+      setError(
+        "Password must be at least 8 characters long and include uppercase, lowercase, numeric, and special characters."
+      );
+      setLoading(false);
+      return;
+    }
+
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       setLoading(false);
       return;
     }
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      if (profileImage) {
-        const storageRef = ref(storage, `profileImages/${userCredential.user.uid}`);
-        const uploadTask = uploadBytesResumable(storageRef, profileImage);
-        uploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setUploadProgress(progress);
-          },
-          (error) => {
-            setError(error.message);
-            setLoading(false);
-          },
-          async () => {
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            await updateProfile(userCredential.user, {
-              displayName,
-              photoURL: downloadURL,
-            });
-            setLoading(false);
-          }
-        );
-      } else {
-        await updateProfile(userCredential.user, { displayName });
-        setLoading(false);
-      }
+      const userCredential = await signUp(email, password);
+      const defaultProfileImageUrl = "https://example.com/default-profile-image.png";
+      const displayName = `${firstName} ${lastName}`;
+
+      await updateUserProfile(userCredential.user, {
+        displayName,
+        photoURL: defaultProfileImageUrl,
+      });
+
+      const newUser: User = {
+        id: userCredential.user.uid,
+        email,
+        displayName,
+        photoURL: defaultProfileImageUrl,
+        groupsIn: [],
+        createdAt: "", // Placeholder, will be set by Firestore serverTimestamp()
+        updatedAt: ""  // Placeholder, will be set by Firestore serverTimestamp()
+      };
+
+      await createUserDocument(newUser);
+
+      setLoading(false);
     } catch (error) {
-      setError(error.message);
+      setError((error as Error).message);
       setLoading(false);
     }
   };
 
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '100%',
-        maxWidth: 400,
-        margin: '0 auto',
-        padding: 3,
-        boxShadow: 3,
-        borderRadius: 2,
-      }}
-    >
-      <Typography variant="h5" gutterBottom>
-        Sign Up
-      </Typography>
-      <TextField
-        label="Display Name"
-        variant="outlined"
-        fullWidth
-        required
-        value={displayName}
-        onChange={(e) => setDisplayName(e.target.value)}
-        sx={{ mb: 2 }}
-      />
-      <TextField
-        label="Email"
-        type="email"
-        variant="outlined"
-        fullWidth
-        required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        sx={{ mb: 2 }}
-      />
-      <TextField
-        label="Password"
-        type={showPassword ? 'text' : 'password'}
-        variant="outlined"
-        fullWidth
-        required
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        sx={{ mb: 2 }}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={handleShowPasswordToggle}>
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
-      <TextField
-        label="Confirm Password"
-        type={showPassword ? 'text' : 'password'}
-        variant="outlined"
-        fullWidth
-        required
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-        sx={{ mb: 2 }}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={handleShowPasswordToggle}>
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
-      <Button
-        variant="contained"
-        component="label"
-        sx={{ mb: 2 }}
-      >
-        Upload Profile Image
+    <div className="w-full max-w-md mx-auto p-4 md:p-8 lg:p-16">
+      <h1 className="text-2xl font-bold mb-2">Welcome!</h1>
+      <p className="text-gray-600 mb-6">
+        You'll need a valid email to confirm your registration.
+      </p>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <input
-          type="file"
-          hidden
-          accept="image/*"
-          onChange={handleProfileImageChange}
+          type="text"
+          name="firstName"
+          placeholder="First Name"
+          value={formData.firstName}
+          onChange={handleChange}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          required
         />
-      </Button>
-      {uploadProgress > 0 && (
-        <Box sx={{ width: '100%', mb: 2 }}>
-          <Typography variant="body2" color="textSecondary">{`Upload progress: ${Math.round(uploadProgress)}%`}</Typography>
-          <LinearProgress variant="determinate" value={uploadProgress} />
-        </Box>
-      )}
-      {error && (
-        <Typography color="error" sx={{ mb: 2 }}>
-          {error}
-        </Typography>
-      )}
-      <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading}>
-        {loading ? <CircularProgress size={24} /> : 'Sign Up'}
-      </Button>
-      <p>Already have an account? <a href="/login">Log In</a></p>
-    </Box>
+        <input
+          type="text"
+          name="lastName"
+          placeholder="Last Name"
+          value={formData.lastName}
+          onChange={handleChange}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          required
+        />
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+            required
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-2"
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
+        <div className="relative">
+          <input
+            type={showConfirmPassword ? "text" : "password"}
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+            required
+          />
+          <button
+            type="button"
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            className="absolute right-3 top-2"
+          >
+            {showConfirmPassword ? "Hide" : "Show"}
+          </button>
+        </div>
+        {error && <p className="text-sm text-red-600">{error}</p>}
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full px-4 py-2 font-bold text-white bg-[#576cce] rounded-md hover:bg-blue-600 disabled:opacity-50"
+        >
+          {loading ? "Signing up..." : "Sign up"}
+        </button>
+      </form>
+    </div>
   );
 };
 
