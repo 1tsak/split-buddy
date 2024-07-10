@@ -7,9 +7,18 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { MdOutlinePeopleAlt } from 'react-icons/md';
+import { createNewGroup } from '../services/groupService';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../firebaseConfig';
 
-export default function NewGroupModal() {
+interface INewGroupModalProps{
+    fetchData:()=>void
+}
+
+export default function NewGroupModal(props:INewGroupModalProps) {
+    const {fetchData} = props;
   const [open, setOpen] = React.useState(false);
+  const [user, loading] = useAuthState(auth);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -31,12 +40,13 @@ export default function NewGroupModal() {
         fullWidth={true}
         PaperProps={{
           component: 'form',
-          onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+          onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries((formData as any).entries());
             const groupName = formJson.groupName;
-            console.log(groupName);
+            await createNewGroup(groupName,user?.uid as string);
+            await fetchData()
             handleClose();
           },
         }}

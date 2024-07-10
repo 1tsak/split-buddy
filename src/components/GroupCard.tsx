@@ -4,7 +4,7 @@ import { MdOutlinePeopleAlt } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 
 export interface IGroupCardProps{
-    group:IGroup
+    group:IGroup;
 }
 
 const GroupCard:FC<IGroupCardProps> = ({group}) => {
@@ -14,8 +14,8 @@ const GroupCard:FC<IGroupCardProps> = ({group}) => {
       navigate(id);
     }
   return (
-    <div onClick={onClickCard} className=' bg-main rounded-lg mt-2 flex gap-4 items-center text-white p-2 cursor-pointer'>
-        <div className='p-2  rounded-full w-16 h-16   flex flex-col justify-center items-center bg-secondary'>
+    <div onClick={onClickCard} className=' bg-main h-[100px] rounded-lg flex gap-4 items-center text-white p-2 cursor-pointer'>
+        <div className='p-2  rounded-full w-16 h-16 flex flex-col justify-center items-center bg-secondary'>
            
         <MdOutlinePeopleAlt className='text-3xl'/>
         </div>

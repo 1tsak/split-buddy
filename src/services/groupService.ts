@@ -8,9 +8,10 @@ const groupDb = {
 }
 
 const getGroups = async (userId?:string):Promise<IGroup[]> =>{
-    const groupQuery = await getDocs(groupDb.groups);
+    const grpquery = query(groupDb.groups,where("members",'array-contains',userId),where('createdBy',"==",userId))
+    const groupSnapShot = await getDocs(grpquery);
     const groups:IGroup[] = new Array<IGroup>;
-    groupQuery.forEach((group)=>groups.push(group.data() as IGroup));
+    groupSnapShot.forEach((group)=>groups.push(group.data() as IGroup));
     return groups;
 }
 
@@ -27,7 +28,7 @@ const createNewGroup = async(groupName:string,userId:string)=>{
         description:'',
         name:groupName,
         createdBy:userId,
-        members:[],
+        members:[userId],
         createdAt:serverTimestamp(),
         updatedAt:serverTimestamp(),
 
@@ -39,6 +40,6 @@ const deleteGroup = async(groupId:string)=>{
     await deleteDoc(groupRef)
 }
 
-export{getGroups,createNewGroup,deleteGroup}
+export{getGroups,getGroup,createNewGroup,deleteGroup}
 
 
