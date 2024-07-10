@@ -1,9 +1,8 @@
-import React from "react";
 import { CiMoneyBill } from "react-icons/ci";
 import { CiHome } from "react-icons/ci";
 const Sider = () => {
   return (
-    <div className="h-full w-1/4 bg-slate-50 pt-16">
+    <div className="h-full w-1/4 bg-slate-100 pt-16">
       <div className="flex flex-col gap-3">
         <div className="w-full px-5 py-2 bg-slate-50 font-light cursor-pointer border-b text-gray-700 border-slate-200 flex items-center gap-2">
             <CiHome/>
