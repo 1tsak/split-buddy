@@ -73,6 +73,6 @@ const deleteGroup = async(groupId:string)=>{
     await deleteDoc(groupRef)
 }
 
-export{getGroups,getGroup,createNewGroup,deleteGroup}
+export{getGroups,getGroup,createNewGroup,deleteGroup,addMember,removeMembers}
 
 
