@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { PieChart } from "@mui/x-charts/PieChart";
 import DCard from "../components/DCard";
+import { LineChart } from "@mui/x-charts";
 
 const DashboardPage: React.FC = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -45,7 +46,7 @@ const DashboardPage: React.FC = () => {
         <div>
           <div className="flex flex-col gap-2">
             <div className="flex justify-between items-center px-2">
-              <h2 className="text-2xl font-extrabold">DashBoard</h2>
+              <h2 className="text-2xl font-extrabold">User Dashboard</h2>
               <Button className=" text-main border-main p-1" variant="outlined">
                 More
               </Button>
@@ -80,7 +81,7 @@ const DashboardPage: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="flex justify-around "><DCard/>
+            <div className="flex justify-around mt-2"><DCard/>
             <DCard/>
             <DCard/>
             <DCard/></div>
@@ -95,13 +96,27 @@ const DashboardPage: React.FC = () => {
                   </div>
             </div>
             <div>
-              graph
+            <LineChart
+  xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
+  series={[
+    {
+      data: [2, 5, 4, 8, 1, 10],
+      color:"#687EEF"
+    },
+  ]}
+  height={250}
+  
+/>
             </div>
           </div>
         </div>
         <div>
-          <div>Transactions</div>
-          <div>Current Results</div>
+          <div>
+            <p className="text-2xl font-extrabold">
+            Transactions
+            </p>
+          </div>
+          <div><p className="text-2xl font-extrabold">Current Results</p></div>
         </div>
       </div>
     </>
