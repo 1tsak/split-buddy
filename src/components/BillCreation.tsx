@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 
+import { useEffect, useState } from "react";
 import { getGroupById, getGroups } from "../services/groupService";
 import { getAuth } from "firebase/auth";
 import { Group, User } from "../utils/types";
@@ -7,24 +7,37 @@ import { getUser } from "../services/authService";
 
 const auth = getAuth();
 
+type Split = {
+  userId: string;
+  amount: number;
+  paid: boolean;
+  checked: boolean;
+};
+
+type FormDataType = {
+  title: string;
+  amount: number;
+  group: {
+    name: string;
+    id: string;
+  };
+  splits: Split[];
+};
+
 const BillCreation = () => {
   const [open, setOpen] = useState(false);
   const userInfo = auth.currentUser;
   const [userGroups, setUserGroups] = useState<Group[]>([]);
   const [groupMember, setGroupMember] = useState<User[]>([]);
 
-  const [formData, setFormData] = useState({
-    billname: "",
+  const [formData, setFormData] = useState<FormDataType>({
+    title: "",
     amount: 0,
     group: {
       name: "",
       id: "",
     },
-    preferences: {
-      option1: false,
-      option2: false,
-      option3: false,
-    },
+    splits: [],
   });
 
   const handleClickOpen = () => {
@@ -36,23 +49,12 @@ const BillCreation = () => {
   };
 
   const handleChange = (e: any) => {
-    const { name, value, type, id } = e.target;
+    const { name, value } = e.target;
 
     if (name === "amount" && parseFloat(value) < 0) {
       setFormData({ ...formData, [name]: 0 });
       return;
     }
-
-    // if (type === 'checkbox') {
-    //   setFormData({
-    //     ...formData,
-    //     preferences: {
-    //       ...formData.preferences,
-    //       [name]: checked,
-    //     },
-    //   });
-    //   return;
-    // }
 
     if (name === "group") {
       const index = e.target.selectedIndex;
@@ -70,26 +72,41 @@ const BillCreation = () => {
       setTimeout(() => {
         const getGroupMember = async () => {
           try {
-            // console.log('gname',value);
             const res = await getGroupById(groupId);
             if (!res) {
               return;
             }
-            console.log("group", res.members);
+
             const userPromises = res.members.map((_id) => {
               const user = getUser(_id);
               return user;
             });
-            // console.log(userPromises);
+
             const users = await Promise.all(userPromises);
-            // console.log('hj',users);
             const validUsers = users.filter(
               (user): user is User => user !== null
             );
-            // console.log('users :', validUsers);
+
             setGroupMember(validUsers);
-          } catch (error) {}
+
+            const splits: Split[] = validUsers.map((user) => {
+              return {
+                userId: user.id,
+                amount: parseFloat(formData.amount.toString()) / validUsers.length,
+                paid: false,
+                checked: true,
+              } as Split;
+            });
+
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              splits: splits,
+            }));
+          } catch (error) {
+            console.error("Error fetching group members:", error);
+          }
         };
+
         getGroupMember();
       }, 800);
       return;
@@ -99,25 +116,70 @@ const BillCreation = () => {
   };
 
   const handleCheckboxChange = (e: any) => {
-    const { name, checked } = e.target;
-    setFormData({
-      ...formData,
-      preferences: { ...formData.preferences, [name]: checked },
+    const { name } = e.target;
+
+    let splits = formData.splits.map((split) => {
+      if (split.userId === name) {
+        split.checked = !split.checked;
+        if (!split.checked) {
+          split.amount = 0;
+        }
+      }
+      return split;
     });
+
+    const splitBillCount = splits.filter((split) => split.checked).length;
+
+    splits = splits.map((split) => {
+      if (split.checked) {
+        split.amount = formData.amount / splitBillCount;
+      }
+      return split;
+    });
+
+    setFormData({ ...formData, splits: splits });
+  };
+
+  const customBillChange = (e: any, index: number) => {
+    const { value } = e.target;
+    const customAmount = parseFloat(value);
+
+    if (isNaN(customAmount) || customAmount < 0) {
+      return;
+    }
+
+    let splits = [...formData.splits];
+    splits[index].amount = customAmount;
+
+    const totalCustomAmount = splits.reduce((acc, split, idx) => {
+      if (idx !== index) {
+        return acc + split.amount;
+      }
+      return acc;
+    }, 0);
+
+    const remainingAmount = formData.amount - customAmount;
+    const remainingSplits = splits.filter(split => split.checked);
+
+    splits = splits.map((split, idx) => {
+      if (idx !== index && split.checked) {
+        split.amount = remainingAmount / (remainingSplits.length-1);
+      }
+      return split;
+    });
+
+    setFormData({ ...formData, splits: splits });
   };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    // Handle form submission logic here
     console.log(formData);
-    handleClose();
   };
 
   useEffect(() => {
     const fetchGroups = async (): Promise<void | undefined> => {
       try {
         const groupList = await getGroups(userInfo?.uid);
-
         setUserGroups(groupList);
       } catch (error) {
         console.error("Error fetching groups:", error);
@@ -126,7 +188,7 @@ const BillCreation = () => {
     };
 
     fetchGroups();
-  }, []);
+  }, [userInfo?.uid]);
 
   return (
     <div>
@@ -151,8 +213,8 @@ const BillCreation = () => {
               <div className="mb-4">
                 <input
                   type="text"
-                  name="billname"
-                  value={formData.billname}
+                  name="title"
+                  value={formData.title}
                   onChange={handleChange}
                   placeholder="What's this payment for?"
                   className="w-full px-3 py-2 border rounded"
@@ -175,7 +237,7 @@ const BillCreation = () => {
                   name="group"
                   value={formData.group.name}
                   onChange={handleChange}
-                  className="w-full px-3 py-2  text-gray-700 border rounded"
+                  className="w-full px-3 py-2 text-gray-700 border rounded"
                 >
                   <option disabled value="">
                     Select Group
@@ -196,24 +258,26 @@ const BillCreation = () => {
                   <div className="flex flex-col gap-2">
                     <div>
                       {groupMember.length > 0 &&
-                        groupMember.map((gm) => (
+                        groupMember.map((gm, index) => (
                           <label key={gm.id} className="flex items-center">
                             <div className="flex justify-between w-full">
                               <div className="flex justify-start items-center">
                                 <input
                                   type="checkbox"
-                                  name="option1"
-                                  checked={formData.preferences.option1}
+                                  name={gm.id}
                                   onChange={handleCheckboxChange}
+                                  checked={formData.splits[index]?.checked || false}
                                   className="mr-2"
                                 />
                                 <label htmlFor="">{gm.displayName}</label>
                               </div>
                               <div className="ml-4">
                                 <input
-                                  type="text"
-                                  value={formData.amount}
+                                  type="number"
+                                  value={formData.splits[index]?.amount.toFixed(2) || 0}
+                                  onChange={(e) => customBillChange(e, index)}
                                   className="ml-4 py-1"
+                                  disabled={!formData.splits[index]?.checked || false}
                                 />
                               </div>
                             </div>
@@ -247,3 +311,4 @@ const BillCreation = () => {
 };
 
 export default BillCreation;
+
