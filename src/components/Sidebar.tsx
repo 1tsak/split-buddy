@@ -1,16 +1,23 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Avatar, Box, CircularProgress, Typography } from '@mui/material';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebaseConfig';
 import { signOut } from 'firebase/auth';
 import UserInfoModal from './UserInfoModal';
+import { User } from '../utils/types';
 
 const Sidebar: React.FC = () => {
-  const [user, loading, error] = useAuthState(auth);
+  const [authUser, loading, error] = useAuthState(auth);
+  const [user, setUser] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    if (authUser) {
+      setUser(authUser);
+    }
+  }, [authUser]);
 
   const handleLogout = async () => {
     try {
@@ -24,14 +31,19 @@ const Sidebar: React.FC = () => {
   const handleModalOpen = () => setIsModalOpen(true);
   const handleModalClose = () => setIsModalOpen(false);
 
+  const handleUserProfileUpdate = (updatedUser: User) => {
+    setUser(updatedUser); // Update the user state
+    handleModalClose(); // Close the modal
+  };
+
   const navLinks = [
     { path: '/dashboard', name: 'Home' },
-    { path: '/groups', name: 'Groups' },
+    { path: '/group', name: 'Groups' },
     { path: '/notifications', name: 'Notifications' },
   ];
 
   return (
-       <Box 
+    <Box 
       sx={{ 
         display: 'flex',
         flexDirection: 'column',
@@ -40,7 +52,6 @@ const Sidebar: React.FC = () => {
         backgroundColor: '#576cce',
         padding: '20px',
         justifyContent: 'space-between',
-        borderRadius: '0 20px 20px 0',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
       }}
     >
@@ -79,6 +90,7 @@ const Sidebar: React.FC = () => {
         onClose={handleModalClose}
         user={user}
         onLogout={handleLogout}
+        onUserProfileUpdate={handleUserProfileUpdate} // Pass the callback
       />
     </Box>
   );

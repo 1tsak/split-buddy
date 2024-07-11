@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { signUp, updateUserProfile } from "../services/firebaseAuth";
+import { signUp, signIn, updateUserProfile } from "../services/firebaseAuth"; // import signIn
 import { createUserDocument } from "../services/firestore";
 import { User } from "../utils/types";
-import { IoIosEye ,IoIosEyeOff } from "react-icons/io";
+import { IoIosEye, IoIosEyeOff } from "react-icons/io";
+import { useNavigate } from "react-router-dom"; // import useNavigate
 
 const SignUpForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +17,7 @@ const SignUpForm: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); // useNavigate hook
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -60,13 +62,13 @@ const SignUpForm: React.FC = () => {
 
     try {
       const userCredential = await signUp(email, password);
-      const defaultProfileImageUrl = "https://example.com/default-profile-image.png";// this is temp link just for demo
+      const defaultProfileImageUrl = "https://example.com/default-profile-image.png"; // this is a temp link just for demo
       const displayName = `${firstName} ${lastName}`;
 
-      await updateUserProfile(userCredential.user, {
-        displayName,
-        photoURL: defaultProfileImageUrl,
-      });
+      // await updateUserProfile(userCredential.user, {
+      //   displayName,
+      //   photoURL: defaultProfileImageUrl,
+      // });
 
       const newUser: User = {
         id: userCredential.user.uid,
@@ -79,8 +81,15 @@ const SignUpForm: React.FC = () => {
       };
 
       await createUserDocument(newUser);
+      await updateUserProfile(userCredential.user, {
+        displayName,
+        photoURL: defaultProfileImageUrl,
+      });
+      // Automatically sign in the user
+      await signIn(email, password);
 
       setLoading(false);
+      navigate("/dashboard"); // Navigate to the dashboard
     } catch (error) {
       setError((error as Error).message);
       setLoading(false);
@@ -136,7 +145,7 @@ const SignUpForm: React.FC = () => {
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-2"
           >
-            {!showPassword ?< IoIosEye className="text-xl"/> : <IoIosEyeOff  className="text-xl"/>}
+            {!showPassword ? <IoIosEye className="text-xl" /> : <IoIosEyeOff className="text-xl" />}
           </button>
         </div>
         <div className="relative">
@@ -154,7 +163,7 @@ const SignUpForm: React.FC = () => {
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             className="absolute right-3 top-2"
           >
-            {showConfirmPassword ?< IoIosEye className="text-xl"/> : <IoIosEyeOff  className="text-xl"/>}
+            {!showConfirmPassword ? <IoIosEye className="text-xl" /> : <IoIosEyeOff className="text-xl" />}
           </button>
         </div>
         {error && <p className="text-sm text-red-600">{error}</p>}
