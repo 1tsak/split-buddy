@@ -24,6 +24,7 @@ export interface Expense {
   amount: number;
   category: string;
   createdBy: string;
+  groupId:string;
   createdAt: string;
   updatedAt: string;
   splits: Split[];
