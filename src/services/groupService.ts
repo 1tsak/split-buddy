@@ -11,6 +11,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  or,
   query,
   serverTimestamp,
   setDoc,
@@ -39,9 +40,8 @@ const dbCollection = {
 
 const getGroups = async (userId?: string): Promise<IGroup[]> => {
   const grpquery = query(
-    dbCollection.groups,
-    where("members", "array-contains", userId),
-    where("createdBy", "==", userId)
+    dbCollection.groups,or(where("members", "array-contains", userId),
+    where("createdBy", "==", userId)),
   );
   const groupSnapShot = await getDocs(grpquery);
   const groups: IGroup[] = new Array<IGroup>();
