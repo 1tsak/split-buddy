@@ -38,7 +38,7 @@ const Sidebar: React.FC = () => {
 
   const navLinks = [
     { path: '/dashboard', name: 'Home' },
-    { path: '/groups', name: 'Groups' },
+    { path: '/group', name: 'Groups' },
     { path: '/notifications', name: 'Notifications' },
   ];
 

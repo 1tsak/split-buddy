@@ -18,7 +18,7 @@ function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<LayoutWrapper />}>
           <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/notifications" element={<DashboardPage/>}/>
+          <Route path="/notifications" element={<DashboardPage />} />
           <Route
             path="/group/:groupId"
             element={
@@ -28,11 +28,9 @@ function App() {
             }
           />
           <Route path="/group" element={<GroupHomePage />} />
-            <Route path="/group/:gId" element={<GroupPage/>}>
-          </Route>
         </Route>
       </Route>
-      <Route path="/" element={<HomePage/>} />
+      <Route path="/" element={<HomePage />} />
     </Routes>
   );
 }
