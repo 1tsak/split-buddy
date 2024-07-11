@@ -43,7 +43,7 @@ const DashboardPage: React.FC = () => {
 
   return (
     <>
-      <div className="grid grid-cols-[3.5fr_1.5fr] mt-5 gap-4 p-4">
+      <div className="grid xl:grid-cols-[3.5fr_1.5fr] mt-5 gap-4 p-4">
         <div>
           <div className="flex flex-col gap-2">
             <div className="flex justify-between items-center px-2">
@@ -54,31 +54,30 @@ const DashboardPage: React.FC = () => {
             </div>
             <div>
               <div className="bg-main rounded-lg h-[30vh] flex overflow-hidden">
-                <div><PieChart width={300}
-  height={300} colors={["white"]} 
+                <div className="flex justify-center items-center"><PieChart width={200}
+  height={200} colors={["white"]} 
                   series={[
                     {
                       data: [{ id:1,value: 10 }, {id:2, value: 10 },{id:3, value: 10, color: "white" }, { id:4,value: 40 }],
-                      innerRadius:80,
-                      outerRadius: 100,
+                      innerRadius:70,
+                      outerRadius: 50,
                       paddingAngle: 5,
                       cornerRadius: 5,
                       startAngle: -90,
                       endAngle: 360,
-                      cx: 150,
-                      cy: 150,
+                     cx:100
                     },
                   ]}
                 /></div>
                 <div className="flex-auto flex items-center text-white">
                   <div>
                     <p className="font-thin text-lg ml-2">My Balance</p>
-                    <p className="text-8xl font-bold">$10000.00</p>
+                    <p className="text-6xl 2xl:text-8xl font-bold">$10000.00</p>
                     <p className="font-thin text-lg ml-2">Showing your balance in USD</p>
                   </div>  
                 </div>
                 <div className="shrink-0 mt-8">
-                  <img height={200} className="md:hidden lg:inline" src="/dboard_curve2.png" alt="none" />
+                  <img height={200} className="" src="/dboard_curve2.png" alt="none" />
                 </div>
               </div>
             </div>
@@ -96,8 +95,8 @@ const DashboardPage: React.FC = () => {
                     put buttons
                   </div>
             </div>
-            <div>
-            <LineChart
+            <div className="border-main border-[1px] rounded-lg">
+            <LineChart 
   xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
   series={[
     {
@@ -105,7 +104,7 @@ const DashboardPage: React.FC = () => {
       color:"#687EEF"
     },
   ]}
-  height={250}
+  height={200}
   
 />
             </div>

@@ -24,7 +24,7 @@ const GroupHomePage: FC = () => {
 
         <NewGroupModal fetchData={fetchData}/>
       </div>
-      <div className="overflow-scroll grid md:grid-cols-[1fr_1fr] lg:grid-cols-[1fr_1fr_1fr] gap-4  max-h-[80vh] mx-5 mt-4">
+      <div className="overflow-scroll grid grid-cols-1 md:grid-cols-[1fr_1fr] 2xl:grid-cols-[1fr_1fr_1fr] gap-4  max-h-[80vh] mx-5 mt-4">
         {groups && groups.map((group, i) => {
           return <GroupCard group={group} key={i} />;
         })}
