@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import useGroup from "../hooks/useGroup";
+
 import { getGroupById, getGroups } from "../services/groupService";
-import { Auth, getAuth } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { Group, User } from "../utils/types";
-import getUserDetail from "../services/authService";
+import { getUser } from "../services/authService";
 
 const auth = getAuth();
 
@@ -37,7 +37,6 @@ const BillCreation = () => {
 
   const handleChange = (e: any) => {
     const { name, value, type, id } = e.target;
-    
 
     if (name === "amount" && parseFloat(value) < 0) {
       setFormData({ ...formData, [name]: 0 });
@@ -59,7 +58,7 @@ const BillCreation = () => {
       const index = e.target.selectedIndex;
       const el: any = e.target.childNodes[index];
       const groupId = el.getAttribute("id");
-      
+
       setFormData({
         ...formData,
         group: {
@@ -71,18 +70,24 @@ const BillCreation = () => {
       setTimeout(() => {
         const getGroupMember = async () => {
           try {
-            console.log('gname',value);
+            // console.log('gname',value);
             const res = await getGroupById(groupId);
-            if(!res){
-              return ;
+            if (!res) {
+              return;
             }
-            const data:User[] = [];
-            res.members.forEach(async (_id:string) =>{
-              const user:User = await getUserDetail(_id);
-              // console.log('user',user);
-              setGroupMember([...groupMember,user]);
-            })
-            
+            console.log("group", res.members);
+            const userPromises = res.members.map((_id) => {
+              const user = getUser(_id);
+              return user;
+            });
+            // console.log(userPromises);
+            const users = await Promise.all(userPromises);
+            // console.log('hj',users);
+            const validUsers = users.filter(
+              (user): user is User => user !== null
+            );
+            // console.log('users :', validUsers);
+            setGroupMember(validUsers);
           } catch (error) {}
         };
         getGroupMember();
@@ -107,7 +112,6 @@ const BillCreation = () => {
     console.log(formData);
     handleClose();
   };
-
 
   useEffect(() => {
     const fetchGroups = async (): Promise<void | undefined> => {
@@ -184,79 +188,41 @@ const BillCreation = () => {
                     ))}
                 </select>
               </div>
-              {formData.group.name && 
+              {formData.group.name && (
                 <div className="mb-4">
                   <span className="block text-left mb-2 text-gray-700">
                     Add Members:
                   </span>
                   <div className="flex flex-col gap-2">
-                    <label className="flex items-center">
-                      <div className="flex justify-around w-full">
-                        <div className="flex items-center">
-                          <input
-                            type="checkbox"
-                            name="option1"
-                            checked={formData.preferences.option1}
-                            onChange={handleCheckboxChange}
-                            className="mr-2"
-                          />
-                          <label htmlFor="">option1</label>
-                        </div>
-                        <div className="ml-4">
-                          <input
-                            type="text"
-                            value={formData.amount}
-                            className="ml-4 py-1"
-                          />
-                        </div>
-                      </div>
-                    </label>
-                    <label className="flex items-center">
-                      <div className="flex justify-around w-full ">
-                        <div className="flex items-center">
-                          <input
-                            type="checkbox"
-                            name="option1"
-                            checked={formData.preferences.option1}
-                            onChange={handleCheckboxChange}
-                            className="mr-2"
-                          />
-                          <label htmlFor="">option1</label>
-                        </div>
-                        <div className="ml-4">
-                          <input
-                            type="text"
-                            value={formData.amount}
-                            onChange={handleChange}
-                            className="ml-4 py-1"
-                          />
-                        </div>
-                      </div>
-                    </label>
-                    <label className="flex items-center">
-                      <div className="flex justify-around w-full">
-                        <div className="flex items-center">
-                          <input
-                            type="checkbox"
-                            name="option1"
-                            checked={formData.preferences.option1}
-                            onChange={handleCheckboxChange}
-                            className="mr-2"
-                          />
-                          <label htmlFor="">option1</label>
-                        </div>
-                        <div className="ml-4">
-                          <input
-                            type="text"
-                            value={formData.amount}
-                            className="ml-4 py-1"
-                          />
-                        </div>
-                      </div>
-                    </label>
+                    <div>
+                      {groupMember.length > 0 &&
+                        groupMember.map((gm) => (
+                          <label key={gm.id} className="flex items-center">
+                            <div className="flex justify-between w-full">
+                              <div className="flex justify-start items-center">
+                                <input
+                                  type="checkbox"
+                                  name="option1"
+                                  checked={formData.preferences.option1}
+                                  onChange={handleCheckboxChange}
+                                  className="mr-2"
+                                />
+                                <label htmlFor="">{gm.displayName}</label>
+                              </div>
+                              <div className="ml-4">
+                                <input
+                                  type="text"
+                                  value={formData.amount}
+                                  className="ml-4 py-1"
+                                />
+                              </div>
+                            </div>
+                          </label>
+                        ))}
+                    </div>
                   </div>
                 </div>
-              }
+              )}
               <div className="flex justify-end space-x-2">
                 <button
                   type="button"

@@ -40,14 +40,9 @@ const dbCollection = {
 // by abhishek mei kuch delete kia
 const getGroups = async (userId?: string): Promise<IGroup[]> => {
   const grpquery = query(
-<<<<<<< HEAD
     dbCollection.groups,
     where("members", "array-contains", userId),
 
-=======
-    dbCollection.groups,or(where("members", "array-contains", userId),
-    where("createdBy", "==", userId)),
->>>>>>> b1da234a0279196d8430d186e14ff9ffe2cf2ecb
   );
   const groupSnapShot = await getDocs(grpquery);
   const groups: IGroup[] = new Array<IGroup>();
