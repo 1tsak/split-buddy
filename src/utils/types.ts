@@ -13,7 +13,6 @@ export interface Group {
   name: string;
   description: string;
   createdBy: string;
-  admin: string;
   members: string[];
   createdAt: string;
   updatedAt: string;
@@ -25,24 +24,23 @@ export interface Expense {
   amount: number;
   category: string;
   createdBy: string;
+  groupId:string;
   createdAt: string;
   updatedAt: string;
   splits: Split[];
 }
 
 export interface Split {
-  id: string;
   userId: string;
   amount: number;
   paid: boolean;
 }
 
 export interface Notification {
-  id: string;
   title: string;
   message: string;
-  read: boolean;
   createdAt: string;
+  groupId: string;
 }
 
 export interface Balance {
@@ -50,4 +48,9 @@ export interface Balance {
   userId: string;
   balance: number;
   updatedAt: string;
+}
+
+export interface GroupContextType {
+  groupData: Group | null;
+  setGroup: (group: Group) => void;
 }

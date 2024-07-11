@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Navigate, Outlet } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
@@ -6,6 +6,7 @@ import { CircularProgress, Box } from '@mui/material';
 
 const ProtectedRoute: React.FC = () => {
   const [user, loading] = useAuthState(auth);
+  
 
   if (loading) {
     return (

@@ -2,13 +2,16 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "./NavBar";
+import Sidebar from "./Sidebar";
 
 const LayoutWrapper: React.FC = () => {
   return (
-    <div>
+    <div className=" h-full flex flex-col">
       <Navbar />
-      <main>
-        <Outlet />
+      
+      <main className="flex">
+      <Sidebar />
+      <Outlet />
       </main>
     </div>
   );

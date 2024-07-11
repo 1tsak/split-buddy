@@ -1,7 +1,7 @@
 // components/Sidebar.tsx
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Avatar, Box, CircularProgress } from '@mui/material';
+import { Avatar, Box, CircularProgress, Typography } from '@mui/material';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebaseConfig';
 import { signOut } from 'firebase/auth';
@@ -24,34 +24,40 @@ const Sidebar: React.FC = () => {
   const handleModalClose = () => setIsModalOpen(false);
 
   return (
-    <Box
-      sx={{
+    <Box 
+      sx={{ 
         display: 'flex',
         flexDirection: 'column',
+        height:"93vh",
         width: '250px',
-        height: '100vh',
         backgroundColor: '#576cce',
         padding: '20px',
         justifyContent: 'space-between',
-        borderRadius: '0 20px 20px 0', // Rounded edges on the right side
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Subtle shadow for depth
+        borderRadius: '0 20px 20px 0',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
       }}
     >
       {/* Navigation Links */}
-      <Box>
-        <NavLink to="/dashboard" className="nav-link" style={{ textDecoration: 'none', color: 'white', marginBottom: '15px' }}>
-          Home
+      <Box sx={{ flexGrow: 1 }}>
+        <NavLink to="/dashboard" className="nav-link" style={{ textDecoration: 'none', color: 'white' }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Home
+          </Typography>
         </NavLink>
-        <NavLink to="/groups" className="nav-link" style={{ textDecoration: 'none', color: 'white', marginBottom: '15px' }}>
-          Groups
+        <NavLink to="/groups" className="nav-link" style={{ textDecoration: 'none', color: 'white' }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Groups
+          </Typography>
         </NavLink>
-        <NavLink to="/notifications" className="nav-link" style={{ textDecoration: 'none', color: 'white', marginBottom: '15px' }}>
-          Notifications
+        <NavLink to="/notifications" className="nav-link" style={{ textDecoration: 'none', color: 'white' }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Notifications
+          </Typography>
         </NavLink>
       </Box>
 
       {/* Avatar and User Info */}
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '20px' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
         {loading ? (
           <CircularProgress sx={{ color: 'white' }} />
         ) : (

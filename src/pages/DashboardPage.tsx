@@ -26,7 +26,6 @@ const DashboardPage: React.FC = () => {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <Sidebar />
       <Box sx={{ flexGrow: 1, p: 3 }}>
         <Typography variant="h4">Welcome, {user?.displayName}</Typography>
       </Box>

@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { signIn } from "../services/firebaseAuth";
 import { IoIosEye ,IoIosEyeOff } from "react-icons/io";
 
+
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,6 +18,7 @@ const LoginForm: React.FC = () => {
     e.preventDefault();
     setError("");
     setLoading(true);
+
 
     try {
       await signIn(email, password);
