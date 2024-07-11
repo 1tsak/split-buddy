@@ -9,6 +9,8 @@ import GroupProvider from "./context/GroupProvider";
 import HomePage from "./pages/HomePage";
 
 import GroupHomePage from "./pages/GroupHomePage";
+import GroupHome from "./pages/Group/components/GroupHome";
+import BillDetails from "./pages/Group/components/BillDetails";
 
 function App() {
   return (
@@ -26,7 +28,10 @@ function App() {
                 <GroupPage />
               </GroupProvider>
             }
-          />
+          >
+            <Route index element={<GroupHome />} />
+            <Route path="bill/:billId" element={<BillDetails />} />
+          </Route>
           <Route path="/group" element={<GroupHomePage />} />
         </Route>
       </Route>

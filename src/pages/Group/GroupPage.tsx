@@ -1,6 +1,7 @@
-import { useParams } from "react-router-dom";
+import { Outlet, useParams, Routes, Route } from "react-router-dom";
 import Sider from "./components/Sider";
 import GroupHome from "./components/GroupHome";
+import BillDetails from "./components/BillDetails";
 import useGroup from "../../hooks/useGroup";
 import { useEffect } from "react";
 import { getGroupById } from "../../services/groupService";
@@ -18,11 +19,12 @@ const GroupPage = () => {
     };
     fetchGroupData();
   }, [groupId]);
+
   return (
     <div className="h-full flex">
       <Sider />
       <div className="w-3/4 h-full">
-        <GroupHome />
+       <Outlet/>
       </div>
     </div>
   );
