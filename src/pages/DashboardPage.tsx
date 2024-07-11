@@ -12,6 +12,7 @@ import {
 import { PieChart } from "@mui/x-charts/PieChart";
 import DCard from "../components/DCard";
 import { LineChart } from "@mui/x-charts";
+import TransactionCard from "../components/TransactionCard";
 
 const DashboardPage: React.FC = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -42,7 +43,7 @@ const DashboardPage: React.FC = () => {
 
   return (
     <>
-      <div className="grid grid-cols-[3.5fr_1.5fr] mt-5 gap-2 p-4">
+      <div className="grid grid-cols-[3.5fr_1.5fr] mt-5 gap-4 p-4">
         <div>
           <div className="flex flex-col gap-2">
             <div className="flex justify-between items-center px-2">
@@ -111,11 +112,22 @@ const DashboardPage: React.FC = () => {
           </div>
         </div>
         <div>
-          <div>
+          <div className="rounded-xl border-main border-[1px] p-2">
             <p className="text-2xl font-extrabold">
             Transactions
             </p>
+            <p className="text-gray-400 text-sm">Recent expenses</p>
+            <div>
+              <TransactionCard/>
+              <TransactionCard/>
+              <TransactionCard/>
+              <TransactionCard/>
+              <TransactionCard/>
+              <TransactionCard/>
+              <TransactionCard/>
+            </div>
           </div>
+
           <div><p className="text-2xl font-extrabold">Current Results</p></div>
         </div>
       </div>
