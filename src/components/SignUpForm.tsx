@@ -87,7 +87,7 @@ const SignUpForm: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-4 md:p-8 lg:p-16">
+    <div className="w-full max-w-md mx-auto py-4 md:p-6 lg:px-10">
       <h1 className="text-2xl font-bold mb-2">Welcome!</h1>
       <p className="text-gray-600 mb-6">
         You'll need a valid email to confirm your registration.

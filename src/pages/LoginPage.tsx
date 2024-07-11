@@ -1,6 +1,3 @@
-
-
-
 import React, { useState } from "react";
 import LoginForm from "../components/LoginForm";
 import SignUpForm from "../components/SignUpForm";
@@ -25,12 +22,12 @@ const LoginPage: React.FC = () => {
         </div>
         <h1>home</h1>
       </div>
-      <div className="w-[25%] flex flex-col justify-center items-center shadow-lg shadow-slate-500 h-[70vh] bg-white z-[10] rounded-[16px] absolute top-1/2 left-[17%] transform  -translate-y-1/2">
+      <div className="lg:w-[25%] min-[600px]:w-[90%] flex flex-col items-center lg:-translate-y-1/2 shadow-lg shadow-slate-500 lg:h-fit min-[600px]:h-[90vh] bg-white z-[10] rounded-[16px] absolute lg:top-1/2 sm:top-10 lg:left-[17%] sm:left-1/2">
         {login ? <LoginForm /> : <SignUpForm />}
-        <div className="absolute bottom-10">
+        <div className="">
           {login ? "Don't have an account?" : "Have an account?"}
-          <button onClick={toggleForm} className="mt-4 p-2 text-[#576cce]">
-            {login ? " Signup" : "Login"}
+          <button onClick={toggleForm} className="p-2 text-[#576cce]">
+            {login ? "Signup" : "Login"}
           </button>
         </div>
       </div>
