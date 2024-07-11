@@ -16,7 +16,13 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignUpPage />} />
       <Route element={<ProtectedRoute />}>
-        <Route element={<LayoutWrapper />}>
+        <Route
+          element={
+            <GroupProvider>
+              <LayoutWrapper />
+            </GroupProvider>
+          }
+        >
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/notifications" element={<DashboardPage/>}/>
           <Route
@@ -28,11 +34,10 @@ function App() {
             }
           />
           <Route path="/group" element={<GroupHomePage />} />
-            <Route path="/group/:gId" element={<GroupPage/>}>
-          </Route>
+          <Route path="/group/:gId" element={<GroupPage />}></Route>
         </Route>
       </Route>
-      <Route path="/" element={<HomePage/>} />
+      <Route path="/" element={<HomePage />} />
     </Routes>
   );
 }
