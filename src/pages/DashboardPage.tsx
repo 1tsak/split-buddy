@@ -53,81 +53,95 @@ const DashboardPage: React.FC = () => {
               </Button>
             </div>
             <div>
-              <div className="bg-main rounded-lg h-[30vh] flex overflow-hidden">
-                <div className="flex justify-center items-center"><PieChart width={200}
-  height={200} colors={["white"]} 
-                  series={[
-                    {
-                      data: [{ id:1,value: 10 }, {id:2, value: 10 },{id:3, value: 10, color: "white" }, { id:4,value: 40 }],
-                      innerRadius:70,
-                      outerRadius: 50,
-                      paddingAngle: 5,
-                      cornerRadius: 5,
-                      startAngle: -90,
-                      endAngle: 360,
-                     cx:100
-                    },
-                  ]}
-                /></div>
+              <div className="bg-main rounded-lg h-[30vh] flex flex-col sm:flex-row overflow-hidden">
+                <div className="flex justify-center items-center">
+                  <PieChart sx={{height:"100px"}}
+                    width={300}
+                    height={200}
+                    colors={["white"]}
+                    series={[
+                      {
+                        data: [
+                          { id: 1, value: 10 },
+                          { id: 2, value: 10 },
+                          { id: 3, value: 10, color: "white" },
+                          { id: 4, value: 40 },
+                        ],
+                        innerRadius: 70,
+                        outerRadius: 100,
+                        paddingAngle: 5,
+                        cornerRadius: 5,
+                        startAngle: -90,
+                        endAngle: 360,
+                        cx: 140,
+                      },
+                    ]}
+                  />
+                </div>
                 <div className="flex-auto flex items-center text-white">
-                  <div>
+                  <div className="text-center sm:text-start flex-grow">
                     <p className="font-thin text-lg ml-2">My Balance</p>
-                    <p className="text-6xl 2xl:text-8xl font-bold">$10000.00</p>
-                    <p className="font-thin text-lg ml-2">Showing your balance in USD</p>
-                  </div>  
+                    <p className="text-4xl sm:text-6xl 2xl:text-8xl font-bold">$10000.00</p>
+                    <p className="font-thin text-lg ml-2">
+                      Showing your balance in USD
+                    </p>
+                  </div>
                 </div>
                 <div className="shrink-0 mt-8">
-                  <img height={200} className="" src="/dboard_curve2.png" alt="none" />
+                  <img
+                    height={200}
+                    className=""
+                    src="/dboard_curve2.png"
+                    alt="none"
+                  />
                 </div>
               </div>
             </div>
-            <div className="flex justify-around mt-2"><DCard/>
-            <DCard/>
-            <DCard/>
-            <DCard/></div>
-          </div>
-          <div>
-            <div className="flex justify-between">
-                  <div>
-                    <h2 className="text-2xl font-extrabold">Income Overview</h2>
-                  </div>
-                  <div>
-                    put buttons
-                  </div>
+            <div className="flex flex-wrap gap-2 justify-around mt-2">
+              <DCard />
+              <DCard />
+              <DCard />
+              <DCard />
             </div>
-            <div className="border-main border-[1px] rounded-lg">
-            <LineChart 
-  xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-  series={[
-    {
-      data: [2, 5, 4, 8, 1, 10],
-      color:"#687EEF"
-    },
-  ]}
-  height={200}
-  
-/>
+          </div>
+          <div className="">
+            <div className="flex justify-between">
+              <div>
+                <h2 className="text-2xl font-extrabold">Income Overview</h2>
+              </div>
+              <div>put buttons</div>
+            </div>
+            <div className="border-main border-[1px] h-96 w-full rounded-lg">
+              <LineChart
+                xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
+                series={[
+                  {
+                    data: [2, 5, 4, 8, 1, 10],
+                    color: "#687EEF",
+                  },
+                ]}
+              />
             </div>
           </div>
         </div>
         <div>
           <div className="rounded-xl border-main border-[1px] p-2">
-            <p className="text-2xl font-extrabold">
-            Transactions
-            </p>
+            <p className="text-2xl font-extrabold">Transactions</p>
             <p className="text-gray-400 text-sm">Recent expenses</p>
             <div>
-              <TransactionCard/>
-              <TransactionCard/>
-              <TransactionCard/>
-              <TransactionCard/>
-              <TransactionCard/>
-              <TransactionCard/>
-              <TransactionCard/>
+              <TransactionCard />
+              <TransactionCard />
+              <TransactionCard />
+              <TransactionCard />
+              <TransactionCard />
+              <TransactionCard />
+              <TransactionCard />
             </div>
           </div>
 
-          <div><p className="text-2xl font-extrabold">Current Results</p></div>
+          <div>
+            <p className="text-2xl font-extrabold">Current Results</p>
+          </div>
         </div>
       </div>
     </>

@@ -50,7 +50,6 @@ const Sidebar: React.FC = () => {
       sx={{ 
         display: 'flex',
         flexDirection: 'column',
-        
         width: '250px',
         backgroundColor: '#576cce',
         padding: '20px',
