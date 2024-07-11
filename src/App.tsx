@@ -34,7 +34,6 @@ function App() {
             }
           />
           <Route path="/group" element={<GroupHomePage />} />
-          <Route path="/group/:gId" element={<GroupPage />}></Route>
         </Route>
       </Route>
       <Route path="/" element={<HomePage />} />

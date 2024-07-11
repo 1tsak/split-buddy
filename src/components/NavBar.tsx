@@ -1,6 +1,6 @@
 import { FaPlus } from "react-icons/fa6";
 import NotificationBell from "./UseDialog";
-
+import BillCreation from "./BillCreation";
 const NavBar = () => {
   return (
     <div className="w-full  bg-white px-6 py-4 border border-b-slate-200 flex justify-between items-center">
@@ -11,7 +11,7 @@ const NavBar = () => {
         <NotificationBell />
         <button className="bg-main px-4 py-2 text-sm font-semibold rounded-sm text-white flex items-center gap-2">
           <FaPlus size={16} />
-          <span>Split a Bill</span>
+          <BillCreation/>
         </button>
       </div>
     </div>

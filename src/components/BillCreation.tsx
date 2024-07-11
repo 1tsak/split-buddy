@@ -4,7 +4,7 @@ import useGroup from "../hooks/useGroup";
 const BillCreation = () => {
   const [open, setOpen] = useState(false);
   const {groupData} = useGroup();
-  console.log(groupData);
+  console.log("group",groupData);
   const [formData, setFormData] = useState({
     billname: "",
     amount: 0,
@@ -54,10 +54,10 @@ const BillCreation = () => {
   return (
     <div>
       <button
-        className="px-4 py-2 bg-blue-500 text-white rounded"
+        className="bg-transparent text-white rounded"
         onClick={handleClickOpen}
       >
-        Open Form
+        Split a Bill
       </button>
       {open && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
@@ -68,7 +68,7 @@ const BillCreation = () => {
             >
               &times;
             </button>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="text-gray-900">
               <h2 className="text-xl mb-4">Split the Payment</h2>
 
               <div className="mb-4">
