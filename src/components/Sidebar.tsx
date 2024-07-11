@@ -40,7 +40,6 @@ const Sidebar: React.FC = () => {
         backgroundColor: '#576cce',
         padding: '20px',
         justifyContent: 'space-between',
-        borderRadius: '0 20px 20px 0',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
       }}
     >

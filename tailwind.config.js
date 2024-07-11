@@ -7,7 +7,8 @@ export default {
       colors:{
         "main":"#687EEF",
         "secondary":"#9CF5BA",
-        "tertiary":"#d968ef"
+        "tertiary":"#d968ef",
+        "card-color":"#F0F4FF"
       }
     },
   },

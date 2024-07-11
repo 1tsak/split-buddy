@@ -9,7 +9,6 @@ import {
   CircularProgress,
   Button,
 } from "@mui/material";
-import { signOut } from "firebase/auth";
 import { PieChart } from "@mui/x-charts/PieChart";
 import DCard from "../components/DCard";
 
@@ -76,7 +75,7 @@ const DashboardPage: React.FC = () => {
                     <p className="font-thin text-lg ml-2">Showing your balance in USD</p>
                   </div>  
                 </div>
-                <div className="shrink-0 mt-16">
+                <div className="shrink-0 mt-8">
                   <img height={200} className="md:hidden lg:inline" src="/dboard_curve2.png" alt="none" />
                 </div>
               </div>
@@ -87,7 +86,14 @@ const DashboardPage: React.FC = () => {
             <DCard/></div>
           </div>
           <div>
-            <div>Income + left right</div>
+            <div className="flex justify-between">
+                  <div>
+                    <h2 className="text-2xl font-extrabold">Income Overview</h2>
+                  </div>
+                  <div>
+                    put buttons
+                  </div>
+            </div>
             <div>
               graph
             </div>
