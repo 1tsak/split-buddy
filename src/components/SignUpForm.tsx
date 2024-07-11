@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { signUp, updateUserProfile } from "../services/firebaseAuth";
+import { signUp, signIn, updateUserProfile } from "../services/firebaseAuth"; // import signIn
 import { createUserDocument } from "../services/firestore";
 import { User } from "../utils/types";
+import { IoIosEye, IoIosEyeOff } from "react-icons/io";
+import { useNavigate } from "react-router-dom"; // import useNavigate
 
 const SignUpForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +17,7 @@ const SignUpForm: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); // useNavigate hook
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -59,13 +62,13 @@ const SignUpForm: React.FC = () => {
 
     try {
       const userCredential = await signUp(email, password);
-      const defaultProfileImageUrl = "https://example.com/default-profile-image.png";
+      const defaultProfileImageUrl = "https://example.com/default-profile-image.png"; // this is a temp link just for demo
       const displayName = `${firstName} ${lastName}`;
 
-      await updateUserProfile(userCredential.user, {
-        displayName,
-        photoURL: defaultProfileImageUrl,
-      });
+      // await updateUserProfile(userCredential.user, {
+      //   displayName,
+      //   photoURL: defaultProfileImageUrl,
+      // });
 
       const newUser: User = {
         id: userCredential.user.uid,
@@ -73,13 +76,20 @@ const SignUpForm: React.FC = () => {
         displayName,
         photoURL: defaultProfileImageUrl,
         groupsIn: [],
-        createdAt: "", // Placeholder, will be set by Firestore serverTimestamp()
-        updatedAt: ""  // Placeholder, will be set by Firestore serverTimestamp()
+        createdAt: "", 
+        updatedAt: ""  
       };
 
       await createUserDocument(newUser);
+      await updateUserProfile(userCredential.user, {
+        displayName,
+        photoURL: defaultProfileImageUrl,
+      });
+      // Automatically sign in the user
+      await signIn(email, password);
 
       setLoading(false);
+      navigate("/dashboard"); // Navigate to the dashboard
     } catch (error) {
       setError((error as Error).message);
       setLoading(false);
@@ -87,7 +97,7 @@ const SignUpForm: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-4 md:p-8 lg:p-16">
+    <div className="w-full max-w-md mx-auto py-4 md:p-6 lg:px-10">
       <h1 className="text-2xl font-bold mb-2">Welcome!</h1>
       <p className="text-gray-600 mb-6">
         You'll need a valid email to confirm your registration.
@@ -135,7 +145,7 @@ const SignUpForm: React.FC = () => {
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-2"
           >
-            {showPassword ? "Hide" : "Show"}
+            {!showPassword ? <IoIosEye className="text-xl" /> : <IoIosEyeOff className="text-xl" />}
           </button>
         </div>
         <div className="relative">
@@ -153,7 +163,7 @@ const SignUpForm: React.FC = () => {
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             className="absolute right-3 top-2"
           >
-            {showConfirmPassword ? "Hide" : "Show"}
+            {!showConfirmPassword ? <IoIosEye className="text-xl" /> : <IoIosEyeOff className="text-xl" />}
           </button>
         </div>
         {error && <p className="text-sm text-red-600">{error}</p>}

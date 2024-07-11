@@ -18,6 +18,7 @@ function App() {
       <Route element={<ProtectedRoute />}>
         <Route element={<LayoutWrapper />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/notifications" element={<DashboardPage/>}/>
           <Route
             path="/group/:groupId"
             element={

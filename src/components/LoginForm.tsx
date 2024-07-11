@@ -3,6 +3,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { signIn } from "../services/firebaseAuth";
+import { IoIosEye ,IoIosEyeOff } from "react-icons/io";
 
 
 const LoginForm: React.FC = () => {
@@ -30,7 +31,7 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-4 md:p-8 lg:p-16">
+    <div className="w-full max-w-md mx-auto py-4 md:p-6 lg:px-10">
       <h1 className="text-2xl font-bold mb-2">Welcome Back!</h1>
       <p className="text-gray-600 mb-6">Please log in to continue.</p>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -58,7 +59,7 @@ const LoginForm: React.FC = () => {
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-2"
           >
-            {showPassword ? "Hide" : "Show"}
+            {!showPassword ? < IoIosEye className="text-xl"/> : <IoIosEyeOff  className="text-xl"/>}
           </button>
         </div>
         {error && <p className="text-sm text-red-600">{error}</p>}
