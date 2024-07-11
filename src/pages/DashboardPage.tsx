@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { signOut } from "firebase/auth";
 import { PieChart } from "@mui/x-charts/PieChart";
+import DCard from "../components/DCard";
 
 const DashboardPage: React.FC = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -41,7 +42,7 @@ const DashboardPage: React.FC = () => {
 
   return (
     <>
-      <div className="grid grid-cols-[4fr_1fr] mt-5 gap-2 p-4">
+      <div className="grid grid-cols-[3.5fr_1.5fr] mt-5 gap-2 p-4">
         <div>
           <div className="flex flex-col gap-2">
             <div className="flex justify-between items-center px-2">
@@ -72,19 +73,23 @@ const DashboardPage: React.FC = () => {
                   <div>
                     <p className="font-thin text-lg ml-2">My Balance</p>
                     <p className="text-8xl font-bold">$10000.00</p>
+                    <p className="font-thin text-lg ml-2">Showing your balance in USD</p>
                   </div>  
                 </div>
-                <div className="shrink-0">
+                <div className="shrink-0 mt-16">
                   <img height={200} className="md:hidden lg:inline" src="/dboard_curve2.png" alt="none" />
                 </div>
               </div>
             </div>
-            <div>small cards</div>
+            <div className="flex justify-around "><DCard/>
+            <DCard/>
+            <DCard/>
+            <DCard/></div>
           </div>
           <div>
             <div>Income + left right</div>
             <div>
-            
+              graph
             </div>
           </div>
         </div>
