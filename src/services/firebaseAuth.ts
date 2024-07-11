@@ -12,3 +12,4 @@ export const signIn = async (email: string, password: string) => {
 export const updateUserProfile = async (user: any, profile: { displayName: string; photoURL: string }) => {
   return updateProfile(user, profile);
 };
+

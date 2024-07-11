@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { signUp, updateUserProfile } from "../services/firebaseAuth";
 import { createUserDocument } from "../services/firestore";
 import { User } from "../utils/types";
+import { IoIosEye ,IoIosEyeOff } from "react-icons/io";
 
 const SignUpForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -135,7 +136,7 @@ const SignUpForm: React.FC = () => {
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-2"
           >
-            {showPassword ? "Hide" : "Show"}
+            {!showPassword ?< IoIosEye className="text-xl"/> : <IoIosEyeOff  className="text-xl"/>}
           </button>
         </div>
         <div className="relative">
@@ -153,7 +154,7 @@ const SignUpForm: React.FC = () => {
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             className="absolute right-3 top-2"
           >
-            {showConfirmPassword ? "Hide" : "Show"}
+            {showConfirmPassword ?< IoIosEye className="text-xl"/> : <IoIosEyeOff  className="text-xl"/>}
           </button>
         </div>
         {error && <p className="text-sm text-red-600">{error}</p>}

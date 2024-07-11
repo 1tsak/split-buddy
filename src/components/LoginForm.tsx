@@ -3,6 +3,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { signIn } from "../services/firebaseAuth";
+import { IoIosEye ,IoIosEyeOff } from "react-icons/io";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -56,7 +57,7 @@ const LoginForm: React.FC = () => {
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-2"
           >
-            {showPassword ? "Hide" : "Show"}
+            {!showPassword ? < IoIosEye className="text-xl"/> : <IoIosEyeOff  className="text-xl"/>}
           </button>
         </div>
         {error && <p className="text-sm text-red-600">{error}</p>}
