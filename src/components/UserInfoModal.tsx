@@ -1,4 +1,3 @@
-// components/UserInfoModal.tsx
 import React, { useState } from 'react';
 import {
   Box,
@@ -20,6 +19,7 @@ interface UserInfoModalProps {
   onClose: () => void;
   user: User | null;
   onLogout: () => void;
+  onUserProfileUpdate: (updatedUser: User) => void; // New prop for callback
 }
 
 const UserInfoModal: React.FC<UserInfoModalProps> = ({
@@ -27,6 +27,7 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
   onClose,
   user,
   onLogout,
+  onUserProfileUpdate,
 }) => {
   const [displayName, setDisplayName] = useState(user?.displayName || '');
   const [photoURL, setPhotoURL] = useState(user?.photoURL || '');
@@ -70,7 +71,8 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
     if (user) {
       try {
         await updateUserProfile(user, { displayName, photoURL });
-        onClose();
+        // Call the callback function with the updated user data
+        onUserProfileUpdate({ ...user, displayName, photoURL });
       } catch (error) {
         console.error('Failed to update profile:', error);
       }
