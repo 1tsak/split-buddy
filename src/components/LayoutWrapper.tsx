@@ -9,10 +9,10 @@ const LayoutWrapper: React.FC = () => {
     <div className=" h-full flex flex-col">
       <Navbar />
       
-      <main className="flex">
+      <main className="flex flex-auto">
       <Sidebar />
-      <div className="flex-grow">
-        <Outlet/>
+      <div className="flex-grow ">
+        <Outlet />
       </div>
       </main>
     </div>
