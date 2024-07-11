@@ -59,7 +59,7 @@ const SignUpForm: React.FC = () => {
 
     try {
       const userCredential = await signUp(email, password);
-      const defaultProfileImageUrl = "https://example.com/default-profile-image.png";
+      const defaultProfileImageUrl = "https://example.com/default-profile-image.png";// this is temp link just for demo
       const displayName = `${firstName} ${lastName}`;
 
       await updateUserProfile(userCredential.user, {
@@ -73,8 +73,8 @@ const SignUpForm: React.FC = () => {
         displayName,
         photoURL: defaultProfileImageUrl,
         groupsIn: [],
-        createdAt: "", // Placeholder, will be set by Firestore serverTimestamp()
-        updatedAt: ""  // Placeholder, will be set by Firestore serverTimestamp()
+        createdAt: "", 
+        updatedAt: ""  
       };
 
       await createUserDocument(newUser);
