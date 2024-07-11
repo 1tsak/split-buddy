@@ -1,14 +1,25 @@
 import { useEffect, useState } from "react";
 import useGroup from "../hooks/useGroup";
+import { getGroupById, getGroups } from "../services/groupService";
+import { Auth, getAuth } from "firebase/auth";
+import { Group, User } from "../utils/types";
+import getUserDetail from "../services/authService";
+
+const auth = getAuth();
 
 const BillCreation = () => {
   const [open, setOpen] = useState(false);
-  const {groupData} = useGroup();
-  console.log("group",groupData);
+  const userInfo = auth.currentUser;
+  const [userGroups, setUserGroups] = useState<Group[]>([]);
+  const [groupMember, setGroupMember] = useState<User[]>([]);
+
   const [formData, setFormData] = useState({
     billname: "",
     amount: 0,
-    option: "",
+    group: {
+      name: "",
+      id: "",
+    },
     preferences: {
       option1: false,
       option2: false,
@@ -25,11 +36,60 @@ const BillCreation = () => {
   };
 
   const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    if (name == "amount" && value < 0) {
+    const { name, value, type, id } = e.target;
+    
+
+    if (name === "amount" && parseFloat(value) < 0) {
       setFormData({ ...formData, [name]: 0 });
       return;
     }
+
+    // if (type === 'checkbox') {
+    //   setFormData({
+    //     ...formData,
+    //     preferences: {
+    //       ...formData.preferences,
+    //       [name]: checked,
+    //     },
+    //   });
+    //   return;
+    // }
+
+    if (name === "group") {
+      const index = e.target.selectedIndex;
+      const el: any = e.target.childNodes[index];
+      const groupId = el.getAttribute("id");
+      
+      setFormData({
+        ...formData,
+        group: {
+          name: value,
+          id: groupId,
+        },
+      });
+
+      setTimeout(() => {
+        const getGroupMember = async () => {
+          try {
+            console.log('gname',value);
+            const res = await getGroupById(groupId);
+            if(!res){
+              return ;
+            }
+            const data:User[] = [];
+            res.members.forEach(async (_id:string) =>{
+              const user:User = await getUserDetail(_id);
+              // console.log('user',user);
+              setGroupMember([...groupMember,user]);
+            })
+            
+          } catch (error) {}
+        };
+        getGroupMember();
+      }, 800);
+      return;
+    }
+
     setFormData({ ...formData, [name]: value });
   };
 
@@ -48,9 +108,22 @@ const BillCreation = () => {
     handleClose();
   };
 
-  useEffect(()=>{
 
-  },[])
+  useEffect(() => {
+    const fetchGroups = async (): Promise<void | undefined> => {
+      try {
+        const groupList = await getGroups(userInfo?.uid);
+
+        setUserGroups(groupList);
+      } catch (error) {
+        console.error("Error fetching groups:", error);
+        return;
+      }
+    };
+
+    fetchGroups();
+  }, []);
+
   return (
     <div>
       <button
@@ -95,93 +168,95 @@ const BillCreation = () => {
               </div>
               <div className="mb-4">
                 <select
-                  name="option"
-                  value={formData.option}
+                  name="group"
+                  value={formData.group.name}
                   onChange={handleChange}
                   className="w-full px-3 py-2  text-gray-700 border rounded"
                 >
-                  <option value="">Select Group</option>
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
+                  <option disabled value="">
+                    Select Group
+                  </option>
+                  {userGroups.length > 0 &&
+                    userGroups.map((group: Group, index) => (
+                      <option key={index} id={group.id} value={group.name}>
+                        {group.name}
+                      </option>
+                    ))}
                 </select>
               </div>
-              <div className="mb-4">
-                <span className="block text-left mb-2 text-gray-700">
-                  Add Members:
-                </span>
-                <div className="flex flex-col gap-2">
-                  <label className="flex items-center">
-                    <div className="flex justify-around w-full">
-                      <div className="flex items-center">
-                        <input
-                          type="checkbox"
-                          name="option1"
-                          checked={formData.preferences.option1}
-                          onChange={handleCheckboxChange}
-                          className="mr-2"
-                        />
-                        <label htmlFor="">option1</label>
+              {formData.group.name && 
+                <div className="mb-4">
+                  <span className="block text-left mb-2 text-gray-700">
+                    Add Members:
+                  </span>
+                  <div className="flex flex-col gap-2">
+                    <label className="flex items-center">
+                      <div className="flex justify-around w-full">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            name="option1"
+                            checked={formData.preferences.option1}
+                            onChange={handleCheckboxChange}
+                            className="mr-2"
+                          />
+                          <label htmlFor="">option1</label>
+                        </div>
+                        <div className="ml-4">
+                          <input
+                            type="text"
+                            value={formData.amount}
+                            className="ml-4 py-1"
+                          />
+                        </div>
                       </div>
-                      <div className="ml-4">
-                        
-                        <input
-                          type="text"
-
-                          value={formData.amount}
-                          className="ml-4 py-1"
-                        />
+                    </label>
+                    <label className="flex items-center">
+                      <div className="flex justify-around w-full ">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            name="option1"
+                            checked={formData.preferences.option1}
+                            onChange={handleCheckboxChange}
+                            className="mr-2"
+                          />
+                          <label htmlFor="">option1</label>
+                        </div>
+                        <div className="ml-4">
+                          <input
+                            type="text"
+                            value={formData.amount}
+                            onChange={handleChange}
+                            className="ml-4 py-1"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </label>
-                  <label className="flex items-center">
-                    <div className="flex justify-around w-full ">
-                      <div className="flex items-center">
-                        <input
-                          type="checkbox"
-                          name="option1"
-                          checked={formData.preferences.option1}
-                          onChange={handleCheckboxChange}
-                          className="mr-2"
-                        />
-                        <label htmlFor="">option1</label>
+                    </label>
+                    <label className="flex items-center">
+                      <div className="flex justify-around w-full">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            name="option1"
+                            checked={formData.preferences.option1}
+                            onChange={handleCheckboxChange}
+                            className="mr-2"
+                          />
+                          <label htmlFor="">option1</label>
+                        </div>
+                        <div className="ml-4">
+                          <input
+                            type="text"
+                            value={formData.amount}
+                            className="ml-4 py-1"
+                          />
+                        </div>
                       </div>
-                      <div className="ml-4">
-                        
-                        <input
-                          type="text"
-                          value={formData.amount}
-                          onChange={handleChange}
-                          className="ml-4 py-1"
-                        />
-                      </div>
-                    </div>
-                  </label>
-                  <label className="flex items-center">
-                    <div className="flex justify-around w-full">
-                      <div className="flex items-center">
-                        <input
-                          type="checkbox"
-                          name="option1"
-                          checked={formData.preferences.option1}
-                          onChange={handleCheckboxChange}
-                          className="mr-2"
-                        />
-                        <label htmlFor="">option1</label>
-                      </div>
-                      <div className="ml-4">
-                        
-                        <input
-                          type="text"
-
-                          value={formData.amount}
-                          className="ml-4 py-1"
-                        />
-                      </div>
-                    </div>
-                  </label>
+                    </label>
+                  </div>
                 </div>
-              </div>
+              }
               <div className="flex justify-end space-x-2">
                 <button
                   type="button"

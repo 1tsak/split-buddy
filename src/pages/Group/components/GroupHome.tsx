@@ -11,7 +11,7 @@ const GroupHome = () => {
   const { groupData } = useGroup();
   useEffect(() => {
     // For now, we use sample data
-    setExpenses(sampleExpenses);
+    setExpenses(sampleGroupData);
   }, []);
   return (
     <div className="flex flex-col p-5 ">
