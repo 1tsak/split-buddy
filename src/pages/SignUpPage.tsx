@@ -13,10 +13,11 @@ const SignUpPage: React.FC = () => {
     </div>
     <div className="w-full h-[10vh] absolute top-0 left-0 flex flex-row px-10 items-center justify-between">
       <div className="flex text-white gap-2 flex-row items-center justify-center">
-        <h1 className="text-2xl font-[600]">SB</h1>
-        <h1 className="text-xl">splitbuddy</h1>
+      <Link to="/">
+          <h1 className="text-2xl font-[600]">SB</h1>
+        </Link>
       </div>
-      <h1>home</h1>
+     
     </div>
     <div className="lg:w-[25%] min-[600px]:w-[90%] flex flex-col items-center lg:-translate-y-1/2 shadow-lg shadow-slate-500 lg:h-fit min-[600px]:h-[90vh] bg-white z-[10] rounded-[16px] absolute lg:top-1/2 sm:top-10 lg:left-[17%] sm:left-1/2">
        <SignUpForm />
