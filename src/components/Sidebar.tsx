@@ -6,6 +6,9 @@ import { auth } from '../firebaseConfig';
 import { signOut } from 'firebase/auth';
 import UserInfoModal from './UserInfoModal';
 import { User } from '../utils/types';
+import HomeIcon from '@mui/icons-material/Home';
+import GroupIcon from '@mui/icons-material/Group';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const Sidebar: React.FC = () => {
   const [authUser, loading, error] = useAuthState(auth);
@@ -37,9 +40,9 @@ const Sidebar: React.FC = () => {
   };
 
   const navLinks = [
-    { path: '/dashboard', name: 'Home' },
-    { path: '/group', name: 'Groups' },
-    { path: '/notifications', name: 'Notifications' },
+    { path: '/dashboard', name: 'Home', icon: <HomeIcon /> },
+    { path: '/group', name: 'Groups', icon: <GroupIcon /> },
+    { path: '/notifications', name: 'Notifications', icon: <NotificationsIcon /> },
   ];
 
   return (
@@ -49,7 +52,7 @@ const Sidebar: React.FC = () => {
         flexDirection: 'column',
         height:"93vh",
         width: '250px',
-        backgroundColor: '#576cce',
+        backgroundColor: '#576cce', // Keep the original background color
         padding: '20px',
         justifyContent: 'space-between',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
@@ -61,11 +64,22 @@ const Sidebar: React.FC = () => {
           <NavLink
             to={link.path}
             key={link.name}
-            className={`text-white mb-4 block ${
-              location.pathname === link.path ? 'underline' : ''
-            }`}
+            className="text-white mb-4 block"
+            activeClassName="bg-white"
+            style={{
+              color: location.pathname === link.path ? '#576cce' : 'white', // Change text color based on active state
+            }}
           >
-            <Typography variant="h6">{link.name}</Typography>
+            <Box 
+              display="flex" 
+              alignItems="center" 
+              className={`p-2 rounded-full ${
+                location.pathname === link.path ? 'bg-white' : ''
+              }`}
+            >
+              {link.icon}
+              <Typography variant="h6" style={{ marginLeft: '10px' }}>{link.name}</Typography>
+            </Box>
           </NavLink>
         ))}
       </Box>
