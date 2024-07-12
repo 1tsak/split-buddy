@@ -134,7 +134,6 @@ const getGroupMembers = async (
     users.push(user?.displayName as string)
   }
  }
-  console.log(users.length,users)
   return users;
 };
 export {

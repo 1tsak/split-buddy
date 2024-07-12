@@ -12,7 +12,7 @@ export interface IGroupCardProps {
 }
 
 const GroupCard: FC<IGroupCardProps> = ({ group }) => {
-  const { name, members, id } = group;
+  const { name, id } = group;
   const [grpMembers, setgrpMembers] = useState<string[]>();
   const [user,loading] = useAuthState(auth)
   const [layoutLoading,setLoading] = useState<boolean>(true);
@@ -27,9 +27,8 @@ const GroupCard: FC<IGroupCardProps> = ({ group }) => {
   };
   useEffect(()=>{
     fetchData();
-    
   },[])
-  if(loading){
+  if(layoutLoading){
     return (
       <Box
         sx={{
@@ -48,15 +47,16 @@ const GroupCard: FC<IGroupCardProps> = ({ group }) => {
       onClick={onClickCard}
       className=" bg-main h-[100px] rounded-lg flex gap-4 text-white cursor-pointer overflow-hidden border-[1px] shadow-sm"
     >
-      <div className="p-2 flex flex-col w-24 h-full justify-center items-center bg-white">
+      <div className="p-2 flex flex-col shrink-0 w-24 h-full justify-center items-center bg-white">
         <MdOutlinePeopleAlt className="text-4xl text-main" />
       </div>
       <div className="flex-auto p-2 mt-2 flex flex-col justify-between">
         <p className="font-bold text-xl ">{name}</p>
-        <div>
+        <div className="max-w-full">
           {grpMembers && grpMembers.map((member)=>{
             return <span>{member}</span>
           })}
+          {grpMembers.length > 0 ? '...' : ""}
         </div>
       </div>
     </div>}

@@ -44,7 +44,7 @@ const DashboardPage: React.FC = () => {
 
   return (
     <>
-      <div className="grid xl:grid-cols-[3.5fr_1.5fr] mt-5 gap-4 p-4 overflow-scroll max-h-[88vh]">
+      <div className="grid xl:grid-cols-[3.5fr_1.5fr] mt-5 gap-4 p-4 overflow-scroll max-h-[90vh]">
         <div>
           <div className="flex flex-col gap-2">
             <div className="flex justify-between items-center px-2">
