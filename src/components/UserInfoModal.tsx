@@ -77,8 +77,9 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
   const handleSave = async () => {
     if (user) {
       try {
-        await updateUserProfile(user, { displayName, photoURL });
-        onUserProfileUpdate({ ...user, displayName, photoURL });
+        updateUserProfile(user, { displayName, photoURL });
+         onUserProfileUpdate({ ...user, displayName, photoURL });
+        console.log('onClose',onClose())
         onClose(); // Close the modal
       } catch (error) {
         console.error('Failed to update profile:', error);
