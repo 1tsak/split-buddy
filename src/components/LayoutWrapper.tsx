@@ -13,7 +13,7 @@ const LayoutWrapper: React.FC = () => {
       <Navbar />
 
       {!hideSidebar ? (
-        <main className="flex w-full ">
+        <main className="flex flex-auto ">
           <Sidebar />
           <div className="flex-grow">
             <Outlet />
