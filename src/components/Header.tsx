@@ -12,7 +12,7 @@ const Header = () => {
             </div>
             <div className="flex gap-5 items-center">
             <Link className="" to={"/signup"}>Sign up</Link>
-            <Link className="px-3 py-2 text-white bg-blue-500 rounded-md" to={"/login"}>Login</Link>
+            <Link className="px-3 py-2 text-white bg-main rounded-md" to={"/login"}>Login</Link>
             </div>
         </div>
         <div className="h-[90%] px-2 md:px-10 flex flex-col justify-center md:flex-row md:justify-evenly md:gap-4 ">
