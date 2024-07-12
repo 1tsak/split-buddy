@@ -14,6 +14,7 @@ import DCard from "../components/DCard";
 import { LineChart } from "@mui/x-charts";
 import TransactionCard from "../components/TransactionCard";
 import HeroComponent from "../components/HeroComponent";
+import DashboardLineChart from "../components/DashboardLineChart";
 
 const DashboardPage: React.FC = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -70,16 +71,8 @@ const DashboardPage: React.FC = () => {
               </div>
               <div>put buttons</div>
             </div>
-            <div className="border-main border-[1px] h-96 w-full rounded-lg">
-              <LineChart
-                xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-                series={[
-                  {
-                    data: [2, 5, 4, 8, 1, 10],
-                    color: "#687EEF",
-                  },
-                ]}
-              />
+            <div>
+              <DashboardLineChart/>
             </div>
           </div>
         </div>
