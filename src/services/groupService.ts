@@ -16,8 +16,9 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig";
-import { Group as IGroup } from "../utils/types";
+import { Group as IGroup, User } from "../utils/types";
 import { User as IUser } from "../utils/types";
+import { getUser } from "./authService";
 
 export const getGroupById = async (groupId: string): Promise<IGroup | null> => {
   const groupDocRef = doc(db, "groups", groupId);
@@ -38,8 +39,11 @@ const dbCollection = {
 
 const getGroups = async (userId?: string): Promise<IGroup[]> => {
   const grpquery = query(
-    dbCollection.groups,or(where("members", "array-contains", userId),
-    where("createdBy", "==", userId)),
+    dbCollection.groups,
+    or(
+      where("members", "array-contains", userId),
+      where("createdBy", "==", userId)
+    )
   );
   const groupSnapShot = await getDocs(grpquery);
   const groups: IGroup[] = new Array<IGroup>();
@@ -109,7 +113,7 @@ const removeMembers = async (groupId: string, userId: string) => {
 
     console.log("User and group updated successfully");
   } catch (error) {
-    throw error
+    throw error;
   }
 };
 
@@ -118,6 +122,21 @@ const deleteGroup = async (groupId: string) => {
   await deleteDoc(groupRef);
 };
 
+const getGroupMembers = async (
+  groupId: string,
+  userId: string
+): Promise<string[]> => {
+  const group: IGroup = await getGroup(groupId);
+  const users: string[] = new Array<string>;
+ for (const member of group.members){
+  const user = await getUser(member)
+  if(user?.id!=userId){
+    users.push(user?.displayName as string)
+  }
+ }
+  console.log(users.length,users)
+  return users;
+};
 export {
   getGroups,
   getGroup,
@@ -125,4 +144,5 @@ export {
   deleteGroup,
   addMember,
   removeMembers,
+  getGroupMembers,
 };
