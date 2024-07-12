@@ -1,13 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import LoginForm from "../components/LoginForm";
-import SignUpForm from "../components/SignUpForm";
+
+import { Link } from "react-router-dom";
 
 const LoginPage: React.FC = () => {
-  const [login, setLogin] = useState<boolean>(true);
-
-  const toggleForm = () => {
-    setLogin(!login);
-  };
+  
 
   return (
     <div className="w-full h-[100vh] flex flex-row relative bg-red-100">
@@ -23,11 +20,11 @@ const LoginPage: React.FC = () => {
         <h1>home</h1>
       </div>
       <div className="lg:w-[25%] min-[600px]:w-[90%] flex flex-col items-center lg:-translate-y-1/2 shadow-lg shadow-slate-500 lg:h-fit min-[600px]:h-[90vh] bg-white z-[10] rounded-[16px] absolute lg:top-1/2 sm:top-10 lg:left-[17%] sm:left-1/2">
-        {login ? <LoginForm /> : <SignUpForm />}
+       <LoginForm /> 
         <div className="">
-          {login ? "Don't have an account?" : "Have an account?"}
-          <button onClick={toggleForm} className="p-2 text-[#576cce]">
-            {login ? "Signup" : "Login"}
+        Don't have an account?
+          <button  className="p-2 text-[#576cce]">
+            <Link to="/signup" >Signup</Link>
           </button>
         </div>
       </div>

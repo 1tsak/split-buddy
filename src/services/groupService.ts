@@ -1,9 +1,6 @@
 // write your firebase services here!
 
 import {
-  Query,
-  Timestamp,
-  addDoc,
   arrayRemove,
   arrayUnion,
   collection,
@@ -11,9 +8,11 @@ import {
   doc,
   getDoc,
   getDocs,
+  or,
   query,
   serverTimestamp,
   setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig";
@@ -39,9 +38,8 @@ const dbCollection = {
 
 const getGroups = async (userId?: string): Promise<IGroup[]> => {
   const grpquery = query(
-    dbCollection.groups,
-    where("members", "array-contains", userId),
-    where("createdBy", "==", userId)
+    dbCollection.groups,or(where("members", "array-contains", userId),
+    where("createdBy", "==", userId)),
   );
   const groupSnapShot = await getDocs(grpquery);
   const groups: IGroup[] = new Array<IGroup>();
@@ -69,40 +67,50 @@ const createNewGroup = async (groupName: string, userId: string) => {
 };
 
 const addMember = async (groupId: string, emailId: string) => {
-  const userQuery = query(dbCollection.users, where("email", "==", emailId));
-  const user = await getDocs(userQuery);
-  if (user.empty) throw new Error("User Not found");
-  const userData = user.docs.map((user) => user.data())[0] as IUser;
-  const userRef = doc(dbCollection.users, userData.id);
-  await setDoc(userRef, {
-    groupsIn: arrayUnion(groupId),
-  });
-  const groupRef = doc(dbCollection.groups, groupId);
-  await setDoc(groupRef, {
-    members: arrayUnion(userData.id),
-  });
+  try {
+    const userQuery = query(dbCollection.users, where("email", "==", emailId));
+    const userSnapshot = await getDocs(userQuery);
+
+    if (userSnapshot.empty) {
+      throw new Error("User Not found");
+    }
+
+    const userDoc = userSnapshot.docs[0];
+    const userData = userDoc.data() as IUser;
+    const userRef = doc(dbCollection.users, userData.id);
+    const groupRef = doc(dbCollection.groups, groupId);
+
+    await updateDoc(userRef, {
+      groupsIn: arrayUnion(groupId),
+    });
+
+    await updateDoc(groupRef, {
+      members: arrayUnion(userData.id),
+    });
+
+    console.log("User and group updated successfully");
+  } catch (error) {
+    throw error;
+  }
 };
 
-const removeMembers = async (
-  groupId: string,
-  emailId?: string,
-  userId?: string
-) => {
-  const userQuery = query(
-    dbCollection.users,
-    where("email", "==", emailId || userId)
-  );
-  const user = await getDocs(userQuery);
-  if (user.empty) throw new Error("User Not found");
-  const userData = user.docs.map((user) => user.data())[0] as IUser;
-  const userRef = doc(dbCollection.users, userData.id);
-  await setDoc(userRef, {
-    groupsIn: arrayRemove(groupId),
-  });
-  const groupRef = doc(dbCollection.groups, groupId);
-  await setDoc(groupRef, {
-    members: arrayRemove(userData.id),
-  });
+const removeMembers = async (groupId: string, userId: string) => {
+  try {
+    const userRef = doc(dbCollection.users, userId);
+    const groupRef = doc(dbCollection.groups, groupId);
+
+    await updateDoc(userRef, {
+      groupsIn: arrayRemove(groupId),
+    });
+
+    await updateDoc(groupRef, {
+      members: arrayRemove(userId),
+    });
+
+    console.log("User and group updated successfully");
+  } catch (error) {
+    throw error
+  }
 };
 
 const deleteGroup = async (groupId: string) => {
