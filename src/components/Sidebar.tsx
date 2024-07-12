@@ -6,9 +6,12 @@ import { auth } from '../firebaseConfig';
 import { signOut } from 'firebase/auth';
 import UserInfoModal from './UserInfoModal';
 import { User } from '../utils/types';
+import HomeIcon from '@mui/icons-material/Home';
+import GroupIcon from '@mui/icons-material/Group';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const Sidebar: React.FC = () => {
-  const [authUser, loading, error] = useAuthState(auth);
+  const [authUser, loading] = useAuthState(auth);
   const [user, setUser] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
@@ -32,14 +35,14 @@ const Sidebar: React.FC = () => {
   const handleModalClose = () => setIsModalOpen(false);
 
   const handleUserProfileUpdate = (updatedUser: User) => {
-    setUser(updatedUser); // Update the user state
-    handleModalClose(); // Close the modal
+    setUser(updatedUser);
+    handleModalClose();
   };
 
   const navLinks = [
-    { path: '/dashboard', name: 'Home' },
-    { path: '/group', name: 'Groups' },
-    { path: '/notifications', name: 'Notifications' },
+    { path: '/dashboard', name: 'Home', icon: <HomeIcon /> },
+    { path: '/group', name: 'Groups', icon: <GroupIcon /> },
+    { path: '/notifications', name: 'Notifications', icon: <NotificationsIcon /> },
   ];
 
   return (
@@ -60,11 +63,21 @@ const Sidebar: React.FC = () => {
           <NavLink
             to={link.path}
             key={link.name}
-            className={`text-white mb-4 block ${
-              location.pathname === link.path ? 'underline' : ''
-            }`}
+            className="text-white mb-4 block"
+            style={{
+              color: location.pathname === link.path ? '#576cce' : 'white',
+            }}
           >
-            <Typography variant="h6">{link.name}</Typography>
+            <Box 
+              display="flex" 
+              alignItems="center" 
+              className={`p-2 rounded-full ${
+                location.pathname === link.path ? 'bg-white' : ''
+              }`}
+            >
+              {link.icon}
+              <Typography variant="h6" style={{ marginLeft: '10px' }}>{link.name}</Typography>
+            </Box>
           </NavLink>
         ))}
       </Box>
@@ -89,7 +102,7 @@ const Sidebar: React.FC = () => {
         onClose={handleModalClose}
         user={user}
         onLogout={handleLogout}
-        onUserProfileUpdate={handleUserProfileUpdate} // Pass the callback
+        onUserProfileUpdate={handleUserProfileUpdate}
       />
     </Box>
   );

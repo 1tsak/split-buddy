@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Modal,
@@ -19,7 +19,7 @@ interface UserInfoModalProps {
   onClose: () => void;
   user: User | null;
   onLogout: () => void;
-  onUserProfileUpdate: (updatedUser: User) => void; // New prop for callback
+  onUserProfileUpdate: (updatedUser: User) => void;
 }
 
 const UserInfoModal: React.FC<UserInfoModalProps> = ({
@@ -29,10 +29,17 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
   onLogout,
   onUserProfileUpdate,
 }) => {
-  const [displayName, setDisplayName] = useState(user?.displayName || '');
-  const [photoURL, setPhotoURL] = useState(user?.photoURL || '');
-  const [uploading, setUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
+  const [displayName, setDisplayName] = useState<string>('');
+  const [photoURL, setPhotoURL] = useState<string>('');
+  const [uploading, setUploading] = useState<boolean>(false);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+
+  useEffect(() => {
+    if (user) {
+      setDisplayName(user.displayName || '');
+      setPhotoURL(user.photoURL || '');
+    }
+  }, [user]);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDisplayName(e.target.value);
@@ -70,9 +77,10 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
   const handleSave = async () => {
     if (user) {
       try {
-        await updateUserProfile(user, { displayName, photoURL });
-        // Call the callback function with the updated user data
-        onUserProfileUpdate({ ...user, displayName, photoURL });
+        updateUserProfile(user, { displayName, photoURL });
+         onUserProfileUpdate({ ...user, displayName, photoURL });
+        console.log('onClose',onClose())
+        onClose(); // Close the modal
       } catch (error) {
         console.error('Failed to update profile:', error);
       }

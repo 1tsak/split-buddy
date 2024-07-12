@@ -1,20 +1,27 @@
 // components/Layout.tsx
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./NavBar";
 import Sidebar from "./Sidebar";
 
 const LayoutWrapper: React.FC = () => {
+  const location = useLocation();
+  const hideSidebar = location.pathname.startsWith("/group/");
+
   return (
-    <div className=" h-full flex flex-col">
+    <div className="h-full flex flex-col">
       <Navbar />
-      
-      <main className="flex flex-auto">
-      <Sidebar />
-      <div className="flex-grow ">
+
+      {!hideSidebar ? (
+        <main className="flex w-full ">
+          <Sidebar />
+          <div className="flex-grow">
+            <Outlet />
+          </div>
+        </main>
+      ) : (
         <Outlet />
-      </div>
-      </main>
+      )}
     </div>
   );
 };
