@@ -11,7 +11,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 
 const Sidebar: React.FC = () => {
-  const [authUser, loading, error] = useAuthState(auth);
+  const [authUser, loading] = useAuthState(auth);
   const [user, setUser] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const location = useLocation();
@@ -35,8 +35,8 @@ const Sidebar: React.FC = () => {
   const handleModalClose = () => setIsModalOpen(false);
 
   const handleUserProfileUpdate = (updatedUser: User) => {
-    setUser(updatedUser); // Update the user state
-    handleModalClose(); // Close the modal
+    setUser(updatedUser);
+    handleModalClose();
   };
 
   const navLinks = [
@@ -50,9 +50,9 @@ const Sidebar: React.FC = () => {
       sx={{ 
         display: 'flex',
         flexDirection: 'column',
-        height:"93vh",
+        height: '93vh',
         width: '250px',
-        backgroundColor: '#576cce', // Keep the original background color
+        backgroundColor: '#576cce',
         padding: '20px',
         justifyContent: 'space-between',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
@@ -65,9 +65,8 @@ const Sidebar: React.FC = () => {
             to={link.path}
             key={link.name}
             className="text-white mb-4 block"
-            activeClassName="bg-white"
             style={{
-              color: location.pathname === link.path ? '#576cce' : 'white', // Change text color based on active state
+              color: location.pathname === link.path ? '#576cce' : 'white',
             }}
           >
             <Box 
@@ -104,7 +103,7 @@ const Sidebar: React.FC = () => {
         onClose={handleModalClose}
         user={user}
         onLogout={handleLogout}
-        onUserProfileUpdate={handleUserProfileUpdate} // Pass the callback
+        onUserProfileUpdate={handleUserProfileUpdate}
       />
     </Box>
   );
