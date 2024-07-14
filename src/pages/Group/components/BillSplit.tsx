@@ -2,8 +2,12 @@ import React, { useEffect, useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { Expense, Split } from "../../../utils/types";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../../../firebaseConfig";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { Button, TextField } from "@mui/material";
 
 interface BillSplitProp {
   expenseData: Expense;
@@ -11,20 +15,35 @@ interface BillSplitProp {
 }
 
 const BillSplit = ({ expenseData, splitData }: BillSplitProp) => {
-//   const [user, loading] = useAuthState(auth);
-//   const [userSplit, setUserSplit] = useState<Split>();
-//   useEffect(() => {
-//     console.log(splitData)
-//     if (splitData)
-//       setUserSplit(
-//         splitData.find((split: Split) => split.userId === user?.uid)
-//       );
-//   }, []);
+  //   const [user, loading] = useAuthState(auth);
+  //   const [userSplit, setUserSplit] = useState<Split>();
+  //   useEffect(() => {
+  //     console.log(splitData)
+  //     if (splitData)
+  //       setUserSplit(
+  //         splitData.find((split: Split) => split.userId === user?.uid)
+  //       );
+  //   }, []);
+  const handleSubmit = (e: any) => {};
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <div className="bg-white rounded-md p-5 border border-slate-200 flex flex-col w-[400px]">
       <div className="flex flex-row justify-between items-center">
         <p>Splitting bill of Rs {expenseData.amount}</p>
-        <IoIosArrowForward size={20} />
+        <IoIosArrowForward
+          onClick={handleClickOpen}
+          className="cursor-pointer"
+          size={20}
+        />
       </div>
       <div className="py-1">
         <span className="text-4xl">{splitData?.amount}</span>
@@ -38,6 +57,31 @@ const BillSplit = ({ expenseData, splitData }: BillSplitProp) => {
         <span>Settle Bill</span>
         <MdKeyboardDoubleArrowRight />
       </button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          component: "form",
+          onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+            handleSubmit(event);
+          },
+        }}
+      >
+        <DialogTitle>{expenseData.title}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <h1>{expenseData.category}</h1>
+            <ul>
+              {expenseData.splits.map((split:Split)=>(<li>{split.userId}</li>))}
+            </ul>
+          </DialogContentText>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button type="submit">Add</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
