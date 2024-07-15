@@ -50,9 +50,9 @@ const DashboardPage: React.FC = () => {
           <div className="flex flex-col gap-2">
             <div className="flex justify-between items-center px-2">
               <h2 className="text-2xl font-extrabold">User Dashboard</h2>
-              {/* <Button className=" text-main border-main p-1" variant="outlined">
+              <Button className=" text-main border-main p-1" variant="outlined">
                 More
-              </Button> */}
+              </Button>
             </div>
             <div>
               <HeroComponent/>
@@ -65,11 +65,11 @@ const DashboardPage: React.FC = () => {
             </div>
           </div>
           <div className="">
-            <div className="flex justify-between mt-2">
+            <div className="flex justify-between">
               <div>
                 <h2 className="text-2xl font-extrabold">Income Overview</h2>
               </div>
-              {/* <div>put buttons</div> */}
+              <div>put buttons</div>
             </div>
             <div>
               <DashboardLineChart/>
@@ -77,15 +77,10 @@ const DashboardPage: React.FC = () => {
           </div>
         </div>
         <div>
-          <div className="rounded-xl border-main border-[1px] p-2 flex-auto">
-            <p className="text-2xl font-extrabold">Recent Transactions</p>
-            <p className="text-gray-400 text-sm"></p>
-            <div className="overflow-scroll h-[70vh]">
-              <TransactionCard />
-              <TransactionCard />
-              <TransactionCard />
-              <TransactionCard />
-              <TransactionCard />
+          <div className="rounded-xl border-main border-[1px] p-2">
+            <p className="text-2xl font-extrabold">Transactions</p>
+            <p className="text-gray-400 text-sm">Recent expenses</p>
+            <div>
               <TransactionCard />
               <TransactionCard />
               <TransactionCard />
@@ -94,6 +89,10 @@ const DashboardPage: React.FC = () => {
               <TransactionCard />
               <TransactionCard />
             </div>
+          </div>
+          
+          <div>
+            <p className="text-2xl font-extrabold">Current Results</p>
           </div>
         </div>
       </div>

@@ -1,6 +1,3 @@
-import { PieValueType } from "@mui/x-charts";
-import { MakeOptional } from "@mui/x-charts/internals";
-
 export interface User {
   id: string;
   email: string;
@@ -56,7 +53,4 @@ export interface Balance {
 export interface GroupContextType {
   groupData: Group | null;
   setGroup: (group: Group) => void;
-}
-
-export interface PieChartDataType extends MakeOptional<PieValueType,"id">{
 }
