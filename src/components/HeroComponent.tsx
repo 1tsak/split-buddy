@@ -12,15 +12,14 @@ import { MakeOptional } from "@mui/x-charts/internals";
 
 const HeroComponent = () => {
   const [loading, setLoading] = useState(true);
-  // const [user,_] = useAuthState(auth);
+  const [user,_] = useAuthState(auth);
   const [amt, setAmt] = useState<number>(0);
   const [pieChartData, setPieChartData] = useState<PieChartDataType[]>();
   async function fetchData() {
-    const data = await getUserTotalPaidAmt("userId1");
-    const chartData = await getUserAmtData("userId1");
+    const data = await getUserTotalPaidAmt(user?.uid as string);
+    const chartData = await getUserAmtData(user?.uid as string);
     setAmt(data);
     setPieChartData(chartData);
-    console.log(chartData);
     setLoading(false);
   }
   useEffect(() => {

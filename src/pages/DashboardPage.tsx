@@ -15,6 +15,7 @@ import { LineChart } from "@mui/x-charts";
 import TransactionCard from "../components/TransactionCard";
 import HeroComponent from "../components/HeroComponent";
 import DashboardLineChart from "../components/DashboardLineChart";
+import DCardContainer from "../components/DCardContainer";
 
 const DashboardPage: React.FC = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -57,21 +58,19 @@ const DashboardPage: React.FC = () => {
             <div>
               <HeroComponent/>
             </div>
-            <div className="flex flex-wrap gap-2 justify-around mt-2">
-              <DCard />
-              <DCard />
-              <DCard />
-              <DCard />
+            <div>
+            <h2 className="text-2xl font-extrabold">Recent Bills</h2>
+              <DCardContainer/>
             </div>
           </div>
           <div className="">
             <div className="flex justify-between mt-2">
               <div>
-                <h2 className="text-2xl font-extrabold">Income Overview</h2>
+                <h2 className="text-2xl font-extrabold mt-2">Overview</h2>
               </div>
               {/* <div>put buttons</div> */}
             </div>
-            <div>
+            <div className="mt-2">
               <DashboardLineChart/>
             </div>
           </div>

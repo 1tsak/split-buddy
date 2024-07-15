@@ -1,13 +1,11 @@
 import {
   collection,
-  getDoc,
   getDocs,
-  query,
   query,
   where,
 } from "firebase/firestore";
 import { db } from "../firebaseConfig";
-import { Expense, PieChartDataType } from "../utils/types";
+import { DCardType, Expense, PieChartDataType } from "../utils/types";
 import { sampleExpenses } from "../data/sampleExpenses";
 
 const dbCollection = {
@@ -61,4 +59,20 @@ const getUserAmtData =async (userId:string):Promise<PieChartDataType[]> =>{
     return data 
 }
 
-export{getUserTotalPaidAmt,getUserAmtData}
+const getUserRecentBills = async(userId:string):Promise<DCardType[]> =>{
+    const query1 = query(dbCollection.expenses,where("createdBy","==",userId));
+    const data = new Array<DCardType>;
+    const snapShot = await getDocs(query1);
+    snapShot.forEach(expense=>{
+        const exp :Expense= expense.data() as Expense; 
+        data.push({title:exp.title,amount:exp.amount})
+    })
+    // sampleExpenses.forEach((exp,i)=>{
+    //     if(exp.createdBy == userId){
+    //         data.push({title:exp.title,amount:exp.amount});
+    //     }
+    // })
+    return data
+} 
+
+export{getUserTotalPaidAmt,getUserAmtData,getUserRecentBills}

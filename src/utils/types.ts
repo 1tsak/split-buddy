@@ -60,3 +60,9 @@ export interface GroupContextType {
 
 export interface PieChartDataType extends MakeOptional<PieValueType,"id">{
 }
+
+export interface DCardType {
+  title:string,
+  amount:number | string,
+  grpId?:string,
+}
