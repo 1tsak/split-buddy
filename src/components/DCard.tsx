@@ -1,5 +1,3 @@
-import React, { FC } from 'react'
-
 import { FaHome } from "react-icons/fa";
 
 

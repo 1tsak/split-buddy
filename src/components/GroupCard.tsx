@@ -53,8 +53,8 @@ const GroupCard: FC<IGroupCardProps> = ({ group }) => {
       <div className="flex-auto p-2 mt-2 flex flex-col justify-between">
         <p className="font-bold text-xl ">{name}</p>
         <div className="max-w-full">
-          {grpMembers && grpMembers.map((member)=>{
-            return <span>{member}</span>
+          You,{grpMembers && grpMembers.map((member)=>{
+            return <span>{member},</span>
           })}
           {grpMembers.length > 0 ? '...' : ""}
         </div>
