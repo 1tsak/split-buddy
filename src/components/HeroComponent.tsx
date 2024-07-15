@@ -55,7 +55,7 @@ const HeroComponent = () => {
                 </div>
                 <div className="flex-auto flex items-center text-white">
                   <div className="text-center sm:text-start flex-grow">
-                    <p className="font-thin text-lg ml-2">Your Paid Amount Till Now</p>
+                    <p className="font-thin text-lg ml-2 min-w-64">Your Paid Amount Till Now</p>
                     <p className="text-4xl sm:text-6xl 2xl:text-8xl font-bold flex items-center">{'₹'}{loading ? <Box
         sx={{
           display: "flex",
