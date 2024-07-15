@@ -15,7 +15,7 @@ const DCardContainer = () => {
   };
   useEffect(() => {
     fetchData();
-  });
+  },[]);
   if(bills && bills.length==0){
     return <div className="flex items-center justify-center">
         No Recent bill Data Available

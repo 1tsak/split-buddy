@@ -67,11 +67,14 @@ const getUserRecentBills = async(userId:string):Promise<DCardType[]> =>{
         const exp :Expense= expense.data() as Expense; 
         data.push({title:exp.title,amount:exp.amount})
     })
+    
     // sampleExpenses.forEach((exp,i)=>{
     //     if(exp.createdBy == userId){
     //         data.push({title:exp.title,amount:exp.amount});
     //     }
     // })
+    // splicing the data before sending so the the user only see 4 objects
+    data.splice(4,data.length);
     return data
 } 
 
