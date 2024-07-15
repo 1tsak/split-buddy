@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+import { AiOutlineUser } from "react-icons/ai";
 import { Expense, Split } from "../../../utils/types";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Button, TextField } from "@mui/material";
+import {
+  Button,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Avatar,
+  Typography,
+  Box,
+  Grid,
+} from "@mui/material";
+import { db } from "../../../firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
 
 interface BillSplitProp {
   expenseData: Expense;
@@ -15,26 +27,38 @@ interface BillSplitProp {
 }
 
 const BillSplit = ({ expenseData, splitData }: BillSplitProp) => {
-  //   const [user, loading] = useAuthState(auth);
-  //   const [userSplit, setUserSplit] = useState<Split>();
-  //   useEffect(() => {
-  //     console.log(splitData)
-  //     if (splitData)
-  //       setUserSplit(
-  //         splitData.find((split: Split) => split.userId === user?.uid)
-  //       );
-  //   }, []);
-  const handleSubmit = (e: any) => {};
+  const [open, setOpen] = useState(false);
+  const [members, setMembers] = useState<
+    { userId: string; name: string; amount: number; paid: boolean }[]
+  >([]);
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
+  const handleClickOpen = async () => {
+    const membersData = await Promise.all(
+      expenseData.splits.map(async (split) => {
+        const userDoc = await getDoc(doc(db, "users", split.userId));
+        const userData = userDoc.data();
+        return {
+          userId: split.userId,
+          name: userData?.displayName || "Unknown User",
+          amount: split.amount,
+          paid: split.paid,
+        };
+      })
+    );
+    setMembers(membersData);
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    // Add logic to handle form submission
+    handleClose();
+  };
+
   return (
     <div className="bg-white rounded-md p-5 border border-slate-200 flex flex-col w-[400px]">
       <div className="flex flex-row justify-between items-center">
@@ -53,7 +77,6 @@ const BillSplit = ({ expenseData, splitData }: BillSplitProp) => {
         Your share for {expenseData.title}
       </p>
       <button className="bg-main px-4 py-2 my-2 text-sm font-semibold rounded-md w-fit text-white flex items-center gap-2">
-        {/* <FaPlus size={16} /> */}
         <span>Settle Bill</span>
         <MdKeyboardDoubleArrowRight />
       </button>
@@ -62,24 +85,47 @@ const BillSplit = ({ expenseData, splitData }: BillSplitProp) => {
         onClose={handleClose}
         PaperProps={{
           component: "form",
-          onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-            handleSubmit(event);
-          },
+          onSubmit: handleSubmit,
         }}
       >
-        <DialogTitle>{expenseData.title}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            <h1>{expenseData.category}</h1>
-            <ul>
-              {expenseData.splits.map((split:Split)=>(<li>{split.userId}</li>))}
-            </ul>
-          </DialogContentText>
+        <DialogTitle>
+          <div style={{ display: "flex",flexDirection:"column" }}>
+            <Grid container justifyContent="space-between" alignItems="start">
+              <Grid item>
+                <Typography variant="h6">{expenseData.title}</Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1" color="textSecondary">
+                  Category: {expenseData.category}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Typography variant="body1" color="textSecondary">
+              Amount: Rs {expenseData.amount}
+            </Typography>
+          </div>
+        </DialogTitle>
+        <DialogContent style={{ width: "500px" }}>
+          <List>
+            {members.map((member) => (
+              <ListItem key={member.userId}>
+                <ListItemAvatar>
+                  <Avatar>
+                    <AiOutlineUser />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={member.name}
+                  secondary={`Amount: Rs ${member.amount} - ${
+                    member.paid ? "Paid" : "Unpaid"
+                  }`}
+                />
+              </ListItem>
+            ))}
+          </List>
         </DialogContent>
-
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Add</Button>
+          <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
     </div>

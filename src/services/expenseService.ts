@@ -16,9 +16,9 @@ export const fetchExpenses = async (groupId: string): Promise<Expense[]> => {
 };
 
 
-export const addExpense = async (groupId: string, expense: Expense) => {
+export const addExpense = async ( expense: Expense) => {
   try {
-    const expensesCollectionRef = collection(doc(db, 'groups', groupId), 'expenses');
+    const expensesCollectionRef = collection(doc(db, 'groups'), 'expenses');
     const expenseWithTimestamp = {
       ...expense,
       createdAt: serverTimestamp(),

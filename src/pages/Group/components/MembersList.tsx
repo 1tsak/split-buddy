@@ -91,7 +91,7 @@ const MembersList = () => {
     getMembers();
   }, [groupData]);
   return (
-    <div className="flex flex-col items-start gap-3 rounded-md w-1/2 h-fit bg-slate-100 p-5">
+    <div className="flex flex-col items-start gap-3 rounded-md w-[400px] h-fit bg-slate-100 p-5">
       <h2 className="py-2 text-slate-500">Members</h2>
       <ul className="flex flex-wrap gap-2 font-light">
         {members &&
