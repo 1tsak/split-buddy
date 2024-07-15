@@ -66,3 +66,9 @@ export interface DCardType {
   amount:number | string,
   grpId?:string,
 }
+
+export interface TransactionCardType{
+  isGetting:boolean,
+  amount:number | string,
+  userName?:string,
+}
