@@ -17,9 +17,11 @@ import {
   Typography,
   Box,
   Grid,
+  ListItemButton,
 } from "@mui/material";
-import { db } from "../../../firebaseConfig";
+import { auth, db } from "../../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 interface BillSplitProp {
   expenseData: Expense;
@@ -27,6 +29,7 @@ interface BillSplitProp {
 }
 
 const BillSplit = ({ expenseData, splitData }: BillSplitProp) => {
+  const [user, loading] = useAuthState(auth);
   const [open, setOpen] = useState(false);
   const [members, setMembers] = useState<
     { userId: string; name: string; amount: number; paid: boolean }[]
@@ -48,6 +51,7 @@ const BillSplit = ({ expenseData, splitData }: BillSplitProp) => {
     setMembers(membersData);
     setOpen(true);
   };
+  const handleSettleBill = async () => {};
 
   const handleClose = () => {
     setOpen(false);
@@ -76,10 +80,12 @@ const BillSplit = ({ expenseData, splitData }: BillSplitProp) => {
       <p className="text-sm text-gray-500 py-1 font-light">
         Your share for {expenseData.title}
       </p>
-      <button className="bg-main px-4 py-2 my-2 text-sm font-semibold rounded-md w-fit text-white flex items-center gap-2">
-        <span>Settle Bill</span>
-        <MdKeyboardDoubleArrowRight />
-      </button>
+      {expenseData.createdBy !== user?.uid ?(
+        <button className="bg-main px-4 py-2 my-2 text-sm font-semibold rounded-md w-fit text-white flex items-center gap-2">
+          <span>Settle Bill</span>
+          <MdKeyboardDoubleArrowRight />
+        </button>
+      ):<p className="py-2 text-gray-400">Already Paid</p>}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -89,7 +95,7 @@ const BillSplit = ({ expenseData, splitData }: BillSplitProp) => {
         }}
       >
         <DialogTitle>
-          <div style={{ display: "flex",flexDirection:"column" }}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
             <Grid container justifyContent="space-between" alignItems="start">
               <Grid item>
                 <Typography variant="h6">{expenseData.title}</Typography>
@@ -120,6 +126,9 @@ const BillSplit = ({ expenseData, splitData }: BillSplitProp) => {
                     member.paid ? "Paid" : "Unpaid"
                   }`}
                 />
+                {expenseData.createdBy === user?.uid && !member.paid && (
+                  <Button className="bg-red">Mark Paid</Button>
+                )}
               </ListItem>
             ))}
           </List>

@@ -1,7 +1,5 @@
 import { Outlet, useParams, Routes, Route } from "react-router-dom";
 import Sider from "./components/Sider";
-import GroupHome from "./components/GroupHome";
-import BillDetails from "./components/BillDetails";
 import useGroup from "../../hooks/useGroup";
 import { useEffect, useState } from "react";
 import { getGroupById } from "../../services/groupService";
