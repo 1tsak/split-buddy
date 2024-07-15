@@ -5,7 +5,7 @@ import React from 'react'
 const DashboardLineChart = () => {
   return (
     <div className="border-main border-[1px] h-96 w-full rounded-lg">
-              <LineChart
+              <LineChart 
                 xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
                 series={[
                   {
