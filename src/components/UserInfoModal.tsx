@@ -77,9 +77,8 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
   const handleSave = async () => {
     if (user) {
       try {
-        updateUserProfile(user, { displayName, photoURL });
-         onUserProfileUpdate({ ...user, displayName, photoURL });
-        console.log('onClose',onClose())
+         updateUserProfile(user, { displayName, photoURL });
+        onUserProfileUpdate({ ...user, displayName, photoURL });
         onClose(); // Close the modal
       } catch (error) {
         console.error('Failed to update profile:', error);
@@ -120,6 +119,8 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
           onChange={handleNameChange}
           fullWidth
           sx={{ mb: 2 }}
+          error={!displayName.trim()}
+          helperText={!displayName.trim() && "Name cannot be empty"}
         />
         <Button
           variant="contained"
@@ -150,7 +151,7 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
           color="primary"
           fullWidth
           onClick={handleSave}
-          disabled={uploading}
+          disabled={uploading || !displayName.trim()}
           sx={{ mb: 2 }}
         >
           Save
