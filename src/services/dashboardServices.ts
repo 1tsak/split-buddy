@@ -39,23 +39,25 @@ const getUserTotalPaidAmt = async (userId: string): Promise<number> => {
 const getUserAmtData =async (userId:string):Promise<PieChartDataType[]> =>{
     const expensesSnapShot = await getDocs(dbCollection.expenses);
     const data = new Array<PieChartDataType>
-    // expensesSnapShot.forEach((expense) => {
-    //   const splits = (expense.data() as Expense).splits;
-    //   splits.forEach((split,i) => {
-    //     if (split.userId == userId && split.paid==true) {
-    //       data.push({id:i,value:+split.amount})
-    //     }
-    //   });
-    // });
+    expensesSnapShot.forEach((expense) => {
+      const splits = (expense.data() as Expense).splits;
+      splits.forEach((split,i) => {
+        if (split.userId == userId && split.paid==true) {
+          data.push({id:i,value:+split.amount})
+        }
+      });
+    });
 
-    sampleExpenses.forEach(expense=>{
-        const splits = expense.splits;
-        splits.forEach((split,i) => {
-            if (split.userId == userId && split.paid==true) {
-                data.push({id:i,value:+split.amount})
-              } 
-        });
-    })
+    // sampleExpenses.forEach(expense=>{
+    //     const splits = expense.splits;
+    
+    //     splits.forEach((split) => {
+    //         if (split.userId == userId && split.paid==true) {
+    //             data.push({value:+split.amount})
+                
+    //           } 
+    //     });
+    // })
     return data 
 }
 
