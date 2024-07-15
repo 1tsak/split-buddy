@@ -12,6 +12,7 @@ import GroupHomePage from "./pages/GroupHomePage";
 import GroupHome from "./pages/Group/components/GroupHome";
 import BillDetails from "./pages/Group/components/BillDetails";
 import RedirectToDashboard from "./components/RedirectToDashboard";
+import NotificationPage from "./components/NotificationPage";
 
 function App() {
   return (
@@ -41,7 +42,7 @@ function App() {
           }
         >
           <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/notifications" element={<DashboardPage />} />
+          <Route path="/notifications" element={<NotificationPage />} />
           <Route
             path="/group/:groupId"
             element={
