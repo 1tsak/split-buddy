@@ -79,7 +79,7 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
       try {
          updateUserProfile(user, { displayName, photoURL });
         onUserProfileUpdate({ ...user, displayName, photoURL });
-        onClose(); // Close the modal
+        onClose(); 
       } catch (error) {
         console.error('Failed to update profile:', error);
       }
