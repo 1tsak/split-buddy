@@ -5,6 +5,7 @@ import { Group, User } from "../utils/types";
 import { getUser } from "../services/authService";
 import { addExpense } from "../services/expenseService";
 import { useNavigate, useParams } from "react-router-dom";
+import { notificationService } from "../services/notificationService";
 const auth = getAuth();
 type Split = {
   userId: string;
@@ -24,7 +25,7 @@ type FormDataType = {
 };
 const BillCreation = () => {
   const [open, setOpen] = useState(false);
-  const userInfo = auth.currentUser;
+  const [userInfo,setUserInfo] = useState<User>();
   const [userGroups, setUserGroups] = useState<Group[]>([]);
   const [groupMember, setGroupMember] = useState<User[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -249,10 +250,14 @@ const BillCreation = () => {
       groupId: formData.group.id,
       splits: [...ActualSplit],
     };
-    console.log(expenseData);
+    // console.log(expenseData);
     try {
       await addExpense(expenseData);
       navigate(`/group/${groupId}`)
+    await notificationService({title :  `${userInfo?.displayName} created a new bill` ,
+        message : `${expenseData.title} ${expenseData.category}`,
+        groupId: expenseData.groupId
+      })
       handleClose();
     } catch (error) {
       console.log(error);
@@ -264,17 +269,36 @@ const BillCreation = () => {
     }
   }, [formData.group.id, formData.amount]);
   useEffect(() => {
+    const fetchUserDetail = async () => {
+      try {
+        if(!auth.currentUser){
+          return ;
+        }
+        const data = await getUser(auth?.currentUser?.uid);
+
+        if(!data){
+          return ;
+        }
+        setUserInfo(data);
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+  
+    if (!userInfo) {
+      fetchUserDetail();
+    }
     const fetchGroups = async () => {
       // console.log('gcvhbjk');
       try {
-        const groupList = await getGroups(userInfo?.uid);
+        const groupList = await getGroups(auth?.currentUser?.uid);
         setUserGroups(groupList);
       } catch (error) {
         console.error("Error fetching groups:", error);
       }
     };
     fetchGroups();
-  }, [userInfo?.uid]);
+  }, [auth?.currentUser?.uid]);
   return (
     <div>
       <button

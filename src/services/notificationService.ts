@@ -30,7 +30,7 @@ const notificationService = async ({
 
 
 const fetchNotification = async (userId: string): Promise<Notification[] | undefined> => {
-//   console.log(userId);
+  // console.log(userId);
   try {
     // Reference to the document
     const userRef = doc(db, "users", userId);
