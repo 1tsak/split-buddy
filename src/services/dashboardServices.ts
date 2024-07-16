@@ -6,7 +6,6 @@ import {
   PieChartDataType,
   TransactionCardType,
 } from "../utils/types";
-import { sampleExpenses } from "../data/sampleExpenses";
 import { getUser } from "./authService";
 
 const dbCollection = {

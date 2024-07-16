@@ -5,11 +5,20 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Expense } from "../../../utils/types";
 import { Box, CircularProgress } from "@mui/material";
+
 const Sider = () => {
   const { groupData, expenses, loading } = useGroup();
+
   useEffect(() => {
     console.log(groupData);
   }, [groupData]);
+
+  const sortedExpenses = expenses
+    ? [...expenses].sort(
+        (a, b) => b.updatedAt.seconds - a.updatedAt.seconds
+      )
+    : [];
+
   return (
     <div className="h-full w-1/4 bg-slate-100 pt-4">
       <h1 className="text-center text-xl text-slate-700">{groupData?.name}</h1>
@@ -36,10 +45,11 @@ const Sider = () => {
             <CircularProgress />
           </Box>
         ) : (
-          <ul className="p-2  text-gray-700  flex flex-col cursor-pointer font-light ">
-            {expenses && expenses.length > 0 ? (
-              expenses.map((expense: Expense) => (
-                <Link to={`bill/${expense.id}`}>
+          <ul className="p-2 text-gray-700 flex flex-col cursor-pointer font-light">
+            <p className="font-light text-sm p-2 text-gray-400">Today</p>
+            {sortedExpenses && sortedExpenses.length > 0 ? (
+              sortedExpenses.map((expense: Expense) => (
+                <Link to={`bill/${expense.id}`} key={expense.id}>
                   <li className="border-b slate-300 p-3 flex justify-between items-center gap-2">
                     <div className="flex gap-2 items-center">
                       <CiMoneyBill size={18} />
