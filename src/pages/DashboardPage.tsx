@@ -26,7 +26,7 @@ const DashboardPage: React.FC = () => {
       values[1].forEach(value=>{
         chartData1.push(value.value)
       })
-      setChartData(chartData1)
+      setChartData(chartData1.slice(0,12))
       
 
       setLoading(false)

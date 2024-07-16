@@ -21,7 +21,7 @@ const TransactionCard:FC<ITransactionCardProps> = ({data}) => {
             <p className='text-[12px] text-gray-400 font-thin'>{isGetting ?"By:" : "To:"}{data.userName}</p>
         </div>
         <div >
-            <p className={isGetting ? 'text-green-500': 'text-red-500'}>{isGetting?"":'-'}₹{amount}</p>
+            <p className={isGetting ? 'text-green-500 text-start': 'text-red-500 text-start'}>{isGetting?"":'-'}₹{amount}</p>
         </div>
     </div>
   )
