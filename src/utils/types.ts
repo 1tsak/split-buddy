@@ -55,6 +55,8 @@ export interface Balance {
 
 export interface GroupContextType {
   groupData: Group | null;
+  expenses:Expense[];
+  setExpenses:(expenses:Expense[])=>void;
   setGroup: (group: Group) => void;
 }
 

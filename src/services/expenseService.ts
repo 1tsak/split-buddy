@@ -1,10 +1,10 @@
-import { addDoc, collection, doc, getDocs, query, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, query, serverTimestamp, where } from "firebase/firestore";
 import { Expense } from "../utils/types";
 import { db } from "../firebaseConfig";
 
 export const fetchExpenses = async (groupId: string): Promise<Expense[]> => {
-  const expensesCollection = collection(db, `expenses`);
-  const expensesQuery = query(expensesCollection);
+  const expensesCollection = collection(db, 'expenses');
+  const expensesQuery = query(expensesCollection, where('groupId', '==', groupId));
   const querySnapshot = await getDocs(expensesQuery);
 
   const expenses: Expense[] = [];
@@ -18,7 +18,7 @@ export const fetchExpenses = async (groupId: string): Promise<Expense[]> => {
 
 export const addExpense = async ( expense: Expense) => {
   try {
-    const expensesCollectionRef = collection(doc(db, 'groups'), 'expenses');
+    const expensesCollectionRef = collection(db, 'expenses');
     const expenseWithTimestamp = {
       ...expense,
       createdAt: serverTimestamp(),
