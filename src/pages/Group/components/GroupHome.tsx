@@ -9,6 +9,7 @@ import { LineChart } from "@mui/x-charts";
 
 const GroupHome = () => {
   const { groupData,expenses } = useGroup();
+  
 
   useEffect(() => {
   }, [groupData]);
