@@ -9,6 +9,7 @@ import { notificationService } from "../services/notificationService";
 import useGroup from "../hooks/useGroup";
 import { BsToggle2On } from "react-icons/bs";
 import { BsToggle2Off } from "react-icons/bs";
+import { Box, CircularProgress } from "@mui/material";
 
 const auth = getAuth();
 type Split = {
@@ -35,7 +36,8 @@ const BillCreation = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [customBill, setCustomBill] = useState<number[]>([]);
   const [custom, setCustom] = useState<boolean>(false);
-  const {fetchExpensesData} = useGroup();
+  const [loading,setLoading] = useState(false);
+  const { fetchExpensesData } = useGroup();
   const [formData, setFormData] = useState<FormDataType>({
     title: "",
     amount: 0,
@@ -97,6 +99,7 @@ const BillCreation = () => {
 
   // handleling field change
   const handleChange = (e: any) => {
+    setLoading(true);
     const { name, value } = e.target;
     if (name === "amount" && parseFloat(value) <= 0) {
       setFormData({ ...formData, [name]: 0 });
@@ -135,8 +138,11 @@ const BillCreation = () => {
               setCustomBill(arr);
             }
             setGroupMember(validUsers);
+            setLoading(false);
           } catch (error) {
             console.error("Error fetching group members:", error);
+            setLoading(false);
+
           }
         };
         getGroupMember();
@@ -394,44 +400,59 @@ const BillCreation = () => {
                   </div>
                   <div className="flex flex-col items-center ">
                     <div className="mb-4">
-                      {groupMember.map((user, index) => (
-                        <div
-                          key={user.id}
-                          className="flex items-center justify-between mb-2"
+                      {!loading ? (
+                        groupMember && groupMember.map((user, index) => (
+                          <div
+                            key={user.id}
+                            className="flex items-center justify-between mb-2"
+                          >
+                            <label className="mr-2">
+                              <input
+                                type="checkbox"
+                                name={user.id}
+                                checked={
+                                  formData.splits[index]?.checked || false
+                                }
+                                onChange={handleCheckboxChange}
+                                className="mr-2"
+                              />
+                              {user.displayName}
+                            </label>
+                            {
+                              <input
+                                type="tel"
+                                name="customAmount"
+                                value={
+                                  !custom
+                                    ? formData.splits[index]?.checked
+                                      ? formData.splits[index]?.amount.toFixed(
+                                          2
+                                        ) || 0
+                                      : 0
+                                    : customBill[index]
+                                }
+                                onChange={(e) => customBillChange(e, index)}
+                                placeholder="Amount"
+                                disabled={
+                                  !formData.splits[index]?.checked || !custom
+                                }
+                                className="w-1/3 px-3 py-2 border rounded ml-2"
+                              />
+                            }
+                          </div>
+                        ))
+                      ) : (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            height: "100%",
+                          }}
                         >
-                          <label className="mr-2">
-                            <input
-                              type="checkbox"
-                              name={user.id}
-                              checked={formData.splits[index]?.checked || false}
-                              onChange={handleCheckboxChange}
-                              className="mr-2"
-                            />
-                            {user.displayName}
-                          </label>
-                          {
-                            <input
-                              type="tel"
-                              name="customAmount"
-                              value={
-                                !custom
-                                  ? formData.splits[index]?.checked
-                                    ? formData.splits[index]?.amount.toFixed(
-                                        2
-                                      ) || 0
-                                    : 0
-                                  : customBill[index]
-                              }
-                              onChange={(e) => customBillChange(e, index)}
-                              placeholder="Amount"
-                              disabled={
-                                !formData.splits[index]?.checked || !custom
-                              }
-                              className="w-1/3 px-3 py-2 border rounded ml-2"
-                            />
-                          }
-                        </div>
-                      ))}
+                          <CircularProgress />
+                        </Box>
+                      )}
                     </div>
                   </div>
                 </div>
