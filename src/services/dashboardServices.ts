@@ -6,7 +6,7 @@ import {
   PieChartDataType,
   TransactionCardType,
 } from "../utils/types";
-import { sampleExpenses } from "../data/sampleExpenses";
+import { getUser } from "./authService";
 
 const dbCollection = {
   expenses: collection(db, "expenses"),
@@ -19,10 +19,11 @@ const getUserTotalPaidAmt = async (userId: string): Promise<number> => {
     const splits = (expense.data() as Expense).splits;
     splits.forEach((split) => {
       if (split.userId == userId && split.paid == true) {
-        amt += split.amount;
+        amt += Number(split.amount);
       }
     });
   });
+  console.log(amt)
   // sampleExpenses.forEach(sampleExpenses=>{
   //     const splits = sampleExpenses.splits;
   //     splits.forEach(sp=>{
@@ -39,9 +40,9 @@ const getUserAmtData = async (userId: string): Promise<PieChartDataType[]> => {
   const data = new Array<PieChartDataType>();
   expensesSnapShot.forEach((expense) => {
     const splits = (expense.data() as Expense).splits;
-    splits.forEach((split, i) => {
+    splits.forEach((split) => {
       if (split.userId == userId && split.paid == true) {
-        data.push({ id: i, value: +split.amount });
+        data.push({ id: Math.random(), value: +split.amount });
       }
     });
   });
@@ -89,17 +90,23 @@ const getUserTransactoins = async (
     if (exp.createdBy == userId) {
       splits.forEach((split) => {
         if (split.userId != userId) {
-          data.push({ amount: split.amount, isGetting: true });
+          data.push({ amount: split.amount, isGetting: true ,userName:split.userId});
         }
       });
     } else {
       splits.forEach(split=>{
         if(split.userId==userId){
-          data.push({amount:split.amount,isGetting:false})
+          data.push({amount:split.amount,isGetting:false,userName:exp.createdBy})
         }
       })
     }
   });
+
+  for(const dt of data){
+    const user = await getUser(dt.userName as string);
+    dt.userName = user?.displayName
+  }
+
   // sampleExpenses.forEach((expense) => {
   //   const exp = expense
   //   const splits = exp.splits;
@@ -117,6 +124,7 @@ const getUserTransactoins = async (
   //     })
   //   }
   // });
+  console.log(data)
   return data;
 };
 

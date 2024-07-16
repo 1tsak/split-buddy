@@ -16,12 +16,12 @@ const TransactionCard:FC<ITransactionCardProps> = ({data}) => {
         <div className={`rounded-lg overflow-hidden p-3 ${isGetting ? 'bg-green-400': 'bg-red-400'} `}>
             <MdAttachMoney className='text-white text-xl font-bolder'/>
         </div>
-        <div className='flex-grow flex justify-start items-center'>
+        <div className='flex-grow flex justify-start items-start flex-col '>
             <p className='font-bold'>{isGetting ? "Received" : 'Send'}</p>
-            {/* <p className='text-sm text-gray-400 font-thin'>2 min ago</p> */}
+            <p className='text-[12px] text-gray-400 font-thin'>{isGetting ?"By:" : "To:"}{data.userName}</p>
         </div>
         <div >
-            <p className={isGetting ? 'text-green-500': 'text-red-500'}>{isGetting?"":'-'}₹{amount}</p>
+            <p className={isGetting ? 'text-green-500 text-start': 'text-red-500 text-start'}>{isGetting?"":'-'}₹{amount}</p>
         </div>
     </div>
   )

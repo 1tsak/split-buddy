@@ -6,14 +6,14 @@ export const calculateTotalExpenses = (expenses: Expense[]) => {
 };
 
 export const calculateUserExpenses = (expenses: Expense[]) => {
-  const userExpenses: { [userId: string]: number } = {};
+  const userExpenses: { [key: string]: number } = {};
 
-  expenses.forEach(expense => {
-    expense.splits.forEach(split => {
+  expenses.forEach((expense) => {
+    expense.splits.forEach((split) => {
       if (!userExpenses[split.userId]) {
         userExpenses[split.userId] = 0;
       }
-      userExpenses[split.userId] += split.amount;
+      userExpenses[split.userId] += Number(split.amount); // Ensure amount is treated as a number
     });
   });
 

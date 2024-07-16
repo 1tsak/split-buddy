@@ -27,7 +27,7 @@ export interface Expense {
   amount: number;
   category: string;
   createdBy: string;
-  groupId:string;
+  groupId: string;
   createdAt: string;
   updatedAt: string;
   splits: Split[];
@@ -37,6 +37,10 @@ export interface Split {
   userId: string;
   amount: number;
   paid: boolean;
+}
+
+export interface ExpenseMember extends Split {
+  name: string;
 }
 
 export interface Notification {
@@ -55,22 +59,26 @@ export interface Balance {
 
 export interface GroupContextType {
   groupData: Group | null;
-  expenses:Expense[];
-  setExpenses:(expenses:Expense[])=>void;
+  expenses: Expense[] | null;
+  expenseMembers: ExpenseMember[] | null;
+  fetchExpenseMembersData: (expenseData: Expense[]) => void;
+  setExpenses: (expenses: Expense[]) => void;
   setGroup: (group: Group) => void;
+  fetchExpensesData: (groupId: string) => void;
+  fetchGroupsData: (groupId: string) => void;
+  loading: boolean;
 }
 
-export interface PieChartDataType extends MakeOptional<PieValueType,"id">{
-}
+export interface PieChartDataType extends MakeOptional<PieValueType, "id"> {}
 
 export interface DCardType {
-  title:string,
-  amount:number | string,
-  grpId?:string,
+  title: string;
+  amount: number | string;
+  grpId?: string;
 }
 
-export interface TransactionCardType{
-  isGetting:boolean,
-  amount:number | string,
-  userName?:string,
+export interface TransactionCardType {
+  isGetting: boolean;
+  amount: number | string;
+  userName?: string;
 }
