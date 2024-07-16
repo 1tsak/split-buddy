@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import DCard from "./DCard";
 import { DCardType } from "../utils/types";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -15,7 +15,7 @@ const DCardContainer = () => {
   };
   useEffect(() => {
     fetchData();
-  });
+  },[]);
   if(bills && bills.length==0){
     return <div className="flex items-center justify-center">
         No Recent bill Data Available

@@ -35,7 +35,7 @@ const HeroComponent = () => {
             slotProps={{
               noDataOverlay: {
                 message: "No Data Available",
-                sx: { color: "white",fill:'white'},
+                sx: { color: "white",fill:'white',display:'flex',justifyContent:'center',alignItems:'center'},
               },
             }}
             width={300}

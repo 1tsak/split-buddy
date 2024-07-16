@@ -15,7 +15,7 @@ const LayoutWrapper: React.FC = () => {
       {!hideSidebar ? (
         <main className="flex flex-auto ">
           <Sidebar />
-          <div className="flex-grow">
+          <div className="flex-1">
             <Outlet />
           </div>
         </main>

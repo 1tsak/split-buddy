@@ -5,9 +5,11 @@ const Header = () => {
     <>
       <div className="px-10 h-screen flex  flex-col">
         <div className="h-[10%] flex justify-between items-center">
-            <div>
+            <div className="w-40"> 
             <Link  to={"/"}>
-                <h2 className="text-2xl" >Split-Buddy</h2>
+            <span className="font-semibold text-main ">
+          <img src="logo_main.png" alt="site logo" />
+        </span>
             </Link>
             </div>
             <div className="flex gap-5 items-center">
