@@ -15,9 +15,7 @@ import {
   ListItemText,
   Avatar,
   Typography,
-  Box,
   Grid,
-  ListItemButton,
 } from "@mui/material";
 import { auth, db } from "../../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
@@ -29,14 +27,20 @@ interface BillSplitProp {
   splitData: Split;
 }
 
-const BillSplit = ({ expenseData: expense, splitData }: BillSplitProp) => {
+const BillSplit = ({ expenseData: initialExpense, splitData }: BillSplitProp) => {
   const [user, loading] = useAuthState(auth);
   const [open, setOpen] = useState(false);
   const [members, setMembers] = useState<
     { userId: string; name: string; amount: number; paid: boolean }[]
   >([]);
+  const [expenseData, setExpenseData] = useState<Expense>(initialExpense);
+  const currentUserPaid = expenseData.splits.some(
+    (split) => split.userId === user?.uid && split.paid
+  );
 
-  const [expenseData, setExpenseData] = useState(expense);
+  useEffect(() => {
+    setExpenseData(initialExpense);
+  }, [initialExpense]);
 
   const handleClickOpen = async () => {
     const membersData = await Promise.all(
@@ -54,26 +58,20 @@ const BillSplit = ({ expenseData: expense, splitData }: BillSplitProp) => {
     setMembers(membersData);
     setOpen(true);
   };
-  const handleSettleBill = async () => {};
 
   const handleClose = () => {
     setOpen(false);
   };
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    // Add logic to handle form submission
-    handleClose();
-  };
-  const markPaid = async(userId: string) => {
+  const markPaid = async (userId: string) => {
     const updatedSplits = expenseData.splits.map((split: Split) => {
       if (split.userId === userId) {
         return { ...split, paid: true };
       }
       return split;
     });
-    setExpenseData((prevExpense) => ({ ...prevExpense, splits: updatedSplits }))
-    await markBillPaid(expense.id,updatedSplits);
+
+    setExpenseData((prevExpense) => ({ ...prevExpense, splits: updatedSplits }));
+    await markBillPaid(expenseData.id, updatedSplits);
     handleClose();
   };
 
@@ -94,8 +92,12 @@ const BillSplit = ({ expenseData: expense, splitData }: BillSplitProp) => {
       <p className="text-sm text-gray-500 py-1 font-light">
         Your share for {expenseData.title}
       </p>
-      {expenseData.createdBy !== user?.uid ? (
-        <button className="bg-main px-4 py-2 my-2 text-sm font-semibold rounded-md w-fit text-white flex items-center gap-2">
+      {expenseData.splits.some((split) => split.userId === user?.uid) &&
+      !currentUserPaid ? (
+        <button
+          className="bg-main px-4 py-2 my-2 text-sm font-semibold rounded-md w-fit text-white flex items-center gap-2"
+          onClick={()=>markPaid(auth.currentUser?.uid!)}
+        >
           <span>Settle Bill</span>
           <MdKeyboardDoubleArrowRight />
         </button>
@@ -107,7 +109,10 @@ const BillSplit = ({ expenseData: expense, splitData }: BillSplitProp) => {
         onClose={handleClose}
         PaperProps={{
           component: "form",
-          onSubmit: handleSubmit,
+          onSubmit: (e:any) => {
+            e.preventDefault();
+            handleClose();
+          },
         }}
       >
         <DialogTitle>

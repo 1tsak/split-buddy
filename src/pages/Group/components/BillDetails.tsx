@@ -9,26 +9,27 @@ const BillDetails = () => {
   const { expenses } = useGroup();
   const { billId } = useParams<{ billId: string }>();
   const { groupData } = useGroup();
-  const [expense, setExpense] = useState<Expense>();
+  const [expense, setExpense] = useState<Expense | undefined>(undefined);
   const auth = getAuth();
 
   useEffect(() => {
-    setExpense(
-      expenses?.filter((expense: Expense) => expense.id === billId)[0]
-    );
-  }, [expenses]);
+    if (expenses && billId) {
+      const foundExpense = expenses.find((expense: Expense) => expense.id === billId);
+      setExpense(foundExpense);
+    }
+  }, [expenses, billId]);
+
   return (
     <div className="p-5 h-full w-full flex flex-col">
       <h1 className="text-center text-lg font-semibold text-gray-600">
         {groupData?.name}
       </h1>
       <div className="grid">
-      {expense && expense.splits && expense.splits
-        .filter((split: Split) => split.userId === auth.currentUser?.uid)
-        .map((split: Split) => (
-          <BillSplit key={split.userId} expenseData={expense} splitData={split} />
-        ))}
-
+        {expense && expense.splits && expense.splits
+          .filter((split: Split) => split.userId === auth.currentUser?.uid)
+          .map((split: Split) => (
+            <BillSplit key={split.userId} expenseData={expense} splitData={split} />
+          ))}
       </div>
     </div>
   );

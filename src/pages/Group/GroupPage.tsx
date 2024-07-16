@@ -23,7 +23,7 @@ const GroupPage = () => {
       }
     };
     fetchGroupData();
-  }, [groupId,]);
+  }, [groupId]);
 
   return (
     <div className="h-full flex">

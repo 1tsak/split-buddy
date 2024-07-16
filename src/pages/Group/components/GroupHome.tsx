@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Expense } from "../../../utils/types";
-import { sampleExpenses } from "../../../data/sampleExpenses.ts";
+import { sampleExpenses as chartExpenses } from "../../../data/sampleExpenses.ts";
 import ExpensesGraph from "../components/ExpensesGraph";
 import useGroup from "../../../hooks/useGroup";
 
@@ -8,11 +8,9 @@ import MembersList from "./MembersList.tsx";
 import { LineChart } from "@mui/x-charts";
 
 const GroupHome = () => {
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const { groupData } = useGroup();
+  const { groupData,expenses } = useGroup();
 
   useEffect(() => {
-    setExpenses(sampleExpenses);
   }, [groupData]);
 
   return (
@@ -38,7 +36,7 @@ const GroupHome = () => {
           colors={["#687EEF"]}
           height={300}
         />
-        <ExpensesGraph expenses={expenses} />
+        <ExpensesGraph expenses={chartExpenses as any} />
       </div>
     </div>
   );

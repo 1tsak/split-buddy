@@ -4,6 +4,7 @@ import { getAuth } from "firebase/auth";
 import { Group, User } from "../utils/types";
 import { getUser } from "../services/authService";
 import { addExpense } from "../services/expenseService";
+import { useNavigate, useParams } from "react-router-dom";
 const auth = getAuth();
 type Split = {
   userId: string;
@@ -27,6 +28,8 @@ const BillCreation = () => {
   const [userGroups, setUserGroups] = useState<Group[]>([]);
   const [groupMember, setGroupMember] = useState<User[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const navigate = useNavigate();
+  const { groupId } = useParams<{ groupId: string }>();
   const [customBill, setCustomBill] = useState<{ [key: number]: number }>({});
   const [formData, setFormData] = useState<FormDataType>({
     title: "",
@@ -249,6 +252,7 @@ const BillCreation = () => {
     console.log(expenseData);
     try {
       await addExpense(expenseData);
+      navigate(`/group/${groupId}`)
       handleClose();
     } catch (error) {
       console.log(error);

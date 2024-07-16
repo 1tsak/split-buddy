@@ -11,7 +11,6 @@ export const sampleExpenses = [
       splits: [
         { userId: 'userId1', amount: 500, paid: true },
         { userId: 'userId2', amount: 250, paid: false },
-        { userId: 'userId3', amount: 250, paid: false },
       ],
     },
     {
@@ -25,7 +24,6 @@ export const sampleExpenses = [
       splits: [
         { userId: 'userId1', amount: 100, paid: true },
         { userId: 'userId2', amount: 50, paid: true },
-        { userId: 'userId3', amount: 50, paid: false },
       ],
     },
     {
@@ -39,7 +37,6 @@ export const sampleExpenses = [
       splits: [
         { userId: 'userId1', amount: 500, paid: true },
         { userId: 'userId2', amount: 250, paid: false },
-        { userId: 'userId3', amount: 250, paid: false },
       ],
     },
     {
@@ -53,7 +50,6 @@ export const sampleExpenses = [
       splits: [
         { userId: 'userId1', amount: 100, paid: true },
         { userId: 'userId2', amount: 50, paid: true },
-        { userId: 'userId3', amount: 50, paid: false },
       ],
     },
     {
@@ -67,7 +63,6 @@ export const sampleExpenses = [
       splits: [
         { userId: 'userId1', amount: 500, paid: true },
         { userId: 'userId2', amount: 250, paid: false },
-        { userId: 'userId3', amount: 250, paid: false },
       ],
     },
     {
@@ -81,7 +76,6 @@ export const sampleExpenses = [
       splits: [
         { userId: 'userId1', amount: 100, paid: true },
         { userId: 'userId2', amount: 50, paid: true },
-        { userId: 'userId3', amount: 50, paid: false },
       ],
     },
     {
@@ -95,7 +89,6 @@ export const sampleExpenses = [
       splits: [
         { userId: 'userId1', amount: 500, paid: true },
         { userId: 'userId2', amount: 250, paid: false },
-        { userId: 'userId3', amount: 250, paid: false },
       ],
     },
     {
@@ -109,7 +102,6 @@ export const sampleExpenses = [
       splits: [
         { userId: 'userId1', amount: 100, paid: true },
         { userId: 'userId2', amount: 50, paid: true },
-        { userId: 'userId3', amount: 50, paid: false },
       ],
     },
   ];
