@@ -23,6 +23,7 @@ const getUserTotalPaidAmt = async (userId: string): Promise<number> => {
       }
     });
   });
+  console.log(amt)
   // sampleExpenses.forEach(sampleExpenses=>{
   //     const splits = sampleExpenses.splits;
   //     splits.forEach(sp=>{

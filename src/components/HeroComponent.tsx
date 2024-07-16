@@ -1,5 +1,5 @@
 import { PieChart, PieValueType } from "@mui/x-charts";
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebaseConfig";
 import {
@@ -10,21 +10,26 @@ import { Box, CircularProgress } from "@mui/material";
 import { PieChartDataType } from "../utils/types";
 import { MakeOptional } from "@mui/x-charts/internals";
 
-const HeroComponent = () => {
-  const [loading, setLoading] = useState(true);
-  const [user,_] = useAuthState(auth);
-  const [amt, setAmt] = useState<number>(0);
-  const [pieChartData, setPieChartData] = useState<PieChartDataType[]>();
-  async function fetchData() {
-    const data = await getUserTotalPaidAmt(user?.uid as string);
-    const chartData = await getUserAmtData(user?.uid as string);
-    setAmt(data);
-    setPieChartData(chartData);
-    setLoading(false);
-  }
-  useEffect(() => {
-    fetchData();
-  }, []);
+interface IHeroComponetProps{
+  amt:number;
+  pieChartData:PieChartDataType[],
+}
+
+const HeroComponent:FC<IHeroComponetProps> = ({amt,pieChartData}) => {
+  // const [loading, setLoading] = useState(true);
+  // const [user,_] = useAuthState(auth);
+  // const [amt, setAmt] = useState<number>(0);
+  // const [pieChartData, setPieChartData] = useState<PieChartDataType[]>();
+  // async function fetchData() {
+  //   const data = await getUserTotalPaidAmt(user?.uid as string);
+  //   const chartData = await getUserAmtData(user?.uid as string);
+  //   setAmt(data);
+  //   setPieChartData(chartData);
+  //   setLoading(false);
+  // }
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
   return (
     <div className="bg-main rounded-lg h-[30vh] flex flex-col sm:flex-row overflow-hidden">
@@ -74,19 +79,10 @@ const HeroComponent = () => {
           <p className="font-thin text-lg min-w-64">
             Your Paid Amount Till Now
           </p>
-          <p className="text-4xl sm:text-6xl 2xl:text-8xl font-bold flex items-center">
-            {"₹"}
-            {loading ? (
-              <Box
-                sx={{
-                  display: "flex",
-                }}
-              >
-                <CircularProgress className="text-white" />
-              </Box>
-            ) : (
-              amt
-            )}
+          <p className="text-4xl sm:text-6xl 2xl:text-8xl font-bold flex items-center overflow-hidden">
+
+            ₹
+            {17345}
           </p>
           <p className="font-thin text-lg">Showing your Amount in INR</p>
         </div>
