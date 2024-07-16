@@ -17,21 +17,21 @@ import NotificationPage from "./components/NotificationPage";
 function App() {
   return (
     <Routes>
-      <Route 
-        path="/login" 
+      <Route
+        path="/login"
         element={
           <RedirectToDashboard>
             <LoginPage />
           </RedirectToDashboard>
-        } 
+        }
       />
-      <Route 
-        path="/signup" 
+      <Route
+        path="/signup"
         element={
           <RedirectToDashboard>
             <SignUpPage />
           </RedirectToDashboard>
-        } 
+        }
       />
       <Route element={<ProtectedRoute />}>
         <Route
@@ -43,14 +43,7 @@ function App() {
         >
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/notifications" element={<NotificationPage />} />
-          <Route
-            path="/group/:groupId"
-            element={
-              <GroupProvider>
-                <GroupPage />
-              </GroupProvider>
-            }
-          >
+          <Route path="/group/:groupId" element={<GroupPage />}>
             <Route index element={<GroupHome />} />
             <Route path="bill/:billId" element={<BillDetails />} />
           </Route>

@@ -14,13 +14,15 @@ import useGroup from "../../../hooks/useGroup.ts";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../../firebaseConfig.ts";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { Box, CircularProgress } from "@mui/material";
 
 const MembersList = () => {
   const [members, setMembers] = useState<User[] | null>();
   const { groupData } = useGroup();
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = React.useState(false);
-  const [user, loading] = useAuthState(auth);
+  const [user] = useAuthState(auth);
+  const [loading, setLoading] = useState(true);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -29,9 +31,9 @@ const MembersList = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  useEffect(()=>{
+  useEffect(() => {
     setError(null);
-  },[open])
+  }, [open]);
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -43,12 +45,12 @@ const MembersList = () => {
       if (!user) {
         setError("User not found");
       } else {
-        await addMember(groupData?.id as string, email)
         const userPresent = members?.find((member) => member.id === user.id);
-        if(userPresent){
+        if (userPresent) {
           alert("User already present");
-          return ;
+          return;
         }
+        await addMember(groupData?.id as string, email);
         setMembers((prevState: any) => [...prevState, user]);
         alert("User added Successfully!");
         handleClose();
@@ -60,6 +62,7 @@ const MembersList = () => {
   };
   const getMembers = async () => {
     console.log(groupData);
+    setLoading(true);
     const members: User[] = [];
     if (groupData?.members) {
       for (const userId of groupData.members) {
@@ -74,12 +77,13 @@ const MembersList = () => {
       }
     }
     setMembers(members);
+    setLoading(false);
     console.log(members);
   };
   const deleteMember = async (memberId: string) => {
     try {
-      const response=await removeMembers(groupData?.id as string, memberId);
-      console.log({response})
+      const response = await removeMembers(groupData?.id as string, memberId);
+      console.log({ response });
       setMembers((prevState: any) =>
         prevState.filter((member: User) => member.id !== memberId)
       );
@@ -99,20 +103,34 @@ const MembersList = () => {
     <div className="flex flex-col items-start gap-3 rounded-md w-[400px] h-fit bg-slate-100 p-5">
       <h2 className="py-2 text-slate-500">Members</h2>
       <ul className="flex flex-wrap gap-2 font-light">
-        {members &&
+        {loading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+              width:"100%",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          members &&
           members.map((member: User) => (
             <li className="p-2 flex items-center  border border-slate-300 gap-2 rounded">
               {member.displayName}
               {member.id !== user?.uid && (
                 <RiDeleteBin6Line
-                  onClick={()=>deleteMember(member.id)}
+                  onClick={() => deleteMember(member.id)}
                   className="cursor-pointer"
                   size={18}
                   color="#242424"
                 />
               )}
             </li>
-          ))}
+          ))
+        )}
       </ul>
       <button
         onClick={handleClickOpen}
@@ -147,7 +165,13 @@ const MembersList = () => {
           />
         </DialogContent>
         {error && (
-          <DialogContentText style={{ color: "red", paddingLeft:"1.25rem",fontSize:"0.75rem" }}>
+          <DialogContentText
+            style={{
+              color: "red",
+              paddingLeft: "1.25rem",
+              fontSize: "0.75rem",
+            }}
+          >
             {error}
           </DialogContentText>
         )}

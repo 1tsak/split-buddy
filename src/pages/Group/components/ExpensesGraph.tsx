@@ -1,17 +1,17 @@
 // components/ExpensesGraph.tsx
 import React from 'react';
-import { BarChart, Tooltip, PieChart, Pie, Cell } from 'recharts';
+import { PieChart, Pie, Tooltip, Cell } from 'recharts';
 import { Expense } from '../../../utils/types';
 import { calculateUserExpenses } from '../../../utils/calculateExpenses';
 
 interface ExpensesGraphProps {
   expenses: Expense[];
+  expensesMap: { [key: string]: { username: string; totalAmountShared: number } };
 }
-
-
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
+const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }: any) => {
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -24,17 +24,19 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   );
 };
 
-const RADIAN = Math.PI / 180;
-
-const ExpensesGraph: React.FC<ExpensesGraphProps> = ({ expenses }) => {
+const ExpensesGraph: React.FC<ExpensesGraphProps> = ({ expenses, expensesMap }) => {
   const userExpenses = calculateUserExpenses(expenses);
-  const data = Object.keys(userExpenses).map(userId => ({
-    name: userId,
-    value: userExpenses[userId],
-  }));
+
+  const data = Object.keys(userExpenses).map((userId) => {
+    const username = expensesMap[userId]?.username || 'Unknown User';
+    return {
+      name: username,
+      value: userExpenses[userId],
+    };
+  });
 
   return (
-    <PieChart width={400} height={400}>
+    <PieChart width={400} height={300}>
       <Pie
         data={data}
         cx={200}
@@ -53,6 +55,5 @@ const ExpensesGraph: React.FC<ExpensesGraphProps> = ({ expenses }) => {
     </PieChart>
   );
 };
-
 
 export default ExpensesGraph;

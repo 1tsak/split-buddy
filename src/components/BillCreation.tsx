@@ -5,6 +5,7 @@ import { Group, User } from "../utils/types";
 import { getUser } from "../services/authService";
 import { addExpense } from "../services/expenseService";
 import { notificationService } from "../services/notificationService";
+import useGroup from "../hooks/useGroup";
 const auth = getAuth();
 type Split = {
   userId: string;
@@ -24,10 +25,11 @@ type FormDataType = {
 };
 const BillCreation = () => {
   const [open, setOpen] = useState(false);
-  const [userInfo,setUserInfo] = useState<User>();
+  const [userInfo, setUserInfo] = useState<User>();
   const [userGroups, setUserGroups] = useState<Group[]>([]);
   const [groupMember, setGroupMember] = useState<User[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const {fetchExpensesData} = useGroup();
   const [customBill, setCustomBill] = useState<{ [key: number]: number }>({});
   const [formData, setFormData] = useState<FormDataType>({
     title: "",
@@ -250,10 +252,12 @@ const BillCreation = () => {
     // console.log(expenseData);
     try {
       await addExpense(expenseData);
-    await notificationService({title :  `${userInfo?.displayName} created a new bill` ,
-        message : `${expenseData.title} ${expenseData.category}`,
-        groupId: expenseData.groupId
-      })
+      await notificationService({
+        title: `${userInfo?.displayName} created a new bill`,
+        message: `${expenseData.title} ${expenseData.category}`,
+        groupId: expenseData.groupId,
+      });
+      fetchExpensesData(formData.group.id);
       handleClose();
     } catch (error) {
       console.log(error);
@@ -267,20 +271,20 @@ const BillCreation = () => {
   useEffect(() => {
     const fetchUserDetail = async () => {
       try {
-        if(!auth.currentUser){
-          return ;
+        if (!auth.currentUser) {
+          return;
         }
         const data = await getUser(auth?.currentUser?.uid);
 
-        if(!data){
-          return ;
+        if (!data) {
+          return;
         }
         setUserInfo(data);
       } catch (error) {
         console.error("Error fetching user details:", error);
       }
     };
-  
+
     if (!userInfo) {
       fetchUserDetail();
     }
