@@ -3,12 +3,14 @@ import BillSplit from "./BillSplit";
 import useGroup from "../../../hooks/useGroup";
 import { useParams } from "react-router-dom";
 import { Expense, Split } from "../../../utils/types";
+import { getAuth } from "firebase/auth";
 
 const BillDetails = () => {
   const { expenses } = useGroup();
   const { billId } = useParams<{ billId: string }>();
   const { groupData } = useGroup();
   const [expense, setExpense] = useState<Expense>();
+  const auth = getAuth();
 
   useEffect(() => {
     setExpense(
@@ -21,7 +23,11 @@ const BillDetails = () => {
         {groupData?.name}
       </h1>
       <div className="grid">
-        {expense && expense.splits && expense.splits.map((split:Split)=>(<BillSplit expenseData={expense} splitData = {split}/>))}
+      {expense && expense.splits && expense.splits
+        .filter((split: Split) => split.userId === auth.currentUser?.uid)
+        .map((split: Split) => (
+          <BillSplit key={split.userId} expenseData={expense} splitData={split} />
+        ))}
 
       </div>
     </div>

@@ -76,13 +76,12 @@ const BillCreation = () => {
     });
     const splits: Split[] = groupMember.map((user, index) => {
       let amount = formData.splits[index]?.checked
-        ? splitsMember > 0
-          ? remainingAmount / splitsMember
-          : 0
-        : 0; // console.log(amount);
-      if (customBill[index]) {
-        amount = customBill[index];
-      }
+        ? ( splitsMember > 0 ?        parseFloat((remainingAmount / (splitsMember || 1)).toFixed(2))
+        : 0)
+        : 0;// console.log(amount);
+        if(customBill[index]){
+          amount = customBill[index];
+        }
       return {
         userId: user.id,
         amount: amount,
@@ -179,8 +178,9 @@ const BillCreation = () => {
       (split, idx) => split.checked && customBill[idx] === undefined
     );
     remainingSplits.forEach((split) => {
-      split.amount = remainingAmount / (remainingSplits.length || 1);
+      split.amount = parseFloat((remainingAmount / (remainingSplits.length || 1)).toFixed(2));
     });
+       
     setFormData((prev) => ({ ...prev, splits }));
     splitEqually();
   };

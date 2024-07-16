@@ -62,6 +62,14 @@ const BillSplit = ({ expenseData, splitData }: BillSplitProp) => {
     // Add logic to handle form submission
     handleClose();
   };
+  const markPaid = (userId:string) => {
+    const updatedSplits = expenseData.splits.map((split:Split) => {
+      if (split.userId === userId) {
+        return { ...split, paid: true };
+      }
+      return split;
+    });
+  };
 
   return (
     <div className="bg-white rounded-md p-5 border border-slate-200 flex flex-col w-[400px]">
@@ -80,12 +88,14 @@ const BillSplit = ({ expenseData, splitData }: BillSplitProp) => {
       <p className="text-sm text-gray-500 py-1 font-light">
         Your share for {expenseData.title}
       </p>
-      {expenseData.createdBy !== user?.uid ?(
+      {expenseData.createdBy !== user?.uid ? (
         <button className="bg-main px-4 py-2 my-2 text-sm font-semibold rounded-md w-fit text-white flex items-center gap-2">
           <span>Settle Bill</span>
           <MdKeyboardDoubleArrowRight />
         </button>
-      ):<p className="py-2 text-gray-400">Already Paid</p>}
+      ) : (
+        <p className="py-2 text-gray-400">Already Paid</p>
+      )}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -127,7 +137,12 @@ const BillSplit = ({ expenseData, splitData }: BillSplitProp) => {
                   }`}
                 />
                 {expenseData.createdBy === user?.uid && !member.paid && (
-                  <Button className="bg-red">Mark Paid</Button>
+                  <Button
+                    onClick={() => markpaid(member.userId)}
+                    className="bg-red"
+                  >
+                    Mark Paid
+                  </Button>
                 )}
               </ListItem>
             ))}
