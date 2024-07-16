@@ -3,6 +3,7 @@ import { getGroupById, getGroups } from "../services/groupService";
 import { getAuth } from "firebase/auth";
 import { Group, User } from "../utils/types";
 import { getUser } from "../services/authService";
+import { addExpense } from "../services/expenseService";
 const auth = getAuth();
 type Split = {
   userId: string;
@@ -192,7 +193,7 @@ const BillCreation = () => {
       return { success: false, message: msg };
     }
   };
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async(e: any) => {
     e.preventDefault();
     if (!formData.group.id) {
       setErrorMessage("No Group Found");
@@ -211,18 +212,19 @@ const BillCreation = () => {
     }
     const ActualSplit = formData.splits.map((split) => {
       if (!split.checked) {
-        return;
+        return null; // Returning null or undefined will result in undefined in the resulting array
       }
-      if (split.userId === auth.currentUser?.uid) {
-        split.paid = true;
-      }
-      return {
+      const updatedSplit = {
         userId: split.userId,
         amount: split.amount,
-        paid: split.paid,
+        paid: split.userId === auth.currentUser?.uid ? true : split.paid || false,
       };
-    });
-    const FormDataSubmission = {
+      return updatedSplit;
+    }).filter(Boolean); // Filtering out null or undefined entries
+    
+    // console.log(ActualSplit);
+    
+    const expenseData:any = {
       title: formData.title,
       category: formData.category,
       amount: Number(formData.amount),
@@ -230,7 +232,8 @@ const BillCreation = () => {
       groupId: formData.group.id,
       splits: [...ActualSplit],
     };
-    console.log(FormDataSubmission);
+    console.log(expenseData);
+    await addExpense(expenseData);
   };
   useEffect(() => {
     if (formData.group.id && formData.amount > 0) {
