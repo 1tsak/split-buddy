@@ -8,7 +8,6 @@ import { notificationService } from "../services/notificationService";
 import { BsToggle2On } from "react-icons/bs";
 import { BsToggle2Off } from "react-icons/bs";
 
-
 const auth = getAuth();
 type Split = {
   userId: string;
@@ -44,6 +43,7 @@ const BillCreation = () => {
     },
     splits: [],
   });
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -78,7 +78,7 @@ const BillCreation = () => {
         ? splitsMember > 0
           ? parseFloat((remainingAmount / (splitsMember || 1)).toFixed(2))
           : 0
-        : 0; 
+        : 0;
       return {
         userId: user.id,
         amount: amount,
@@ -91,6 +91,8 @@ const BillCreation = () => {
       splits: splits,
     }));
   };
+
+  // handleling field change
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     if (name === "amount" && parseFloat(value) <= 0) {
@@ -114,7 +116,6 @@ const BillCreation = () => {
       });
       setTimeout(() => {
         const getGroupMember = async () => {
-          // console.log('fxdcgvhbjdslkjhv');
           try {
             const res = await getGroupById(groupId);
             if (!res) {
@@ -128,7 +129,6 @@ const BillCreation = () => {
             );
             const arr = Array(validUsers.length).fill(0);
             if (arr) {
-              // console.log(arr);
               setCustomBill(arr);
             }
             setGroupMember(validUsers);
@@ -142,6 +142,9 @@ const BillCreation = () => {
     }
     setFormData({ ...formData, [name]: value });
   };
+
+  // handleling checkbox
+
   const handleCheckboxChange = (e: any) => {
     const { name, checked } = e.target;
     let splits = formData.splits.map((split, index) => {
@@ -159,6 +162,9 @@ const BillCreation = () => {
       splitEqually();
     }
   };
+
+  // custombillcChange
+
   const customBillChange = (e: any, index: number) => {
     const { value } = e.target;
     const customAmount = parseFloat(value);
@@ -169,7 +175,7 @@ const BillCreation = () => {
     ) {
       return;
     }
-    console.log("click", value, index);
+    // console.log("click", value, index);
     let billArry = new Array();
     customBill.forEach((bill, ind) => {
       if (index == ind) {
@@ -180,17 +186,13 @@ const BillCreation = () => {
     });
     setCustomBill(billArry);
   };
+
   const validateBill = (splits: Split[], amount: number) => {
     if (!splits) {
-
       return { success: false, message: `Error While Generating Bill` };
     }
-    // console.log('check',splits);
-
     const totalCustomAmount = splits.reduce((acc, split) => {
-
-        return acc + split.amount;
-    
+      return acc + split.amount;
     }, 0);
     if (Math.ceil(totalCustomAmount) === Number(amount)) {
       return { success: true };
@@ -198,10 +200,15 @@ const BillCreation = () => {
       const msg =
         Math.ceil(totalCustomAmount) === 0
           ? "At least one member is required in the expense."
-          : "Total expenses are not equal to the amount.";
+          : totalCustomAmount < amount
+          ? "Total expenses are less than amount."
+          : "Total expenses are greater than amount.";
+
       return { success: false, message: msg };
     }
   };
+
+  // handlleing submit
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!formData.group.id) {
@@ -212,7 +219,7 @@ const BillCreation = () => {
       return;
     }
 
-    const ActualSplit:any = formData.splits
+    const ActualSplit: any = formData.splits
       .map((split, index) => {
         if (!split.checked) {
           return null; // Skip unchecked splits
@@ -227,7 +234,6 @@ const BillCreation = () => {
       })
       .filter(Boolean);
 
-      // console.log(ActualSplit);
     if (!ActualSplit) {
       return;
     }
@@ -248,7 +254,7 @@ const BillCreation = () => {
       groupId: formData.group.id,
       splits: [...ActualSplit],
     };
-    // console.log(expenseData);
+
     try {
       await addExpense(expenseData);
       await notificationService({
@@ -262,6 +268,7 @@ const BillCreation = () => {
     }
   };
 
+  // useEffects
   useEffect(() => {
     if (!custom) {
       splitEqually();
@@ -289,7 +296,6 @@ const BillCreation = () => {
       fetchUserDetail();
     }
     const fetchGroups = async () => {
-      // console.log('gcvhbjk');
       try {
         const groupList = await getGroups(auth?.currentUser?.uid);
         setUserGroups(groupList);
@@ -374,7 +380,7 @@ const BillCreation = () => {
                     <span className="block text-left mb-2 text-gray-700">
                       Add Members:
                     </span>
-                    <span onClick={(e) => setCustom((prev) => !prev)}>
+                    <span onClick={() => setCustom((prev) => !prev)}>
                       {custom ? (
                         <BsToggle2On className="text-2xl" />
                       ) : (
@@ -395,6 +401,7 @@ const BillCreation = () => {
                               name={user.id}
                               checked={formData.splits[index]?.checked || false}
                               onChange={handleCheckboxChange}
+                              className="mr-2"
                             />
                             {user.displayName}
                           </label>
