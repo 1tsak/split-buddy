@@ -24,8 +24,9 @@ const DashboardLineChart:FC<DashboardLineChartProps> = ({chartData}) => {
     <div className="border-main border-[1px] h-96 w-full rounded-lg">
               {chartData ? <LineChart 
                 // xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
+                
                 series={[
-                  {
+                  { label:'Monthly Expense',
                     data: chartData,
                     color: "#687EEF",
                   },
