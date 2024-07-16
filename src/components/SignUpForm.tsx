@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { signUp, signIn, updateUserProfile } from "../services/firebaseAuth"; // import signIn
+import { signUp, signIn, updateUserProfile } from "../services/firebaseAuth"; 
 import { createUserDocument } from "../services/firestore";
 import { User } from "../utils/types";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
-import { useNavigate } from "react-router-dom"; // import useNavigate
+import { useNavigate } from "react-router-dom"; 
 
 const SignUpForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -17,7 +17,7 @@ const SignUpForm: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); // useNavigate hook
+  const navigate = useNavigate(); 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
