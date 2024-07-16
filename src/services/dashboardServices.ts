@@ -7,6 +7,7 @@ import {
   TransactionCardType,
 } from "../utils/types";
 import { sampleExpenses } from "../data/sampleExpenses";
+import { getUser } from "./authService";
 
 const dbCollection = {
   expenses: collection(db, "expenses"),
@@ -90,17 +91,23 @@ const getUserTransactoins = async (
     if (exp.createdBy == userId) {
       splits.forEach((split) => {
         if (split.userId != userId) {
-          data.push({ amount: split.amount, isGetting: true });
+          data.push({ amount: split.amount, isGetting: true ,userName:split.userId});
         }
       });
     } else {
       splits.forEach(split=>{
         if(split.userId==userId){
-          data.push({amount:split.amount,isGetting:false})
+          data.push({amount:split.amount,isGetting:false,userName:exp.createdBy})
         }
       })
     }
   });
+
+  for(const dt of data){
+    const user = await getUser(dt.userName as string);
+    dt.userName = user?.displayName
+  }
+
   // sampleExpenses.forEach((expense) => {
   //   const exp = expense
   //   const splits = exp.splits;
@@ -118,6 +125,7 @@ const getUserTransactoins = async (
   //     })
   //   }
   // });
+  console.log(data)
   return data;
 };
 
