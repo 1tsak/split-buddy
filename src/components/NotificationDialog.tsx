@@ -69,7 +69,7 @@ const Dialog: React.FC<DialogProps> = ({ isOpen, title, setIsOpen }) => {
               <div className="mt-2 w-full">
              
                 {
-                  notificationList &&
+                  notificationList && notificationList.length>0 ?
                   notificationList.map((notice, index) => (
                     <div
                       className={`mt-6 px-2 pb-2 ${
@@ -78,14 +78,14 @@ const Dialog: React.FC<DialogProps> = ({ isOpen, title, setIsOpen }) => {
                       key={index}
                     >
                       <div className="flex justify-between w-full">
-                        <p className="text-md text-gray-600">{notice.title}</p>
+                        <p className="text-md text-gray-600">{notice.title}<p className="text-md text-gray-700">{notice.message}</p></p>
                         <p className="text-sm text-gray-400">
                           {moment(notice.createdAt).fromNow()}
                         </p>
                       </div>
-                      <p className="text-md text-gray-700">{notice.message}</p>
+                      
                     </div>
-                  ))}
+                  )) : (<p className="text-center">No notifications found</p>)}
                 
               </div>
             </div>
