@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebaseConfig";
 import { Box, Typography, CircularProgress } from "@mui/material";
@@ -6,9 +6,36 @@ import HeroComponent from "../components/HeroComponent";
 import DashboardLineChart from "../components/DashboardLineChart";
 import DCardContainer from "../components/DCardContainer";
 import TransactionContainer from "../components/TransactionContainer";
+import { getUserAmtData, getUserRecentBills, getUserTotalPaidAmt } from "../services/dashboardServices";
+import { DCardType, PieChartDataType } from "../utils/types";
 
 const DashboardPage: React.FC = () => {
-  const [user, loading, error] = useAuthState(auth);
+  const [user, _] = useAuthState(auth);
+  const [loading,setLoading] = useState<boolean>(true);
+  const [amt, setAmt] = useState<number>(0);
+  const [pieChartData, setPieChartData] = useState<PieChartDataType[]>([]);
+  const [bills, setBills] = useState<DCardType[]>([]);
+   const [chartData,setChartData] = useState<number[]>([]);
+  const userId = user?.uid as string;
+  const fetchData = ()=>{
+    Promise.all([getUserTotalPaidAmt(userId),getUserAmtData(userId),getUserRecentBills(userId)]).then(values=>{
+      setAmt(values[0]);
+      setPieChartData(values[1]);
+      setBills(values[2])
+      const chartData1:number[]=[]
+      values[1].forEach(value=>{
+        chartData1.push(value.value)
+      })
+      setChartData(chartData1.slice(0,12))
+      
+
+      setLoading(false)
+    })
+  }
+
+  useEffect(()=>{
+    fetchData()
+  },[])
 
   if (loading) {
     return (
@@ -17,19 +44,12 @@ const DashboardPage: React.FC = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh",
+          height: "100%",
+          width:"100%"
         }}
       >
-        <CircularProgress />
+        <CircularProgress  className="text-main text-5xl"/>
       </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Typography variant="h6" color="error">
-        Error: {error.message}
-      </Typography>
     );
   }
 
@@ -45,11 +65,11 @@ const DashboardPage: React.FC = () => {
             </Button> */}
             </div>
             <div>
-              <HeroComponent />
+              <HeroComponent amt={amt} pieChartData={pieChartData}/>
             </div>
             <div>
               <h2 className="text-2xl font-extrabold">Recent Bills</h2>
-              <DCardContainer />
+              <DCardContainer bills={bills}/>
             </div>
           </div>
           <div className="">
@@ -60,7 +80,7 @@ const DashboardPage: React.FC = () => {
               {/* <div>put buttons</div> */}
             </div>
             <div className="mt-2">
-              <DashboardLineChart />
+              <DashboardLineChart chartData={chartData} />
             </div>
           </div>
         </div>

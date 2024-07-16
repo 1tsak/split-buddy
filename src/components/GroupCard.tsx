@@ -28,22 +28,10 @@ const GroupCard: FC<IGroupCardProps> = ({ group }) => {
   useEffect(()=>{
     fetchData();
   },[])
-  if(layoutLoading){
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
+  
   
   return (<>
-    {grpMembers && <div
+    {<div
       onClick={onClickCard}
       className=" bg-main h-[100px] rounded-lg flex gap-4 text-white cursor-pointer overflow-hidden border-[1px] shadow-sm"
     >
@@ -51,13 +39,13 @@ const GroupCard: FC<IGroupCardProps> = ({ group }) => {
         <MdOutlinePeopleAlt className="text-4xl text-main" />
       </div>
       <div className="flex-auto p-2 mt-2 flex flex-col justify-between">
-        <p className="font-bold text-xl ">{name}</p>
-        <div className="max-w-full">
+        <div className="font-bold text-xl ">{name}</div>
+        {/* <div className="max-w-full">
           You,{grpMembers && grpMembers.map((member)=>{
             return <span>{member},</span>
           })}
           {grpMembers.length > 0 ? '...' : ""}
-        </div>
+        </div> */}
       </div>
     </div>}
     </>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import DCard from "./DCard";
 import { DCardType } from "../utils/types";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -6,16 +6,20 @@ import { auth } from "../firebaseConfig";
 import { getUserRecentBills } from "../services/dashboardServices";
 import { Box, CircularProgress } from "@mui/material";
 
-const DCardContainer = () => {
-  const [bills, setBills] = useState<DCardType[]>();
-  const [user, _] = useAuthState(auth);
-  const fetchData = async () => {
-    const billsData = await getUserRecentBills(user?.uid as string);
-    setBills(billsData);
-  };
-  useEffect(() => {
-    fetchData();
-  },[]);
+interface DcardContainerProps{
+  bills:DCardType[]
+}
+
+const DCardContainer:FC<DcardContainerProps> = ({bills}) => {
+  // const [bills, setBills] = useState<DCardType[]>();
+  // const [user, _] = useAuthState(auth);
+  // const fetchData = async () => {
+  //   const billsData = await getUserRecentBills(user?.uid as string);
+  //   setBills(billsData);
+  // };
+  // useEffect(() => {
+  //   // fetchData();
+  // },[]);
   if(bills && bills.length==0){
     return <div className="flex items-center justify-center">
         No Recent bill Data Available
