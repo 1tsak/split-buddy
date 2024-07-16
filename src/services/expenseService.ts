@@ -43,7 +43,7 @@ export const addExpense = async (expense: Expense) => {
   }
 };
 
-const updateExpenseInDatabase = async (
+export const markBillPaid = async (
   expenseId: string,
   updatedSplits: Split[]
 ) => {

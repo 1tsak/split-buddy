@@ -22,18 +22,21 @@ import {
 import { auth, db } from "../../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { markBillPaid } from "../../../services/expenseService";
 
 interface BillSplitProp {
   expenseData: Expense;
   splitData: Split;
 }
 
-const BillSplit = ({ expenseData, splitData }: BillSplitProp) => {
+const BillSplit = ({ expenseData: expense, splitData }: BillSplitProp) => {
   const [user, loading] = useAuthState(auth);
   const [open, setOpen] = useState(false);
   const [members, setMembers] = useState<
     { userId: string; name: string; amount: number; paid: boolean }[]
   >([]);
+
+  const [expenseData, setExpenseData] = useState(expense);
 
   const handleClickOpen = async () => {
     const membersData = await Promise.all(
@@ -62,13 +65,16 @@ const BillSplit = ({ expenseData, splitData }: BillSplitProp) => {
     // Add logic to handle form submission
     handleClose();
   };
-  const markPaid = (userId:string) => {
-    const updatedSplits = expenseData.splits.map((split:Split) => {
+  const markPaid = async(userId: string) => {
+    const updatedSplits = expenseData.splits.map((split: Split) => {
       if (split.userId === userId) {
         return { ...split, paid: true };
       }
       return split;
     });
+    setExpenseData((prevExpense) => ({ ...prevExpense, splits: updatedSplits }))
+    await markBillPaid(expense.id,updatedSplits);
+    handleClose();
   };
 
   return (
@@ -138,7 +144,7 @@ const BillSplit = ({ expenseData, splitData }: BillSplitProp) => {
                 />
                 {expenseData.createdBy === user?.uid && !member.paid && (
                   <Button
-                    onClick={() => markpaid(member.userId)}
+                    onClick={() => markPaid(member.userId)}
                     className="bg-red"
                   >
                     Mark Paid
