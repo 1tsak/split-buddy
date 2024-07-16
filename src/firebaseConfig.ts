@@ -5,13 +5,13 @@ import { getStorage } from 'firebase/storage';
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB6YKFV3luacTIgBxb1zh0BO-3iOF-l2W0",
-  authDomain: "split-buddy-101.firebaseapp.com",
-  projectId: "split-buddy-101",
-  storageBucket: "split-buddy-101.appspot.com",
-  messagingSenderId: "938602674449",
-  appId: "1:938602674449:web:2cdc8bfbc1272ed11b74b0",
-  measurementId: "G-VZMV106E53"
+  apiKey: "AIzaSyBy7MqPrSiamySmvsadcj9_JCr5gGGOCgM",
+  authDomain: "split-buddy-315cb.firebaseapp.com",
+  projectId: "split-buddy-315cb",
+  storageBucket: "split-buddy-315cb.appspot.com",
+  messagingSenderId: "358215945843",
+  appId: "1:358215945843:web:2122bffeb655b080ea6406",
+  measurementId: "G-V6Z530SZBG"
 };
 
 const app = initializeApp(firebaseConfig);
