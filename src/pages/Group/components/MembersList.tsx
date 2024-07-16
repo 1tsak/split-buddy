@@ -43,7 +43,12 @@ const MembersList = () => {
       if (!user) {
         setError("User not found");
       } else {
-        await addMember(groupData?.id as string, email);
+        await addMember(groupData?.id as string, email)
+        const userPresent = members?.find((member) => member.id === user.id);
+        if(userPresent){
+          alert("User already present");
+          return ;
+        }
         setMembers((prevState: any) => [...prevState, user]);
         alert("User added Successfully!");
         handleClose();

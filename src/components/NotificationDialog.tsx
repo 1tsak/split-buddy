@@ -34,7 +34,7 @@ const Dialog: React.FC<DialogProps> = ({ isOpen, title, setIsOpen }) => {
     }
 
     // user_id yeha bhejna
-    const notifications = await fetchNotification('ZqgU3bO7GnPNqn9ahmAvQCtJsQ93');
+    const notifications = await fetchNotification(user.uid);
     setNotificationList(notifications);
    } catch (error) {
     
