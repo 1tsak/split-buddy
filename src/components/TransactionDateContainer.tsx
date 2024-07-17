@@ -16,7 +16,7 @@ const TransactionDateContainer:FC<ITransactionDateContainerProps> = ({transactio
         <CiCalendarDate className='text-2xl'/>
         <p className='font-bolder text-xl'>{date}</p>
        </div>
-       <div className='width-full'>
+       <div>
         {transactions.map((t,i)=>{
             return <TransactionCard data={t} key={i}/>
         })}
