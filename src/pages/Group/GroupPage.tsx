@@ -9,6 +9,7 @@ const GroupPage = () => {
   const { fetchGroupsData,fetchExpensesData,loading } = useGroup();
 
   useEffect(() => {
+    console.log("changhed")
     if (groupId) {
       fetchGroupsData(groupId);
       fetchExpensesData(groupId);
@@ -16,7 +17,7 @@ const GroupPage = () => {
   }, [groupId]);
 
   return (
-    <div className="h-full flex">
+    <div className="h-full overflow-hidden flex">
       <Sider />
       <div className="w-3/4 h-full">
         {loading ? (

@@ -2,20 +2,24 @@ import { CiMoneyBill } from "react-icons/ci";
 import { CiHome } from "react-icons/ci";
 import useGroup from "../../../hooks/useGroup";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom"; // Import useLocation from react-router-dom
 import { Expense } from "../../../utils/types";
 import { Box, CircularProgress } from "@mui/material";
-import { format, isToday, isYesterday } from 'date-fns';
+import { format, isToday, isYesterday } from "date-fns";
+import { CiChat2 } from "react-icons/ci";
 
 const Sider = () => {
   const { groupData, expenses, loading } = useGroup();
+  const location = useLocation(); // Get current location using useLocation()
 
   useEffect(() => {
     console.log(groupData);
   }, [groupData]);
 
   const sortedExpenses = expenses
-    ? [...expenses].sort((a:any, b:any) => b.updatedAt.seconds - a.updatedAt.seconds)
+    ? [...expenses].sort(
+        (a: any, b: any) => b.updatedAt.seconds - a.updatedAt.seconds
+      )
     : [];
 
   const getExpenseLabel = (timestamp: any) => {
@@ -32,19 +36,32 @@ const Sider = () => {
     return acc;
   }, {});
 
+  // Function to determine if a link is active
+  const isActiveLink = (path: string) => {
+    return location.pathname === path;
+  };
+
   return (
-    <div className="h-full overflow-y-hidden w-1/4 bg-slate-100 pt-4">
+    <div className="h-full w-1/4 bg-slate-100 pt-4 flex flex-col">
       <h1 className="text-center text-xl text-slate-700">{groupData?.name}</h1>
       <p className="text-sm text-center text-slate-500">
         {groupData?.description}
       </p>
-      <div className="flex flex-col gap-3 flex-1 mt-12">
-        <Link to={`/group/${groupData?.id}`}>
-          <div className="w-full px-5 py-2 bg-slate-50 font-light cursor-pointer border-b text-gray-700 border-slate-200 flex items-center gap-2">
-            <CiHome />
-            <span>Home</span>
-          </div>
-        </Link>
+      <div className="flex flex-col flex-1 overflow-hidden mt-12">
+        <div>
+          <Link to={`/group/${groupData?.id}`}>
+            <div className={`w-full px-5 py-2 bg-slate-100 font-light cursor-pointer border-b text-gray-700 border-slate-200 flex items-center gap-2 ${isActiveLink(`/group/${groupData?.id}`) ? 'bg-white' : ''}`}>
+              <CiHome />
+              <span>Home</span>
+            </div>
+          </Link>
+          <Link to={`/group/${groupData?.id}/chat`}>
+            <div className={`w-full px-5 py-2 bg-slate-100 font-light cursor-pointer border-b text-gray-700 border-slate-200 flex items-center gap-2 ${isActiveLink(`/group/${groupData?.id}/chat`) ? 'bg-white' : ''}`}>
+              <CiChat2 />
+              <span>Chat</span>
+            </div>
+          </Link>
+        </div>
         <h2 className="px-2 mt-4 text-lg text-center text-gray-500">Bills</h2>
         {loading ? (
           <Box
@@ -58,7 +75,7 @@ const Sider = () => {
             <CircularProgress />
           </Box>
         ) : (
-          <ul className="p-2 text-gray-700 flex flex-col h-full overflow-y-scroll cursor-pointer font-light">
+          <ul className="flex-1 overflow-y-auto p-2 text-gray-700 flex flex-col cursor-pointer font-light">
             {Object.keys(groupedExpenses).map((label) => (
               <div key={label}>
                 <p className="font-light text-sm p-2 text-gray-400">{label}</p>

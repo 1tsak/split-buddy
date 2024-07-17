@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Expense, Split } from "../../../utils/types";
-import { sampleExpenses } from "../../../data/sampleExpenses.ts";
 import ExpensesGraph from "../components/ExpensesGraph";
 import useGroup from "../../../hooks/useGroup";
 
@@ -96,7 +95,7 @@ const GroupHome = () => {
     <div className="flex flex-col p-5 ">
       <div className="w-full pt-5 flex px-8 justify-between items-center">
         {Object.keys(expensesMap).length === 0 ? (
-          <p className="font-regular">No Expense Found</p>
+          <p className="font-regular">No Expenses Found</p>
         ) : (
           <div className="font-light">
             {totalExpenses && (
