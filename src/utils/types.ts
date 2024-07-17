@@ -60,8 +60,6 @@ export interface Balance {
 export interface GroupContextType {
   groupData: Group | null;
   expenses: Expense[] | null;
-  expenseMembers: ExpenseMember[] | null;
-  fetchExpenseMembersData: (expenseData: Expense[]) => void;
   setExpenses: (expenses: Expense[]) => void;
   setGroup: (group: Group) => void;
   fetchExpensesData: (groupId: string) => void;

@@ -1,19 +1,25 @@
-import React, { createContext, useState } from "react";
-import { Expense, ExpenseMember, Group, GroupContextType, Split } from "../utils/types";
+import React, { createContext, useEffect, useState } from "react";
+import {
+  Expense,
+  ExpenseMember,
+  Group,
+  GroupContextType,
+  Split,
+} from "../utils/types";
 import { fetchExpenses } from "../services/expenseService";
 import { getGroupById } from "../services/groupService";
 import { getUser } from "../services/authService";
+import { useParams } from "react-router-dom";
 
 export const GroupContext = createContext<GroupContextType | undefined>(
   undefined
 );
 
-
 const GroupProvider = ({ children }: { children: React.ReactNode }) => {
   const [groupData, setGroupData] = useState<Group | null>(null);
   const [expenses, setExpensesData] = useState<Expense[] | null>(null);
-  const [expenseMembers, setExpenseMembers] = useState<ExpenseMember[] | null>(null);
   const [loading, setLoading] = useState(false);
+  const { groupId } = useParams<{ groupId: string }>();
 
   const setExpenses = (expenses: Expense[]) => {
     setExpensesData(expenses);
@@ -48,27 +54,12 @@ const GroupProvider = ({ children }: { children: React.ReactNode }) => {
       setLoading(false);
     }
   };
-  const fetchExpenseMembersData = async (expenseData:Expense[]) => {
-    // setLoading(true);
-    // try {
-    //   const membersData:ExpenseMember[] = await Promise.all(
-    //     expenseData.splits.map(async (split) => {
-    //       const userData = await getUser(split.userId);
-    //       return {
-    //         userId: split.userId,
-    //         name: userData?.displayName || "Unknown User",
-    //         amount: split.amount,
-    //         paid: split.paid,
-    //       };
-    //     })
-    //   );
-    //   setExpenseMembers(membersData);
-    //   setLoading(false);
-    // } catch (error) {
-    //   console.log(error);
-    //   setLoading(false);
-    // }
-  };
+  useEffect(() => {
+    console.log(groupId);
+    if (!groupId) {
+      setGroupData(null);
+    }
+  }, [groupId]);
 
   return (
     <GroupContext.Provider
@@ -79,9 +70,7 @@ const GroupProvider = ({ children }: { children: React.ReactNode }) => {
         setExpenses,
         fetchExpensesData,
         fetchGroupsData,
-        expenseMembers,
-        fetchExpenseMembersData,
-        loading
+        loading,
       }}
     >
       {children}

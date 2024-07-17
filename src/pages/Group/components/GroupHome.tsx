@@ -12,7 +12,7 @@ import { AiOutlineUser } from "react-icons/ai";
 
 const GroupHome = () => {
   // const [expenses, setExpenses] = useState<Expense[]>([]);
-  const { groupData, expenses, fetchExpenseMembersData } = useGroup();
+  const { groupData, expenses } = useGroup();
   const totalExpenses = expenses
     ? expenses.reduce((total, expense) => {
         const splitAmounts = expense.splits.map((split: Split) => split.amount);
@@ -57,7 +57,6 @@ const GroupHome = () => {
             totalAmountShared: 0,
           };
         }
-        console.log(split.amount);
         expensesMap[split.userId].totalAmountShared += Number(split.amount);
       }
     }
@@ -88,7 +87,6 @@ const GroupHome = () => {
       const fetchExpensesMap = async () => {
         const map = await fetchUsersFromExpenses(groupData?.id, expenses);
         setExpensesMap(map);
-        console.log(map);
       };
       fetchExpensesMap();
     }

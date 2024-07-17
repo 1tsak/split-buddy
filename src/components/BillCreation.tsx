@@ -60,7 +60,7 @@ const BillCreation = () => {
     const groupFormData = groupData
       ? { name: formData.group.name, id: formData.group.id }
       : { name: "", id: "" };
-      
+
     setFormData({
       title: "",
       amount: 0,
@@ -100,7 +100,27 @@ const BillCreation = () => {
       splits: splits,
     }));
   };
+  const getGroupMember = async (groupId: string) => {
+    try {
+      const res = await getGroupById(groupId);
+      if (!res) {
+        return;
+      }
+      const userPromises = res.members.map((_id) => getUser(_id));
+      const users = await Promise.all(userPromises);
 
+      const validUsers = users.filter((user): user is User => user !== null);
+      const arr = Array(validUsers.length).fill(0);
+      if (arr) {
+        setCustomBill(arr);
+      }
+      setGroupMember(validUsers);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching group members:", error);
+      setLoading(false);
+    }
+  };
   // handleling field change
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -125,30 +145,7 @@ const BillCreation = () => {
         },
       });
       setTimeout(() => {
-        const getGroupMember = async () => {
-          try {
-            const res = await getGroupById(groupId);
-            if (!res) {
-              return;
-            }
-            const userPromises = res.members.map((_id) => getUser(_id));
-            const users = await Promise.all(userPromises);
-
-            const validUsers = users.filter(
-              (user): user is User => user !== null
-            );
-            const arr = Array(validUsers.length).fill(0);
-            if (arr) {
-              setCustomBill(arr);
-            }
-            setGroupMember(validUsers);
-            setLoading(false);
-          } catch (error) {
-            console.error("Error fetching group members:", error);
-            setLoading(false);
-          }
-        };
-        getGroupMember();
+        getGroupMember(groupId);
       }, 800);
       return;
     }
@@ -320,9 +317,16 @@ const BillCreation = () => {
   }, [auth?.currentUser?.uid]);
   useEffect(() => {
     if (!groupData?.id || !groupId) {
+      setFormData({
+        ...formData,
+        group: {
+          name: "",
+          id: "",
+        },
+      });
       return;
     }
-    
+
     if (!userGroups) return;
     const groupName = userGroups.find((group) => group.id === groupData.id);
     // console.log(groupName);
@@ -335,6 +339,7 @@ const BillCreation = () => {
         },
       });
     }
+    getGroupMember(groupId);
   }, [groupData, userGroups]);
   return (
     <div>
@@ -417,12 +422,10 @@ const BillCreation = () => {
                     >
                       {!custom ? `Equal` : `Custom`}
                       {custom ? (
-                        <BsToggle2On className="text-2xl" /> 
+                        <BsToggle2On className="text-2xl" />
                       ) : (
                         <BsToggle2Off className="text-2xl" />
                       )}
-                     
-                      
                     </span>
                   </div>
                   <div className="flex mt-6 flex-col items-center ">
