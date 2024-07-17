@@ -1,5 +1,6 @@
 import { PieValueType } from "@mui/x-charts";
 import { MakeOptional } from "@mui/x-charts/internals";
+import { Timestamp } from "firebase/firestore";
 
 export interface User {
   id: string;
@@ -27,9 +28,9 @@ export interface Expense {
   amount: number;
   category: string;
   createdBy: string;
-  groupId: string;
-  createdAt: string;
-  updatedAt: string;
+  groupId:string;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
   splits: Split[];
 }
 
@@ -67,7 +68,9 @@ export interface GroupContextType {
   loading: boolean;
 }
 
-export interface PieChartDataType extends MakeOptional<PieValueType, "id"> {}
+export interface PieChartDataType extends MakeOptional<PieValueType, "id"> {
+
+}
 
 export interface DCardType {
   title: string;
@@ -75,8 +78,22 @@ export interface DCardType {
   grpId?: string;
 }
 
-export interface TransactionCardType {
-  isGetting: boolean;
-  amount: number | string;
-  userName?: string;
+export interface TransactionCardType{
+  isGetting:boolean,
+  amount:number | string,
+  userName?:string,
+  time?:Date
+}
+
+export interface TransactionGroupType{
+  [key:string] : TransactionCardType[]
+}
+
+export interface LineChartType{
+  amt:number,
+  time:Date,
+  isGetting:boolean;
+}
+export interface LineChartGroupType{
+  [key:string] : number
 }
