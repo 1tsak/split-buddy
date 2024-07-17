@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-
 import { getAuth } from "firebase/auth";
 import { Notification } from "../utils/types.ts";
 import moment from "moment";
 import { fetchNotification } from "../services/notificationService.ts";
+import { CircularProgress, Box } from '@mui/material';
 const auth = getAuth();
 
 type DialogProps = {
@@ -13,11 +13,11 @@ type DialogProps = {
 };
 
 const Dialog: React.FC<DialogProps> = ({ isOpen, title, setIsOpen }) => {
-  
   const user = auth.currentUser;
 
   const [notificationList, setNotificationList] = useState<Notification[] | undefined>([]);
-  
+  const [loading, setLoading]= useState<boolean>(false);
+
   const handleClose = () => {
     setIsOpen(false);
   };
@@ -26,19 +26,26 @@ const Dialog: React.FC<DialogProps> = ({ isOpen, title, setIsOpen }) => {
     e.stopPropagation();
   };
 
-  
   const fetchNotice = async () => {
-   try {
-    if(!user){
-      return ;
-    }
+    setLoading(true);
+    try {
+      if (!user) {
+        return;
+      }
 
-    // user_id yeha bhejna
-    const notifications = await fetchNotification(user.uid);
-    setNotificationList(notifications);
-   } catch (error) {
-    
-   }
+      const notifications = await fetchNotification(user.uid);
+
+      // Sort notifications by date before setting them
+      const sortedNotifications = notifications &&  notifications.sort((a, b) => {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      });
+
+      setNotificationList(sortedNotifications);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -60,16 +67,17 @@ const Dialog: React.FC<DialogProps> = ({ isOpen, title, setIsOpen }) => {
         className="bg-white rounded-lg mr-12 overflow-hidden shadow-md transform transition-all w-[400px]"
         onClick={handleContentClick}
       >
-        <div className="bg-white pt-5 pb-4  sm:pb-4">
-          <div className="">
+        <div className="bg-white pt-5 pb-4 sm:pb-4">
+          <div>
             <div className="mt-3 sm:mt-0 sm:ml-4 sm:text-left">
               <h3 className="text-lg text-center leading-6 font-medium text-slate-500 uppercase">
                 {title}
               </h3>
-              <div className="mt-2 w-full">
-             
-                {
-                  notificationList &&
+              {
+                loading ? <div className='text-center py-3 mt-3'><Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'start', height: '100vh' }}>
+                <CircularProgress />
+              </Box></div> : <div className="mt-2 w-full">
+                {notificationList && notificationList.length > 0 ? (
                   notificationList.map((notice, index) => (
                     <div
                       className={`mt-6 px-2 pb-2 ${
@@ -78,16 +86,22 @@ const Dialog: React.FC<DialogProps> = ({ isOpen, title, setIsOpen }) => {
                       key={index}
                     >
                       <div className="flex justify-between w-full">
-                        <p className="text-md text-gray-600">{notice.title}</p>
+                        <div className="text-md text-gray-600">
+                          {notice.title}
+                          <p className="text-md text-gray-700">{notice.message}</p>
+                        </div>
                         <p className="text-sm text-gray-400">
                           {moment(notice.createdAt).fromNow()}
                         </p>
                       </div>
-                      <p className="text-md text-gray-700">{notice.message}</p>
                     </div>
-                  ))}
-                
+                  ))
+                ) : (
+                  <p className="text-center">No notifications found</p>
+                )}
               </div>
+              }
+              
             </div>
           </div>
         </div>
@@ -97,3 +111,4 @@ const Dialog: React.FC<DialogProps> = ({ isOpen, title, setIsOpen }) => {
 };
 
 export default Dialog;
+

@@ -7,7 +7,6 @@ import {
   TransactionCardType,
   TransactionGroupType,
 } from "../utils/types";
-import { sampleExpenses } from "../data/sampleExpenses";
 import { getUser } from "./authService";
 import moment from "moment";
 
@@ -24,7 +23,7 @@ const getUserTotalPaidAmt = async (userId: string): Promise<number> => {
     const splits = (expense.data() as Expense).splits;
     splits.forEach((split) => {
       if (split.userId == userId && split.paid == true) {
-        amt += split.amount;
+        amt += Number(split.amount);
       }
     });
   });

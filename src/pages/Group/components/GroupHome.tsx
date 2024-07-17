@@ -1,33 +1,125 @@
 import { useEffect, useState } from "react";
-import { Expense } from "../../../utils/types";
+import { Expense, Split } from "../../../utils/types";
 import { sampleExpenses } from "../../../data/sampleExpenses.ts";
 import ExpensesGraph from "../components/ExpensesGraph";
 import useGroup from "../../../hooks/useGroup";
 
 import MembersList from "./MembersList.tsx";
 import { LineChart } from "@mui/x-charts";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../../firebaseConfig.ts";
+import { AiOutlineUser } from "react-icons/ai";
 
 const GroupHome = () => {
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const { groupData } = useGroup();
+  // const [expenses, setExpenses] = useState<Expense[]>([]);
+  const { groupData, expenses, fetchExpenseMembersData } = useGroup();
+  const totalExpenses = expenses
+    ? expenses.reduce((total, expense) => {
+        const splitAmounts = expense.splits.map((split: Split) => split.amount);
+        const totalSplitAmount = splitAmounts.reduce(
+          (sum, amount) => sum + Number(amount),
+          0
+        );
+        return total + totalSplitAmount;
+      }, 0)
+    : 0;
+  const [expensesMap, setExpensesMap] = useState<{
+    [userId: string]: {
+      userId: string;
+      username: string;
+      totalAmountShared: number;
+    };
+  }>({});
+
+  const fetchUsersFromExpenses = async (
+    groupId: string,
+    expenses: Expense[]
+  ) => {
+    const expensesMap: {
+      [userId: string]: {
+        userId: string;
+        username: string;
+        totalAmountShared: number;
+      };
+    } = {};
+
+    // Filter expenses by groupId
+    const filteredExpenses = expenses.filter(
+      (expense) => expense.groupId === groupId
+    );
+
+    for (const expense of filteredExpenses) {
+      for (const split of expense.splits) {
+        if (!expensesMap[split.userId]) {
+          expensesMap[split.userId] = {
+            userId: split.userId,
+            username: "",
+            totalAmountShared: 0,
+          };
+        }
+        console.log(split.amount);
+        expensesMap[split.userId].totalAmountShared += Number(split.amount);
+      }
+    }
+
+    // Fetch user names asynchronously
+    const fetchUserNames = async () => {
+      const userIds = Object.keys(expensesMap);
+      await Promise.all(
+        userIds.map(async (userId) => {
+          const userDoc = await getDoc(doc(db, "users", userId));
+          const userData = userDoc.data();
+          if (userData) {
+            expensesMap[userId].username =
+              userData.displayName || "Unknown User";
+          }
+        })
+      );
+    };
+
+    // Call fetchUserNames function
+    await fetchUserNames();
+
+    return expensesMap;
+  };
 
   useEffect(() => {
-    setExpenses(sampleExpenses);
-  }, [groupData]);
+    if (groupData?.id && expenses) {
+      const fetchExpensesMap = async () => {
+        const map = await fetchUsersFromExpenses(groupData?.id, expenses);
+        setExpensesMap(map);
+        console.log(map);
+      };
+      fetchExpensesMap();
+    }
+  }, [groupData, expenses]);
 
   return (
     <div className="flex flex-col p-5 ">
-      <div className="w-full flex px-8 justify-between items-center">
-        <div className="font-light">
-          <h2 className="text-lg font-semibold my-1 text-gray-700">Expenses</h2>
-          <p className="font-regular">Total Expenses : 100RS</p>
-          <p>Aakash Share : 55RS</p>
-          <p>Abhishek Share : 45RS</p>
-        </div>
+      <div className="w-full pt-5 flex px-8 justify-between items-center">
+        {Object.keys(expensesMap).length === 0 ? (
+          <p className="font-regular">Loading users and their shares...</p>
+        ) : (
+          <div className="font-light">
+            {totalExpenses && (
+              <p className="text-lg font-semibold">
+                Total Expenses: ₹{totalExpenses}
+              </p>
+            )}
+            <br />
+            {Object.values(expensesMap).map((userData) => (
+              <div key={userData.userId} className="flex items-center gap-2">
+                <AiOutlineUser size={20} />
+                <span>{userData.username}</span>
+                <span>Share: ₹{userData.totalAmountShared} </span>
+              </div>
+            ))}
+          </div>
+        )}
         <MembersList />
       </div>
       <div className=" w-full flex px-2 justify-between items-center gap-5">
-        <LineChart
+        {/* <LineChart
           xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
           series={[
             {
@@ -37,8 +129,16 @@ const GroupHome = () => {
           width={500}
           colors={["#687EEF"]}
           height={300}
-        />
-        <ExpensesGraph expenses={expenses} />
+        /> */}
+        <div className="w-full flex flex-col mt-16 items-center mr-[5rem] justify-center">
+          {expenses && expensesMap && (
+            <ExpensesGraph
+              expenses={expenses}
+              expensesMap={expensesMap as any}
+            />
+          )}
+          <p className="p-2 font-light text-gray-400">User Expenses Chart</p>
+        </div>
       </div>
     </div>
   );
