@@ -376,19 +376,22 @@ const BillCreation = () => {
               </div>
               {formData.group.name && (
                 <div className="mb-4">
-                  <div className="flex justify-between ">
+                  <div className="flex justify-between items-center">
                     <span className="block text-left mb-2 text-gray-700">
                       Add Members:
                     </span>
-                    <span onClick={() => setCustom((prev) => !prev)}>
+                    <span className="flex gap-1 items-center" onClick={() => setCustom((prev) => !prev)}>
+                    {!custom ? `Equal` : `Custom`}
                       {custom ? (
-                        <BsToggle2On className="text-2xl" />
+                        <BsToggle2On className="text-2xl" /> 
                       ) : (
                         <BsToggle2Off className="text-2xl" />
                       )}
+                     
+                      
                     </span>
                   </div>
-                  <div className="flex flex-col items-center ">
+                  <div className="flex mt-6 flex-col items-center ">
                     <div className="mb-4">
                       {groupMember.map((user, index) => (
                         <div
