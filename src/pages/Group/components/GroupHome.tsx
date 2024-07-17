@@ -86,6 +86,7 @@ const GroupHome = () => {
     if (groupData?.id && expenses) {
       const fetchExpensesMap = async () => {
         const map = await fetchUsersFromExpenses(groupData?.id, expenses);
+        console.log(map)
         setExpensesMap(map);
       };
       fetchExpensesMap();

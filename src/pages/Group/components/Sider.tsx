@@ -1,16 +1,32 @@
 import { CiMoneyBill } from "react-icons/ci";
 import { CiHome } from "react-icons/ci";
 import useGroup from "../../../hooks/useGroup";
-import { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom"; // Import useLocation from react-router-dom
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom"; // Import useLocation from react-router-dom
 import { Expense } from "../../../utils/types";
 import { Box, CircularProgress } from "@mui/material";
 import { format, isToday, isYesterday } from "date-fns";
 import { CiChat2 } from "react-icons/ci";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  Typography,
+} from "@mui/material";
+import { Delete as DeleteIcon } from "@mui/icons-material";
+import { getAuth } from "firebase/auth";
+import { deleteGroup } from "../../../services/groupService";
 
 const Sider = () => {
   const { groupData, expenses, loading } = useGroup();
   const location = useLocation(); // Get current location using useLocation()
+  const [open, setOpen] = useState(false);
+  const auth = getAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log(groupData);
@@ -41,22 +57,77 @@ const Sider = () => {
     return location.pathname === path;
   };
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleDelete = async () => {
+    if (groupData && groupData.id) await deleteGroup(groupData?.id);
+    setOpen(false);
+    alert("Group Deleted Succefully");
+    navigate("/group");
+  };
+
   return (
     <div className="h-full w-1/4 bg-slate-100 pt-4 flex flex-col">
-      <h1 className="text-center text-xl text-slate-700">{groupData?.name}</h1>
+      <div className="flex justify-between px-2">
+        <h1 className="text-center  font-light pl-2 text-xl text-slate-700">
+          {groupData?.name}
+        </h1>
+        <div>
+          {groupData?.createdBy === auth.currentUser?.uid && (
+            <div>
+              <button
+                onClick={handleOpen}
+                className="bg-slate-800 text-white rounded-sm text-sm py-1 px-2"
+              >
+                Delete
+              </button>
+              <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Delete Group!</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Do you really want to delete this group?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="primary">
+                    Cancel
+                  </Button>
+                  <Button onClick={handleDelete} color="primary" autoFocus>
+                    Yes
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </div>
+          )}
+        </div>
+      </div>
       <p className="text-sm text-center text-slate-500">
         {groupData?.description}
       </p>
       <div className="flex flex-col flex-1 overflow-hidden mt-12">
         <div>
           <Link to={`/group/${groupData?.id}`}>
-            <div className={`w-full px-5 py-2 bg-slate-100 font-light cursor-pointer border-b text-gray-700 border-slate-200 flex items-center gap-2 ${isActiveLink(`/group/${groupData?.id}`) ? 'bg-white' : ''}`}>
+            <div
+              className={`w-full px-5 py-2 bg-slate-100 font-light cursor-pointer border-b text-gray-700 border-slate-200 flex items-center gap-2 ${
+                isActiveLink(`/group/${groupData?.id}`) ? "bg-white" : ""
+              }`}
+            >
               <CiHome />
               <span>Home</span>
             </div>
           </Link>
           <Link to={`/group/${groupData?.id}/chat`}>
-            <div className={`w-full px-5 py-2 bg-slate-100 font-light cursor-pointer border-b text-gray-700 border-slate-200 flex items-center gap-2 ${isActiveLink(`/group/${groupData?.id}/chat`) ? 'bg-white' : ''}`}>
+            <div
+              className={`w-full px-5 py-2 bg-slate-100 font-light cursor-pointer border-b text-gray-700 border-slate-200 flex items-center gap-2 ${
+                isActiveLink(`/group/${groupData?.id}/chat`) ? "bg-white" : ""
+              }`}
+            >
               <CiChat2 />
               <span>Chat</span>
             </div>

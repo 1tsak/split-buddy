@@ -73,7 +73,7 @@ const Chat = () => {
         Group Chat
       </Typography>
       <List sx={{ overflow: "auto", flex: "1" }}>
-        {messages.map((msg: any) => (
+        {messages.length >0 ?messages.map((msg: any) => (
           <ListItem key={msg.id}>
             <ListItemText
               style={{
@@ -83,7 +83,7 @@ const Chat = () => {
               secondary={msg.message}
             />
           </ListItem>
-        ))}
+        )):(<p className="text-center self-center m-10 text-sm text-gray-400">Waiting for a messages...</p>)}
       </List>
       <Box sx={{ display: "flex", marginTop: 2, diaplay: "flex", gap: "1rem" }}>
         <TextField
