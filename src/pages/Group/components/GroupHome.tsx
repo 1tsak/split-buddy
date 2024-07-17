@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Expense, Split } from "../../../utils/types";
-import { sampleExpenses } from "../../../data/sampleExpenses.ts";
 import ExpensesGraph from "../components/ExpensesGraph";
 import useGroup from "../../../hooks/useGroup";
 

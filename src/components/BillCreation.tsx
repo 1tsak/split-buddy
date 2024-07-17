@@ -38,6 +38,7 @@ const BillCreation = () => {
   const [customBill, setCustomBill] = useState<number[]>([]);
   const [custom, setCustom] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
+  const [addBillLoading, setAddBillLoading] = useState(false);
   const { groupId } = useParams<{ groupId: string }>();
   const { fetchExpensesData } = useGroup();
   const [formData, setFormData] = useState<FormDataType>({
@@ -220,24 +221,25 @@ const BillCreation = () => {
   // handlleing submit
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setAddBillLoading(true);
     if (!formData.group.id) {
       setErrorMessage("No Group Found");
       setTimeout(() => {
         setErrorMessage("");
       }, 6000);
+      setAddBillLoading(false);
       return;
+     
     }
 
     const ActualSplit: any = formData.splits
       .map((split, index) => {
-        if (!split.checked) {
-          return null; // Skip unchecked splits
-        }
+       
         const updatedSplit = {
           userId: split.userId,
-          amount: !custom ? split.amount : Number(customBill[index]),
+          amount: !split.checked ? 0 : (!custom ? split.amount : Number(customBill[index])),
           paid:
-            split.userId === auth.currentUser?.uid ? true : split.paid || false,
+            split.userId === auth.currentUser?.uid || !split.checked ? true : split.paid || false,
         };
         return updatedSplit as Split;
       })
@@ -245,14 +247,17 @@ const BillCreation = () => {
 
     if (!ActualSplit) {
       return;
+      setAddBillLoading(false);
     }
     const validate = validateBill(ActualSplit, formData.amount);
     if (!validate.success) {
+      setAddBillLoading(false);
       setErrorMessage(validate.message || "");
       setTimeout(() => {
         setErrorMessage("");
       }, 8000);
       return;
+
     }
 
     const expenseData: any = {
@@ -271,9 +276,11 @@ const BillCreation = () => {
         message: `${expenseData.title} ${expenseData.category}`,
         groupId: expenseData.groupId,
       });
+      setAddBillLoading(false);
       fetchExpensesData(formData.group.id);
       handleClose();
     } catch (error) {
+      setAddBillLoading(false);
       console.log(error);
     }
   };
@@ -497,11 +504,25 @@ const BillCreation = () => {
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-500 text-white rounded"
-                >
-                  Create
-                </button>
+            type="submit"
+            className="text-white bg-main"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "8px 16px",
+              color:'white',
+              borderRadius: "4px",
+              fontSize: "16px",
+            }}
+          >
+            Add
+            {addBillLoading && (
+              <span style={{ marginLeft: "8px" }}>
+                <CircularProgress size={16} style={{ color: "white" }} />
+              </span>
+            )}
+          </button>
               </div>
             </form>
           </div>
