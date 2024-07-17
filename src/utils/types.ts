@@ -28,14 +28,9 @@ export interface Expense {
   amount: number;
   category: string;
   createdBy: string;
-<<<<<<< HEAD
   groupId:string;
   createdAt: Timestamp;
-=======
-  groupId: string;
-  createdAt: string;
->>>>>>> dev
-  updatedAt: string;
+  updatedAt: Timestamp;
   splits: Split[];
 }
 

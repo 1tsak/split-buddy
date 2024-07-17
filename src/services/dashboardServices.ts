@@ -1,4 +1,4 @@
-import { collection, getDocs, query, Timestamp, where } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, query, Timestamp, where } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import {
   DCardType,
@@ -87,7 +87,8 @@ const getUserTransactoins = async (
   userId: string
 ): Promise<TransactionGroupType> => {
   const data = new Array<TransactionCardType>();
-  const snapShot = await getDocs(dbCollection.expenses);
+  const query1 = query(dbCollection.expenses,orderBy("createdAt", "desc"))
+  const snapShot = await getDocs(query1);
   
   snapShot.forEach((expense) => {
     const exp = expense.data() as Expense;
