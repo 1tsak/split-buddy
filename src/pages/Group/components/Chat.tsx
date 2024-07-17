@@ -77,7 +77,7 @@ const Chat = () => {
           <ListItem key={msg.id}>
             <ListItemText
               style={{
-                textAlign: msg.userId === user?.uid ? "start" : "end",
+                textAlign: msg.userId === user?.uid ? "end" : "start",
               }}
               primary={msg.username}
               secondary={msg.message}
