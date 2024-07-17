@@ -70,7 +70,9 @@ export interface GroupContextType {
   loading: boolean;
 }
 
-export interface PieChartDataType extends MakeOptional<PieValueType, "id"> {}
+export interface PieChartDataType extends MakeOptional<PieValueType, "id"> {
+
+}
 
 export interface DCardType {
   title: string;
@@ -87,4 +89,13 @@ export interface TransactionCardType{
 
 export interface TransactionGroupType{
   [key:string] : TransactionCardType[]
+}
+
+export interface LineChartType{
+  amt:number,
+  time:Date,
+  isGetting:boolean;
+}
+export interface LineChartGroupType{
+  [key:string] : number
 }

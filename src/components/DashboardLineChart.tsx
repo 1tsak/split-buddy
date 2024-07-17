@@ -4,9 +4,10 @@ import { getUserAmtData } from '../services/dashboardServices';
 import { Box, CircularProgress } from '@mui/material';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebaseConfig';
+import { LineChartGroupType } from '../utils/types';
 
 interface DashboardLineChartProps{
-  chartData:number[]
+  chartData:LineChartGroupType
 }
 
 const DashboardLineChart:FC<DashboardLineChartProps> = ({chartData}) => {
@@ -20,14 +21,19 @@ const DashboardLineChart:FC<DashboardLineChartProps> = ({chartData}) => {
     // useEffect(()=>{
     //     fetchData();
     // },[])
+    const data = Object.keys(chartData).map(date=>{
+      return chartData[date]
+    })
+    const dayData = Object.keys(chartData).map(date=>{
+      return Math.floor(Number(date))
+    })
   return (
     <div className="border-main border-[1px] h-96 w-full rounded-lg">
               {chartData ? <LineChart 
-                xAxis={[{ data: [1, 2, 3, 4, 5,6,7,8,9,10,11,12] }]}
-                
+                xAxis={[{ data: dayData,tickMinStep:1}]}
                 series={[
-                  { label:'Monthly Expense',
-                    data: chartData,
+                  { label:'Day wise Expense',
+                    data: data,
                     color: "#687EEF",
                   },
                 ]}

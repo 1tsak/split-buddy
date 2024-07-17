@@ -3,11 +3,12 @@ import { db } from "../firebaseConfig";
 import {
   DCardType,
   Expense,
+  LineChartGroupType,
+  LineChartType,
   PieChartDataType,
   TransactionCardType,
   TransactionGroupType,
 } from "../utils/types";
-import { getUser } from "./authService";
 import moment from "moment";
 
 
@@ -92,7 +93,7 @@ const getUserTransactoins = async (
   
   snapShot.forEach((expense) => {
     const exp = expense.data() as Expense;
-    console.log(exp)
+    
     const splits = exp.splits;
     if (exp.createdBy == userId) {
       splits.forEach((split) => {
@@ -145,4 +146,47 @@ const getUserTransactoins = async (
   return groups;
 };
 
-export { getUserTotalPaidAmt, getUserAmtData, getUserRecentBills,getUserTransactoins };
+
+const getDataForLineChart=async (userId:string):Promise<LineChartGroupType> =>{
+  const query1 = query(dbCollection.expenses,orderBy("createdAt", "desc"));
+  const snapShot = await getDocs(query1);
+  const data = new Array<LineChartType>
+  snapShot.forEach(expense=>{
+    const exp = expense.data() as Expense;
+    const splits = exp.splits
+    if (exp.createdBy == userId) {
+      splits.forEach((split) => {
+        if (split.userId != userId) {
+          data.push({ amt: split.amount, isGetting: true ,time:exp.createdAt.toDate()});
+        }
+      });
+    } else {
+      splits.forEach(split=>{
+        if(split.userId==userId){
+          data.push({amt:split.amount,isGetting:false,time:exp.createdAt.toDate()})
+        }
+      })
+    }
+  }); 
+
+  const groups = data.reduce<LineChartGroupType>((group,item)=>{
+    const date = moment(item.time).format('DD')
+    if (!group[date]) {
+      group[date] = 0;
+  }
+  
+  if(item.isGetting){
+    group[date] += Number(item.amt)
+  }
+  else {
+    group[date] -=Number(item.amt)
+  }
+  
+  return group;
+  },{})
+
+ console.log(groups)
+return groups
+}
+
+export { getUserTotalPaidAmt, getUserAmtData, getUserRecentBills,getUserTransactoins,getDataForLineChart };

@@ -6,8 +6,8 @@ import HeroComponent from "../components/HeroComponent";
 import DashboardLineChart from "../components/DashboardLineChart";
 import DCardContainer from "../components/DCardContainer";
 import TransactionContainer from "../components/TransactionContainer";
-import { getUserAmtData, getUserRecentBills, getUserTotalPaidAmt } from "../services/dashboardServices";
-import { DCardType, PieChartDataType } from "../utils/types";
+import { getDataForLineChart, getUserAmtData, getUserRecentBills, getUserTotalPaidAmt } from "../services/dashboardServices";
+import { DCardType, LineChartGroupType, PieChartDataType } from "../utils/types";
 
 const DashboardPage: React.FC = () => {
   const [user, _] = useAuthState(auth);
@@ -15,20 +15,15 @@ const DashboardPage: React.FC = () => {
   const [amt, setAmt] = useState<number>(0);
   const [pieChartData, setPieChartData] = useState<PieChartDataType[]>([]);
   const [bills, setBills] = useState<DCardType[]>([]);
-   const [chartData,setChartData] = useState<number[]>([]);
+   const [chartData,setChartData] = useState<LineChartGroupType>();
+
   const userId = user?.uid as string;
   const fetchData = ()=>{
-    Promise.all([getUserTotalPaidAmt(userId),getUserAmtData(userId),getUserRecentBills(userId)]).then(values=>{
+    Promise.all([getUserTotalPaidAmt(userId),getUserAmtData(userId),getUserRecentBills(userId),getDataForLineChart(userId)]).then(values=>{
       setAmt(values[0]);
       setPieChartData(values[1]);
       setBills(values[2])
-      const chartData1:number[]=[]
-      values[1].forEach(value=>{
-        chartData1.push(value.value)
-      })
-      setChartData(chartData1.slice(0,12))
-      
-
+      setChartData(values[3])
       setLoading(false)
     })
   }

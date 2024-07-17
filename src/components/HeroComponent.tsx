@@ -82,7 +82,7 @@ const HeroComponent:FC<IHeroComponetProps> = ({amt,pieChartData}) => {
           <p className="text-4xl sm:text-6xl 2xl:text-8xl font-bold flex items-center overflow-hidden">
 
             ₹
-            {17345}
+            {amt}
           </p>
           <p className="font-thin text-lg">Showing your Amount in INR</p>
         </div>
