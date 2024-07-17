@@ -13,6 +13,7 @@ import GroupHome from "./pages/Group/components/GroupHome";
 import BillDetails from "./pages/Group/components/BillDetails";
 import RedirectToDashboard from "./components/RedirectToDashboard";
 import NotificationPage from "./components/NotificationPage";
+import Chat from "./pages/Group/components/Chat";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
           <Route path="/group/:groupId" element={<GroupPage />}>
             <Route index element={<GroupHome />} />
             <Route path="bill/:billId" element={<BillDetails />} />
+            <Route path="chat" element={<Chat />} />
           </Route>
           <Route path="/group" element={<GroupHomePage />} />
         </Route>

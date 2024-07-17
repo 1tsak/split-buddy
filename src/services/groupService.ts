@@ -68,9 +68,8 @@ const createNewGroup = async (groupName: string, userId: string) => {
   });
   const userRef = doc(dbCollection.users, userId);
   await updateDoc(userRef, {
-    groupsIn: arrayUnion(userId),
+    groupsIn: arrayUnion(groupRef.id),
   });
-  
 };
 
 const addMember = async (groupId: string, emailId: string) => {
