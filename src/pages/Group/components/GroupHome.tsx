@@ -101,7 +101,11 @@ const GroupHome = () => {
           <p className="font-regular">Loading users and their shares...</p>
         ) : (
           <div className="font-light">
-            {totalExpenses && <p className="text-lg font-semibold">Total Expenses: ₹{totalExpenses}</p>}
+            {totalExpenses && (
+              <p className="text-lg font-semibold">
+                Total Expenses: ₹{totalExpenses}
+              </p>
+            )}
             <br />
             {Object.values(expensesMap).map((userData) => (
               <div key={userData.userId} className="flex items-center gap-2">
@@ -126,10 +130,14 @@ const GroupHome = () => {
           colors={["#687EEF"]}
           height={300}
         /> */}
-        <div className="w-full flex flex-col items-center mr-[6rem] justify-center">
-
-        {expenses&& expensesMap && <ExpensesGraph expenses={expenses} expensesMap={expensesMap as any} />}
-        <p className="p-2 font-light text-gray-400">User Expenses Chart</p>
+        <div className="w-full flex flex-col mt-16 items-center mr-[5rem] justify-center">
+          {expenses && expensesMap && (
+            <ExpensesGraph
+              expenses={expenses}
+              expensesMap={expensesMap as any}
+            />
+          )}
+          <p className="p-2 font-light text-gray-400">User Expenses Chart</p>
         </div>
       </div>
     </div>
