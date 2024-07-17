@@ -1,5 +1,6 @@
 import { PieValueType } from "@mui/x-charts";
 import { MakeOptional } from "@mui/x-charts/internals";
+import { Timestamp } from "firebase/firestore";
 
 export interface User {
   id: string;
@@ -28,7 +29,7 @@ export interface Expense {
   category: string;
   createdBy: string;
   groupId:string;
-  createdAt: string;
+  createdAt: Timestamp;
   updatedAt: string;
   splits: Split[];
 }
@@ -73,4 +74,9 @@ export interface TransactionCardType{
   isGetting:boolean,
   amount:number | string,
   userName?:string,
+  time?:Date
+}
+
+export interface TransactionGroupType{
+  [key:string] : TransactionCardType[]
 }
