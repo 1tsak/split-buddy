@@ -126,7 +126,7 @@ const GroupHome = () => {
           colors={["#687EEF"]}
           height={300}
         /> */}
-        <div className="w-full flex flex-col items-center mr-16 justify-center">
+        <div className="w-full flex flex-col items-center mr-[6rem] justify-center">
 
         {expenses&& expensesMap && <ExpensesGraph expenses={expenses} expensesMap={expensesMap as any} />}
         <p className="p-2 font-light text-gray-400">User Expenses Chart</p>

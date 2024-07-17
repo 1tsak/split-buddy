@@ -36,7 +36,7 @@ const BillCreation = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [customBill, setCustomBill] = useState<number[]>([]);
   const [custom, setCustom] = useState<boolean>(false);
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { fetchExpensesData } = useGroup();
   const [formData, setFormData] = useState<FormDataType>({
     title: "",
@@ -99,7 +99,6 @@ const BillCreation = () => {
 
   // handleling field change
   const handleChange = (e: any) => {
-    setLoading(true);
     const { name, value } = e.target;
     if (name === "amount" && parseFloat(value) <= 0) {
       setFormData({ ...formData, [name]: 0 });
@@ -110,6 +109,7 @@ const BillCreation = () => {
       return;
     }
     if (name === "group") {
+      setLoading(true);
       const index = e.target.selectedIndex;
       const el: any = e.target.childNodes[index];
       const groupId = el.getAttribute("id");
@@ -142,7 +142,6 @@ const BillCreation = () => {
           } catch (error) {
             console.error("Error fetching group members:", error);
             setLoading(false);
-
           }
         };
         getGroupMember();
@@ -177,18 +176,18 @@ const BillCreation = () => {
   const customBillChange = (e: any, index: number) => {
     const { value } = e.target;
     const customAmount = parseFloat(value);
-    if (
-      customAmount > formData.amount ||
-      isNaN(customAmount) ||
-      customAmount < 0
-    ) {
+    if (customAmount > formData.amount || customAmount < 0) {
       return;
     }
     // console.log("click", value, index);
     let billArry = new Array();
     customBill.forEach((bill, ind) => {
       if (index == ind) {
-        billArry.push(value);
+        if (isNaN(value)) {
+          billArry.push(0);
+        } else {
+          billArry.push(value);
+        }
       } else {
         billArry.push(bill);
       }
@@ -401,7 +400,8 @@ const BillCreation = () => {
                   <div className="flex flex-col items-center ">
                     <div className="mb-4">
                       {!loading ? (
-                        groupMember && groupMember.map((user, index) => (
+                        groupMember &&
+                        groupMember.map((user, index) => (
                           <div
                             key={user.id}
                             className="flex items-center justify-between mb-2"
