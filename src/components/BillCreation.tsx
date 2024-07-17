@@ -32,11 +32,13 @@ const BillCreation = () => {
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState<User>();
   const [userGroups, setUserGroups] = useState<Group[]>([]);
+  const { groupData } = useGroup();
   const [groupMember, setGroupMember] = useState<User[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [customBill, setCustomBill] = useState<number[]>([]);
   const [custom, setCustom] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
+  const { groupId } = useParams<{ groupId: string }>();
   const { fetchExpensesData } = useGroup();
   const [formData, setFormData] = useState<FormDataType>({
     title: "",
@@ -54,14 +56,16 @@ const BillCreation = () => {
   };
   const handleClose = () => {
     setErrorMessage("");
+
+    const groupFormData = groupData
+      ? { name: formData.group.name, id: formData.group.id }
+      : { name: "", id: "" };
+      
     setFormData({
       title: "",
       amount: 0,
       category: "",
-      group: {
-        name: "",
-        id: "",
-      },
+      group: groupFormData,
       splits: [],
     });
     setOpen(false);
@@ -314,6 +318,24 @@ const BillCreation = () => {
     };
     fetchGroups();
   }, [auth?.currentUser?.uid]);
+  useEffect(() => {
+    if (!groupData?.id || !groupId) {
+      return;
+    }
+    
+    if (!userGroups) return;
+    const groupName = userGroups.find((group) => group.id === groupData.id);
+    // console.log(groupName);
+    if (groupName) {
+      setFormData({
+        ...formData,
+        group: {
+          name: groupName.name,
+          id: groupName.id,
+        },
+      });
+    }
+  }, [groupData, userGroups]);
   return (
     <div>
       <button
@@ -389,15 +411,16 @@ const BillCreation = () => {
                     <span className="block text-left mb-2 text-gray-700">
                       Add Members:
                     </span>
-                    <span className="flex gap-1 items-center" onClick={() => setCustom((prev) => !prev)}>
-                    {!custom ? `Equal` : `Custom`}
+                    <span
+                      className="flex gap-1 items-center"
+                      onClick={() => setCustom((prev) => !prev)}
+                    >
+                      {!custom ? `Equal` : `Custom`}
                       {custom ? (
-                        <BsToggle2On className="text-2xl" /> 
+                        <BsToggle2On className="text-2xl" />
                       ) : (
                         <BsToggle2Off className="text-2xl" />
                       )}
-                     
-                      
                     </span>
                   </div>
                   <div className="flex mt-6 flex-col items-center ">
