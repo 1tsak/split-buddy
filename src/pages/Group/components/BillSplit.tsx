@@ -21,6 +21,7 @@ import { auth, db } from "../../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { markBillPaid } from "../../../services/expenseService";
+import { notificationService } from "../../../services/notificationService";
 
 interface BillSplitProp {
   expenseData: Expense;
@@ -72,6 +73,11 @@ const BillSplit = ({ expenseData: initialExpense, splitData }: BillSplitProp) =>
 
     setExpenseData((prevExpense) => ({ ...prevExpense, splits: updatedSplits }));
     await markBillPaid(expenseData.id, updatedSplits);
+    await notificationService({
+      title: `${user?.displayName} settled a bill`,
+      message: `${expenseData.title} ${expenseData.category}`,
+      groupId: expenseData.groupId,
+    });
     handleClose();
   };
 

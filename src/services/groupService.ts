@@ -37,13 +37,11 @@ const dbCollection = {
   users: collection(db, "users"),
 };
 
-
 // by abhishek mei kuch delete kia
 const getGroups = async (userId?: string): Promise<IGroup[]> => {
   const grpquery = query(
     dbCollection.groups,
-    where("members", "array-contains", userId),
-
+    where("members", "array-contains", userId)
   );
   const groupSnapShot = await getDocs(grpquery);
   const groups: IGroup[] = new Array<IGroup>();
@@ -68,6 +66,11 @@ const createNewGroup = async (groupName: string, userId: string) => {
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
+  const userRef = doc(dbCollection.users, userId);
+  await updateDoc(userRef, {
+    groupsIn: arrayUnion(userId),
+  });
+  
 };
 
 const addMember = async (groupId: string, emailId: string) => {
@@ -127,13 +130,13 @@ const getGroupMembers = async (
   userId: string
 ): Promise<string[]> => {
   const group: IGroup = await getGroup(groupId);
-  const users: string[] = new Array<string>;
- for (const member of group.members){
-  const user = await getUser(member)
-  if(user?.id!=userId){
-    users.push(user?.displayName as string)
+  const users: string[] = new Array<string>();
+  for (const member of group.members) {
+    const user = await getUser(member);
+    if (user?.id != userId) {
+      users.push(user?.displayName as string);
+    }
   }
- }
   return users;
 };
 export {
