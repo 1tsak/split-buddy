@@ -15,6 +15,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../../firebaseConfig.ts";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Box, CircularProgress } from "@mui/material";
+import { notificationService } from "../../../services/notificationService.ts";
 
 const MembersList = () => {
   const [members, setMembers] = useState<User[] | null>();
@@ -22,8 +23,8 @@ const MembersList = () => {
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = React.useState(false);
   const [user] = useAuthState(auth);
-  const [loading, setLoading] = useState(true);
-
+  const [loading, setLoading] = useState(false);
+  const [addMemberLoading, setAddMemberLoading] = useState<boolean>(false);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -31,11 +32,13 @@ const MembersList = () => {
   const handleClose = () => {
     setOpen(false);
   };
+  console.log(auth);
   useEffect(() => {
     setError(null);
   }, [open]);
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setAddMemberLoading(true);
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries(formData.entries());
     const email = formJson.email as string;
@@ -44,18 +47,28 @@ const MembersList = () => {
       const user = await getUserByEmail(email);
       if (!user) {
         setError("User not found");
+        setAddMemberLoading(false);
       } else {
         const userPresent = members?.find((member) => member.id === user.id);
         if (userPresent) {
           alert("User already present");
+          setAddMemberLoading(false);
           return;
         }
         await addMember(groupData?.id as string, email);
+
+        await notificationService({
+          title: "New Member Added",
+          message: `${user.displayName} has been added to ${groupData?.name}`,
+          groupId: `${groupData?.id}`,
+        });
         setMembers((prevState: any) => [...prevState, user]);
+        setAddMemberLoading(false);
         alert("User added Successfully!");
         handleClose();
       }
     } catch (error) {
+      setAddMemberLoading(false);
       console.error("Error fetching user:", error);
       setError("An error occurred while fetching the user");
     }
@@ -110,7 +123,7 @@ const MembersList = () => {
               justifyContent: "center",
               alignItems: "center",
               height: "100%",
-              width:"100%",
+              width: "100%",
             }}
           >
             <CircularProgress />
@@ -149,7 +162,7 @@ const MembersList = () => {
           },
         }}
       >
-        <DialogTitle>Add a Member</DialogTitle>
+        <DialogTitle>Add a Member </DialogTitle>
         <DialogContent>
           <DialogContentText>Add a member to this group</DialogContentText>
           <TextField
@@ -177,7 +190,26 @@ const MembersList = () => {
         )}
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Add</Button>
+          <Button
+            type="submit"
+            className="text-main"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "8px 16px",
+
+              borderRadius: "4px",
+              fontSize: "16px",
+            }}
+          >
+            Add
+            {addMemberLoading && (
+              <span style={{ marginLeft: "8px" }}>
+                <CircularProgress size={16} style={{ color: "blue" }} />
+              </span>
+            )}
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

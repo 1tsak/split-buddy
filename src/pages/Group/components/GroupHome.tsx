@@ -96,7 +96,7 @@ const GroupHome = () => {
     <div className="flex flex-col p-5 ">
       <div className="w-full pt-5 flex px-8 justify-between items-center">
         {Object.keys(expensesMap).length === 0 ? (
-          <p className="font-regular">Loading users and their shares...</p>
+          <p className="font-regular">No Expense Found</p>
         ) : (
           <div className="font-light">
             {totalExpenses && (
