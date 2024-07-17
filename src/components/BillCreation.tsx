@@ -417,10 +417,12 @@ const BillCreation = () => {
                     >
                       {!custom ? `Equal` : `Custom`}
                       {custom ? (
-                        <BsToggle2On className="text-2xl" />
+                        <BsToggle2On className="text-2xl" /> 
                       ) : (
                         <BsToggle2Off className="text-2xl" />
                       )}
+                     
+                      
                     </span>
                   </div>
                   <div className="flex mt-6 flex-col items-center ">
