@@ -2,7 +2,7 @@ import { CiMoneyBill } from "react-icons/ci";
 import { CiHome } from "react-icons/ci";
 import useGroup from "../../../hooks/useGroup";
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom"; // Import useLocation from react-router-dom
 import { Expense } from "../../../utils/types";
 import { Box, CircularProgress } from "@mui/material";
 import { format, isToday, isYesterday } from "date-fns";
@@ -10,6 +10,7 @@ import { CiChat2 } from "react-icons/ci";
 
 const Sider = () => {
   const { groupData, expenses, loading } = useGroup();
+  const location = useLocation(); // Get current location using useLocation()
 
   useEffect(() => {
     console.log(groupData);
@@ -35,6 +36,11 @@ const Sider = () => {
     return acc;
   }, {});
 
+  // Function to determine if a link is active
+  const isActiveLink = (path: string) => {
+    return location.pathname === path;
+  };
+
   return (
     <div className="h-full w-1/4 bg-slate-100 pt-4 flex flex-col">
       <h1 className="text-center text-xl text-slate-700">{groupData?.name}</h1>
@@ -44,13 +50,13 @@ const Sider = () => {
       <div className="flex flex-col flex-1 overflow-hidden mt-12">
         <div>
           <Link to={`/group/${groupData?.id}`}>
-            <div className="w-full px-5 py-2 bg-slate-50 font-light cursor-pointer border-b text-gray-700 border-slate-200 flex items-center gap-2">
+            <div className={`w-full px-5 py-2 bg-slate-100 font-light cursor-pointer border-b text-gray-700 border-slate-200 flex items-center gap-2 ${isActiveLink(`/group/${groupData?.id}`) ? 'bg-white' : ''}`}>
               <CiHome />
               <span>Home</span>
             </div>
           </Link>
           <Link to={`/group/${groupData?.id}/chat`}>
-            <div className="w-full px-5 py-2 bg-slate-50 font-light cursor-pointer border-b text-gray-700 border-slate-200 flex items-center gap-2">
+            <div className={`w-full px-5 py-2 bg-slate-100 font-light cursor-pointer border-b text-gray-700 border-slate-200 flex items-center gap-2 ${isActiveLink(`/group/${groupData?.id}/chat`) ? 'bg-white' : ''}`}>
               <CiChat2 />
               <span>Chat</span>
             </div>

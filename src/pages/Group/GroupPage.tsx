@@ -9,6 +9,7 @@ const GroupPage = () => {
   const { fetchGroupsData,fetchExpensesData,loading } = useGroup();
 
   useEffect(() => {
+    console.log("changhed")
     if (groupId) {
       fetchGroupsData(groupId);
       fetchExpensesData(groupId);
