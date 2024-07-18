@@ -24,8 +24,8 @@ const LoginPage: React.FC = () => {
        <LoginForm /> 
         <div className="">
         Don't have an account?
-          <button  className="p-2 text-[#576cce]">
-            <Link to="/signup" >Signup</Link>
+          <button  className="p-2 text-blue-800 hover:opacity-70 duration-500">
+            <Link to="/signup" > <b>Signup</b></Link>
           </button>
         </div>
       </div>
