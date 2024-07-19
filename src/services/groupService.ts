@@ -126,7 +126,19 @@ const removeMembers = async (groupId: string, userId: string) => {
 
 const deleteGroup = async (groupId: string) => {
   const groupRef = doc(dbCollection.groups, groupId);
-  await deleteDoc(groupRef);
+  const groupData = await getGroupById(groupId);
+  if (groupData) {
+    const groupMembers = groupData.members || [];
+    const leaveGroupAll = groupMembers.map((member) => leaveGroup(groupId, member));
+    await Promise.all(leaveGroupAll);
+    console.log(groupData);
+
+    // Delete the group document
+    await deleteDoc(groupRef);
+    console.log(`Group ${groupId} deleted successfully`);
+  } else {
+    console.log(`Group ${groupId} does not exist`);
+  }
 };
 
 const leaveGroup = async(groupId: string, userId: string) =>{
