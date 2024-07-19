@@ -4,9 +4,12 @@
 const express = require('express');
 const sgMail = require('@sendgrid/mail');
 const cors = require('cors');
+const {notificationService} = require('./notificationService');
 
 const app = express();
 const port = process.env.PORT || 5000;
+
+
 
 sgMail.setApiKey("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");
 
@@ -41,3 +44,4 @@ app.post('/send-welcome-email', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+notificationService()
