@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { getAuth } from "firebase/auth";
-import { deleteGroup } from "../../../services/groupService";
+import { deleteGroup, leaveGroup } from "../../../services/groupService";
 
 const Sider = () => {
   const { groupData, expenses, loading } = useGroup();
@@ -72,6 +72,13 @@ const Sider = () => {
     navigate("/group");
   };
 
+  const handleLeave = async ()=>{
+    if (groupData && groupData.id && auth.currentUser) await leaveGroup(groupData?.id,auth.currentUser?.uid);
+    setOpen(false);
+    alert("Group left !! You are no longer member of this group.");
+    navigate("/group");
+  }
+
   return (
     <div className="h-full w-1/4 bg-slate-100 pt-4 flex flex-col">
       <div className="flex justify-between px-2">
@@ -79,7 +86,7 @@ const Sider = () => {
           {groupData?.name}
         </h1>
         <div>
-          {groupData?.createdBy === auth.currentUser?.uid && (
+          {groupData?.createdBy === auth.currentUser?.uid ? (
             <div>
               <button
                 onClick={handleOpen}
@@ -99,6 +106,31 @@ const Sider = () => {
                     Cancel
                   </Button>
                   <Button onClick={handleDelete} color="primary" autoFocus>
+                    Yes
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </div>
+          ) : (
+            <div>
+              <button
+                onClick={handleOpen}
+                className="bg-slate-800 text-white rounded-sm text-sm py-1 px-2"
+              >
+                Leave
+              </button>
+              <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Leave Group!</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Do you really want to leave this group?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="primary">
+                    Cancel
+                  </Button>
+                  <Button onClick={handleLeave} color="primary" autoFocus>
                     Yes
                   </Button>
                 </DialogActions>
