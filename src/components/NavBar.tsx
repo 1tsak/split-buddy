@@ -15,10 +15,8 @@ const NavBar = () => {
       </div>
       <div className="flex items-center gap-6">
         <NotificationBell />
-        <button className="bg-main px-4 py-2 text-sm font-semibold rounded-sm text-white flex items-center gap-2">
-          <FaPlus size={16} />
+        
           <BillCreation/>
-        </button>
       </div>
     </div>
   );

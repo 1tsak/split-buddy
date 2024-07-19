@@ -131,7 +131,7 @@ const deleteGroup = async (groupId: string) => {
     const groupMembers = groupData.members || [];
     const leaveGroupAll = groupMembers.map((member) => leaveGroup(groupId, member));
     await Promise.all(leaveGroupAll);
-    console.log(groupData);
+    // console.log(groupData);
 
     // Delete the group document
     await deleteDoc(groupRef);
