@@ -51,7 +51,7 @@ const Sidebar: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         width: '250px',
-        backgroundColor: '#576cce',
+        backgroundColor: '#f1f5f9',
         padding: '20px',
         justifyContent: 'space-between',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
@@ -65,18 +65,16 @@ const Sidebar: React.FC = () => {
             key={link.name}
             className="text-white mb-4 block"
             style={{
-              color: location.pathname === link.path ? '#576cce' : 'white',
+              color: location.pathname === link.path ? '#576cce' : '#9ca3af',textDecoration:"none"
             }}
           >
             <Box 
               display="flex" 
               alignItems="center" 
-              className={`p-2 rounded-full ${
-                location.pathname === link.path ? 'bg-white' : ''
-              }`}
+              className={`p-2 rounded-full `}
             >
               {link.icon}
-              <Typography variant="h6" style={{ marginLeft: '10px' }}>{link.name}</Typography>
+              <Typography variant="subtitle1" style={{ marginLeft: '10px' }}>{link.name}</Typography>
             </Box>
           </NavLink>
         ))}
