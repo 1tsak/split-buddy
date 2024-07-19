@@ -14,6 +14,11 @@ import { updateUserProfile } from '../services/firebaseAuth';
 import { storage } from '../firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
+import { useNavigate } from 'react-router-dom';
+
+// Inside UserInfoModal component
+const navigate = useNavigate();
+
 interface UserInfoModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -44,7 +49,10 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDisplayName(e.target.value);
   };
-
+  const handleViewProfile = () => {
+    onClose();
+    navigate('/profile');
+  };
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -164,6 +172,15 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
         >
           Log Out
         </Button>
+        <Button
+        variant="contained"
+        color="primary"
+        fullWidth
+        onClick={handleViewProfile}
+        sx={{ mb: 2 }}
+      >
+        View Profile
+      </Button>
       </Box>
     </Modal>
   );

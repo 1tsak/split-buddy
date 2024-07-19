@@ -7,7 +7,7 @@ import LayoutWrapper from "./components/LayoutWrapper";
 import GroupPage from "./pages/Group/GroupPage";
 import GroupProvider from "./context/GroupProvider";
 import HomePage from "./pages/HomePage";
-
+import UserProfile from './components/UserProfile';
 import GroupHomePage from "./pages/GroupHomePage";
 import GroupHome from "./pages/Group/components/GroupHome";
 import BillDetails from "./pages/Group/components/BillDetails";
@@ -44,6 +44,8 @@ function App() {
           }
         >
           <Route path="/dashboard" element={<DashboardPage />} />
+          {/* <Route path="/profile" element={<UserProfile />} /> */}
+
           <Route path="/notifications" element={<NotificationPage />} />
           <Route path="/group/:groupId" element={<GroupPage />}>
             <Route index element={<GroupHome />} />
