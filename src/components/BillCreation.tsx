@@ -353,7 +353,7 @@ const BillCreation = () => {
     getGroupMember(groupId);
   }, [groupData, userGroups]);
   return (
-    <div>
+    <div className="step5">
       <button
         onClick={handleClickOpen}
         className="bg-main px-4 py-2 text-sm font-semibold rounded-sm text-white flex items-center gap-2"

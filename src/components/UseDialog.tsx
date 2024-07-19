@@ -10,7 +10,7 @@ const NotificationBell = () => {
 
   return (
     <>
-      <header className="App-header">
+      <header className="App-header step4">
         <button onClick={openDialog} className="px-1 py-1 text-black rounded">
           <IoIosNotificationsOutline
             color="#121212"

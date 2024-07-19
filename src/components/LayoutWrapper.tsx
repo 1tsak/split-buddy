@@ -17,7 +17,7 @@ const LayoutWrapper: React.FC = () => {
           <Sidebar />
           <div className="flex-1">
             <Outlet />
-          </div>
+          </div>    
         </main>
       ) : (
         <Outlet />

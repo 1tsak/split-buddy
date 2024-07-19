@@ -6,6 +6,7 @@ import { auth } from "../firebaseConfig";
 import { Group as IGroup } from "../utils/types";
 import { getGroupMembers, getGroups } from "../services/groupService";
 import { Box, CircularProgress } from "@mui/material";
+import Walkthrough from "../components/WalkThrough";
 
 const GroupHomePage: FC = () => {
   const [user, loading] = useAuthState(auth);
@@ -40,6 +41,7 @@ const GroupHomePage: FC = () => {
             <h1 className="text-2xl font-bold">Your Groups</h1>
 
             <NewGroupModal fetchData={fetchData} />
+            
           </div>
           <div className="overflow-scroll grid grid-cols-1 md:grid-cols-[1fr_1fr] 2xl:grid-cols-[1fr_1fr_1fr] gap-4  max-h-[80vh] mx-5 mt-4">
             {groups

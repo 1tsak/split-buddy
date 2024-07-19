@@ -18,7 +18,7 @@ const Sidebar: React.FC = () => {
 
   useEffect(() => {
     if (authUser) {
-      setUser(authUser);
+      setUser(authUser as any);
     }
   }, [authUser]);
 
@@ -46,7 +46,8 @@ const Sidebar: React.FC = () => {
   ];
 
   return (
-    <Box 
+    <Box
+      className="step2" 
       sx={{ 
         display: 'flex',
         flexDirection: 'column',
@@ -58,12 +59,12 @@ const Sidebar: React.FC = () => {
       }}
     >
       {/* Navigation Links */}
-      <Box className="flex-grow overflow-y-auto">
+      <Box className="flex-grow overflow-y-auto ">
         {navLinks.map((link) => (
           <NavLink
             to={link.path}
             key={link.name}
-            className="text-white mb-4 block"
+            className={`text-white mb-4 block ${link.name==='Groups' && 'step3'}`}
             style={{
               color: location.pathname === link.path ? '#576cce' : 'white',
             }}
