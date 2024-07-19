@@ -109,6 +109,7 @@ const UserProfile: React.FC = () => {
         onChange={handleNameChange}
         fullWidth
         sx={{ mb: 2 }}
+        InputLabelProps={{ shrink: true }}
       />
       <Button
         variant="contained"
@@ -162,3 +163,4 @@ const UserProfile: React.FC = () => {
 };
 
 export default UserProfile;
+

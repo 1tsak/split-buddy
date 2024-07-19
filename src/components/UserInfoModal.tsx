@@ -17,7 +17,6 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
 
 // Inside UserInfoModal component
-const navigate = useNavigate();
 
 interface UserInfoModalProps {
   isOpen: boolean;
@@ -38,7 +37,8 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
   const [photoURL, setPhotoURL] = useState<string>('');
   const [uploading, setUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
-
+  
+  const navigate = useNavigate();
   useEffect(() => {
     if (user) {
       setDisplayName(user.displayName || '');

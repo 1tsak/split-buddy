@@ -16,6 +16,7 @@ import NotificationPage from "./components/NotificationPage";
 import Chat from "./pages/Group/components/Chat";
 import 'rsuite/dist/rsuite.min.css'; 
 
+
 function App() {
   return (
     <Routes>
@@ -44,7 +45,7 @@ function App() {
           }
         >
           <Route path="/dashboard" element={<DashboardPage />} />
-          {/* <Route path="/profile" element={<UserProfile />} /> */}
+          <Route path="/profile" element={<UserProfile />} />
 
           <Route path="/notifications" element={<NotificationPage />} />
           <Route path="/group/:groupId" element={<GroupPage />}>
