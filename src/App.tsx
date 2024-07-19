@@ -14,6 +14,9 @@ import BillDetails from "./pages/Group/components/BillDetails";
 import RedirectToDashboard from "./components/RedirectToDashboard";
 import NotificationPage from "./components/NotificationPage";
 import Chat from "./pages/Group/components/Chat";
+import { requestPermission } from "./services/notiService";
+
+requestPermission()
 
 function App() {
   return (
