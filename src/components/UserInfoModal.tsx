@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -13,10 +14,7 @@ import { User } from '../utils/types';
 import { updateUserProfile } from '../services/firebaseAuth';
 import { storage } from '../firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-
 import { useNavigate } from 'react-router-dom';
-
-// Inside UserInfoModal component
 
 interface UserInfoModalProps {
   isOpen: boolean;
@@ -37,8 +35,9 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
   const [photoURL, setPhotoURL] = useState<string>('');
   const [uploading, setUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
-  
+
   const navigate = useNavigate();
+
   useEffect(() => {
     if (user) {
       setDisplayName(user.displayName || '');
@@ -49,10 +48,12 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDisplayName(e.target.value);
   };
+
   const handleViewProfile = () => {
     onClose();
     navigate('/profile');
   };
+
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -87,7 +88,7 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
       try {
          updateUserProfile(user, { displayName, photoURL });
         onUserProfileUpdate({ ...user, displayName, photoURL });
-        onClose(); 
+        onClose();
       } catch (error) {
         console.error('Failed to update profile:', error);
       }
@@ -99,24 +100,33 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
       <Box
         sx={{
           position: 'absolute',
-          bottom: '20px',
-          left: '80px',
-          width: '350px',
-          borderRadius: '12px',
+          bottom: 0,
+          left: '15%',
+          transform: 'translateX(-50%)',
+          width: '100%',
+          maxWidth: '400px',
+          bgcolor: 'background.paper',
+          borderRadius: 2,
           boxShadow: 24,
           p: 4,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
           outline: 'none',
-          backgroundColor: '#fff',
-          backdropFilter: 'blur(10px)',
+          textAlign: 'center',
+          borderTop: '1px solid #e0e0e0',
+          backgroundColor: '#ffffff',
         }}
       >
         <Avatar
           src={photoURL}
           alt={displayName}
-          sx={{ width: 100, height: 100, mb: 2 }}
+          sx={{
+            width: 100,
+            height: 100,
+            mb: 2,
+            mx: 'auto',
+            boxShadow: 3,
+            border: '2px solid #ddd',
+            borderRadius: '50%',
+          }}
         />
         <Typography variant="h6" sx={{ mb: 2 }}>
           Edit Profile
@@ -128,7 +138,7 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
           fullWidth
           sx={{ mb: 2 }}
           error={!displayName.trim()}
-          helperText={!displayName.trim() && "Name cannot be empty"}
+          helperText={!displayName.trim() && 'Name cannot be empty'}
         />
         <Button
           variant="contained"
@@ -165,22 +175,22 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
           Save
         </Button>
         <Button
-          variant="contained"
+          variant="outlined"
           color="secondary"
           fullWidth
           onClick={onLogout}
+          sx={{ mb: 2 }}
         >
           Log Out
         </Button>
         <Button
-        variant="contained"
-        color="primary"
-        fullWidth
-        onClick={handleViewProfile}
-        sx={{ mb: 2 }}
-      >
-        View Profile
-      </Button>
+          variant="text"
+          color="primary"
+          fullWidth
+          onClick={handleViewProfile}
+        >
+          View Profile
+        </Button>
       </Box>
     </Modal>
   );

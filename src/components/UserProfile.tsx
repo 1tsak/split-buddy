@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -7,6 +8,8 @@ import {
   CircularProgress,
   LinearProgress,
   Typography,
+  Grid,
+  Paper
 } from '@mui/material';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, storage } from '../firebaseConfig';
@@ -94,70 +97,85 @@ const UserProfile: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <CircularProgress />;
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
-    <Box sx={{ padding: '20px' }}>
-      <Typography variant="h4" gutterBottom>
-        User Profile
-      </Typography>
-      <Avatar src={photoURL} alt={displayName} sx={{ width: 100, height: 100, mb: 2 }} />
-      <TextField
-        label="Name"
-        value={displayName}
-        onChange={handleNameChange}
-        fullWidth
-        sx={{ mb: 2 }}
-        InputLabelProps={{ shrink: true }}
-      />
-      <Button
-        variant="contained"
-        component="label"
-        fullWidth
-        sx={{ mb: 2 }}
-        disabled={uploading}
-      >
-        {uploading ? (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <CircularProgress size={24} sx={{ mr: 2 }} />
-            {`Uploading ${uploadProgress}%`}
-          </Box>
-        ) : (
-          'Upload Photo'
-        )}
-        <input type="file" hidden accept="image/*" onChange={handlePhotoUpload} />
-      </Button>
-      {uploading && (
-        <LinearProgress
-          variant="determinate"
-          value={uploadProgress}
-          sx={{ width: '100%', mb: 2 }}
+    <Box sx={{ padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Paper elevation={3} sx={{ padding: '20px', width: '100%', maxWidth: '600px', borderRadius: '12px' }}>
+        <Typography variant="h4" gutterBottom align="center">
+          User Profile
+        </Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
+          <Avatar src={photoURL} alt={displayName} sx={{ width: 120, height: 120, mb: 2 }} />
+          <Button
+            variant="contained"
+            component="label"
+            sx={{ mb: 2 }}
+            disabled={uploading}
+          >
+            {uploading ? (
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <CircularProgress size={24} sx={{ mr: 2 }} />
+                {`Uploading ${uploadProgress}%`}
+              </Box>
+            ) : (
+              'Upload Photo'
+            )}
+            <input type="file" hidden accept="image/*" onChange={handlePhotoUpload} />
+          </Button>
+          {uploading && (
+            <LinearProgress
+              variant="determinate"
+              value={uploadProgress}
+              sx={{ width: '100%', mb: 2 }}
+            />
+          )}
+        </Box>
+        <TextField
+          label="Name"
+          value={displayName}
+          onChange={handleNameChange}
+          fullWidth
+          sx={{ mb: 2 }}
+          InputLabelProps={{ shrink: true }}
+          variant="outlined"
         />
-      )}
-      <Button
-        variant="contained"
-        color="primary"
-        fullWidth
-        onClick={handleSave}
-        disabled={uploading}
-        sx={{ mb: 2 }}
-      >
-        Save
-      </Button>
-      <Box sx={{ height: '400px', width: '100%', mb: 2 }}>
-        {location && (
-          <LoadScript googleMapsApiKey="AIzaSyAb97UQI3KZz47TramGUsMDqck4LCq8Mt8">
-            <GoogleMap
-              mapContainerStyle={{ width: '100%', height: '100%' }}
-              center={location}
-              zoom={15}
-            >
-              <Marker position={location} />
-            </GoogleMap>
-          </LoadScript>
-        )}
-      </Box>
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={handleSave}
+          disabled={uploading}
+          sx={{ mb: 2 }}
+        >
+          Save
+        </Button>
+        <Box sx={{ height: '300px', width: '100%' }}>
+          {location && (
+            <LoadScript googleMapsApiKey="AIzaSyAb97UQI3KZz47TramGUsMDqck4LCq8Mt8">
+              <GoogleMap
+                mapContainerStyle={{ width: '100%', height: '100%' }}
+                center={location}
+                zoom={15}
+              >
+                <Marker position={location} />
+              </GoogleMap>
+            </LoadScript>
+          )}
+        </Box>
+      </Paper>
     </Box>
   );
 };
