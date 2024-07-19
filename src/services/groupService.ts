@@ -19,6 +19,7 @@ import { db } from "../firebaseConfig";
 import { Group as IGroup, User } from "../utils/types";
 import { User as IUser } from "../utils/types";
 import { getUser } from "./authService";
+import { ref } from "firebase/storage";
 
 export const getGroupById = async (groupId: string): Promise<IGroup | null> => {
   const groupDocRef = doc(db, "groups", groupId);
@@ -36,6 +37,10 @@ const dbCollection = {
   groups: collection(db, "groups"),
   users: collection(db, "users"),
 };
+
+
+
+
 
 // by abhishek mei kuch delete kia
 const getGroups = async (userId?: string): Promise<IGroup[]> => {
@@ -124,6 +129,25 @@ const deleteGroup = async (groupId: string) => {
   await deleteDoc(groupRef);
 };
 
+const leaveGroup = async(groupId: string, userId: string) =>{
+  try {
+    
+    const groupRef = doc(dbCollection.groups, groupId);
+    const userRef = doc(dbCollection.users, userId);
+
+    await updateDoc(groupRef, {
+      members: arrayRemove(userId)
+    })
+    await updateDoc(userRef, {
+      groupsIn : arrayRemove(groupId),
+    });
+    console.log(`Group left succcessfully`);
+  }catch(error){
+    console.log(`Error in leaving group`);
+  }
+
+}
+
 const getGroupMembers = async (
   groupId: string,
   userId: string
@@ -146,4 +170,9 @@ export {
   addMember,
   removeMembers,
   getGroupMembers,
+  leaveGroup
 };
+  function get(arrayRef: any) {
+    throw new Error("Function not implemented.");
+  }
+
