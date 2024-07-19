@@ -15,7 +15,7 @@ const DashboardPage: React.FC = () => {
   const [amt, setAmt] = useState<number>(0);
   const [pieChartData, setPieChartData] = useState<PieChartDataType[]>([]);
   const [bills, setBills] = useState<DCardType[]>([]);
-   const [chartData,setChartData] = useState<LineChartGroupType>();
+  //  const [chartData,setChartData] = useState<LineChartGroupType>();
 
   const userId = user?.uid as string;
   const fetchData = ()=>{
@@ -23,7 +23,7 @@ const DashboardPage: React.FC = () => {
       setAmt(values[0]);
       setPieChartData(values[1]);
       setBills(values[2])
-      setChartData(values[3])
+      // setChartData(values[3])
       setLoading(false)
     })
   }
@@ -75,7 +75,7 @@ const DashboardPage: React.FC = () => {
               {/* <div>put buttons</div> */}
             </div>
             <div className="mt-2">
-              <DashboardLineChart chartData={chartData} />
+              <DashboardLineChart  />
             </div>
           </div>
         </div>

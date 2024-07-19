@@ -1,4 +1,14 @@
-import { collection, getDocs, orderBy, query, query, Timestamp, where } from "firebase/firestore";
+import {
+  and,
+  collection,
+  getDocs,
+  or,
+  orderBy,
+  query,
+  query,
+  Timestamp,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import {
   DCardType,
@@ -10,8 +20,7 @@ import {
   TransactionGroupType,
 } from "../utils/types";
 import moment from "moment";
-
-
+import { DateRange } from "rsuite/esm/DateRangePicker";
 
 const dbCollection = {
   expenses: collection(db, "expenses"),
@@ -28,7 +37,7 @@ const getUserTotalPaidAmt = async (userId: string): Promise<number> => {
       }
     });
   });
-  console.log(amt)
+  console.log(amt);
   // sampleExpenses.forEach(sampleExpenses=>{
   //     const splits = sampleExpenses.splits;
   //     splits.forEach(sp=>{
@@ -88,37 +97,45 @@ const getUserTransactoins = async (
   userId: string
 ): Promise<TransactionGroupType> => {
   const data = new Array<TransactionCardType>();
-  const query1 = query(dbCollection.expenses,orderBy("createdAt", "desc"))
+  const query1 = query(dbCollection.expenses, orderBy("createdAt", "desc"));
   const snapShot = await getDocs(query1);
-  
+
   snapShot.forEach((expense) => {
     const exp = expense.data() as Expense;
-    
+
     const splits = exp.splits;
     if (exp.createdBy == userId) {
       splits.forEach((split) => {
         if (split.userId != userId) {
-          data.push({ amount: split.amount, isGetting: true ,time:exp.createdAt.toDate()});
+          data.push({
+            amount: split.amount,
+            isGetting: true,
+            time: exp.createdAt.toDate(),
+          });
         }
       });
     } else {
-      splits.forEach(split=>{
-        if(split.userId==userId){
-          data.push({amount:split.amount,isGetting:false,time:exp.createdAt.toDate()})
+      splits.forEach((split) => {
+        if (split.userId == userId) {
+          data.push({
+            amount: split.amount,
+            isGetting: false,
+            time: exp.createdAt.toDate(),
+          });
         }
-      })
+      });
     }
   });
-  const groups = data.reduce<TransactionGroupType>((group,item)=>{
-    const date = moment(item.time).format('DD-MMMM')
+  const groups = data.reduce<TransactionGroupType>((group, item) => {
+    const date = moment(item.time).format("DD-MMMM");
     if (!group[date]) {
       group[date] = [];
-  }
-  
-  group[date].push(item);
-  
-  return group;
-  },{})
+    }
+
+    group[date].push(item);
+
+    return group;
+  }, {});
 
   // for(const dt of data){
   //   const user = await getUser(dt.userName as string);
@@ -142,51 +159,77 @@ const getUserTransactoins = async (
   //     })
   //   }
   // });
+
+  return groups;
+};
+
+const getDataForLineChart = async (
+  userId: string,
+  dateR: DateRange
+): Promise<LineChartGroupType> => {
+  if (!dateR || dateR==null) return { "16": 22 };
+  console.log("called"
+  )
+  const fromDate = Timestamp.fromDate(dateR[0]);
+  const toDate = Timestamp.fromDate(dateR[1])
+  const query1 = query(
+    dbCollection.expenses,
+    and(where("createdAt","<",new Date('2024-7-18')),where("createdAt", ">", new Date('2024-7-15')),
+    ),orderBy("createdAt", "desc"),
+  );
+  console.log("first")
+  const snapShot = await getDocs(query1);
+  const data = new Array<LineChartType>();
+  snapShot.forEach((expense) => {
+    const exp = expense.data() as Expense;
+    console.log(exp,"exp");
+    const splits = exp.splits;
+    if (exp.createdBy == userId) {
+      splits.forEach((split) => {
+        if (split.userId != userId) {
+          data.push({
+            amt: split.amount,
+            isGetting: true,
+            time: exp.createdAt.toDate(),
+          });
+        }
+      });
+    } else {
+      splits.forEach((split) => {
+        if (split.userId == userId) {
+          data.push({
+            amt: split.amount,
+            isGetting: false,
+            time: exp.createdAt.toDate(),
+          });
+        }
+      });
+    }
+  });
+
+  const groups = data.reduce<LineChartGroupType>((group, item) => {
+    const date = moment(item.time).format("DD");
+    if (!group[date]) {
+      group[date] = 0;
+    }
+
+    if (item.isGetting) {
+      group[date] += Number(item.amt);
+    } else {
+      group[date] -= Number(item.amt);
+    }
+
+    return group;
+  }, {});
+
   
   return groups;
 };
 
-
-const getDataForLineChart=async (userId:string):Promise<LineChartGroupType> =>{
-  const query1 = query(dbCollection.expenses,orderBy("createdAt", "desc"));
-  const snapShot = await getDocs(query1);
-  const data = new Array<LineChartType>
-  snapShot.forEach(expense=>{
-    const exp = expense.data() as Expense;
-    const splits = exp.splits
-    if (exp.createdBy == userId) {
-      splits.forEach((split) => {
-        if (split.userId != userId) {
-          data.push({ amt: split.amount, isGetting: true ,time:exp.createdAt.toDate()});
-        }
-      });
-    } else {
-      splits.forEach(split=>{
-        if(split.userId==userId){
-          data.push({amt:split.amount,isGetting:false,time:exp.createdAt.toDate()})
-        }
-      })
-    }
-  }); 
-
-  const groups = data.reduce<LineChartGroupType>((group,item)=>{
-    const date = moment(item.time).format('DD')
-    if (!group[date]) {
-      group[date] = 0;
-  }
-  
-  if(item.isGetting){
-    group[date] += Number(item.amt)
-  }
-  else {
-    group[date] -=Number(item.amt)
-  }
-  
-  return group;
-  },{})
-
- console.log(groups)
-return groups
-}
-
-export { getUserTotalPaidAmt, getUserAmtData, getUserRecentBills,getUserTransactoins,getDataForLineChart };
+export {
+  getUserTotalPaidAmt,
+  getUserAmtData,
+  getUserRecentBills,
+  getUserTransactoins,
+  getDataForLineChart,
+};

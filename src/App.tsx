@@ -14,6 +14,7 @@ import BillDetails from "./pages/Group/components/BillDetails";
 import RedirectToDashboard from "./components/RedirectToDashboard";
 import NotificationPage from "./components/NotificationPage";
 import Chat from "./pages/Group/components/Chat";
+import 'rsuite/dist/rsuite.min.css'; 
 
 function App() {
   return (

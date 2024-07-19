@@ -19,7 +19,7 @@ import { notificationService } from "../../../services/notificationService.ts";
 
 const MembersList = () => {
   const [members, setMembers] = useState<User[] | null>();
-  const { groupData } = useGroup();
+  const { groupData,fetchGroupsData } = useGroup();
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = React.useState(false);
   const [user] = useAuthState(auth);
@@ -64,6 +64,8 @@ const MembersList = () => {
         });
         setMembers((prevState: any) => [...prevState, user]);
         setAddMemberLoading(false);
+        if(groupData)
+        fetchGroupsData(groupData?.id);
         alert("User added Successfully!");
         handleClose();
       }

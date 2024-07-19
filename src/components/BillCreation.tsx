@@ -321,7 +321,7 @@ const BillCreation = () => {
       }
     };
     fetchGroups();
-  }, [auth?.currentUser?.uid]);
+  }, [auth?.currentUser?.uid,groupId]);
   useEffect(() => {
     if (!groupData?.id || !groupId) {
       setFormData({
