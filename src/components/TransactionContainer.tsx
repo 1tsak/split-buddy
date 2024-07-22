@@ -19,8 +19,8 @@ const TransactionContainer: FC = () => {
   }, []);
 
   if(tData && Object.keys(tData).length==0){
-    return <div className="rounded-xl border-main border-[1px] p-2 flex-auto">
-    <p className="text-2xl font-extrabold">Recent Transactions</p>
+    return <div className="rounded-xl  p-2 flex-auto">
+    <p className="text-xl font-semibold">Recent Transactions</p>
     <p className="text-gray-400 text-sm"></p>
     <div className="overflow-scroll min-h-[80vh] flex items-center justify-center max-h-[80-vh]">
       No Recent Transaction Data Available
@@ -29,8 +29,8 @@ const TransactionContainer: FC = () => {
   }
 
   return (
-    <div className="rounded-xl border-main border-[1px] p-2 flex-auto">
-      <p className="text-2xl font-extrabold">Recent Transactions</p>
+    <div className="rounded-xl  p-2 flex-auto p-5">
+      <p className="text-xl font-semibold">Recent Transactions</p>
       <p className="text-gray-400 text-sm"></p>
       <div className="overflow-scroll min-h-[80vh] max-h-[80vh]">
         {tData ? Object.keys(tData).map((trns,i)=>{

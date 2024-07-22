@@ -13,7 +13,7 @@ const TransactionDateContainer:FC<ITransactionDateContainerProps> = ({transactio
   return (
     <div className='flex flex-col flex-grow'>   
        <div className='flex gap-2 items-center justify-start'>
-        <CiCalendarDate className='text-2xl'/>
+        <CiCalendarDate className='text-xl'/>
         <p className='font-bolder text-xl'>{date}</p>
        </div>
        <div>

@@ -2,6 +2,7 @@ import {
   and,
   collection,
   getDocs,
+  limit,
   or,
   orderBy,
   query,
@@ -74,21 +75,21 @@ const getUserAmtData = async (userId: string): Promise<PieChartDataType[]> => {
 };
 
 const getUserRecentBills = async (userId: string): Promise<DCardType[]> => {
-  const query1 = query(dbCollection.expenses, where("createdBy", "==", userId));
-  const data = new Array<DCardType>();
+  // Update query to order by updatedAt or createdAt field and limit to the most recent 4
+  const query1 = query(
+    dbCollection.expenses,
+    where('createdBy', '==', userId),
+    orderBy('updatedAt', 'desc'), // or 'createdAt' if that's the correct field
+    limit(4)
+  );
+
+  const data: DCardType[] = [];
   const snapShot = await getDocs(query1);
   snapShot.forEach((expense) => {
     const exp: Expense = expense.data() as Expense;
     data.push({ title: exp.title, amount: exp.amount });
   });
 
-  // sampleExpenses.forEach((exp,i)=>{
-  //     if(exp.createdBy == userId){
-  //         data.push({title:exp.title,amount:exp.amount});
-  //     }
-  // })
-  // splicing the data before sending so the the user only see 4 objects
-  data.splice(4, data.length);
   return data;
 };
 

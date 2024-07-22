@@ -7,8 +7,17 @@ import DashboardLineChart from "../components/DashboardLineChart";
 import DCardContainer from "../components/DCardContainer";
 import TransactionContainer from "../components/TransactionContainer";
 import Walkthrough from "../components/Walkthrough";
-import { getDataForLineChart, getUserAmtData, getUserRecentBills, getUserTotalPaidAmt } from "../services/dashboardServices";
-import { DCardType, LineChartGroupType, PieChartDataType } from "../utils/types";
+import {
+  getDataForLineChart,
+  getUserAmtData,
+  getUserRecentBills,
+  getUserTotalPaidAmt,
+} from "../services/dashboardServices";
+import {
+  DCardType,
+  LineChartGroupType,
+  PieChartDataType,
+} from "../utils/types";
 
 const DashboardPage: React.FC = () => {
   const [user, _] = useAuthState(auth);
@@ -21,7 +30,6 @@ const DashboardPage: React.FC = () => {
   const [runWalkthrough, setRunWalkthrough] = useState(false); // State for Walkthrough
 
   const userId = user?.uid as string;
-
   const fetchData = () => {
     Promise.all([
       getUserTotalPaidAmt(userId),
@@ -63,28 +71,27 @@ const DashboardPage: React.FC = () => {
   }
 
   return (
-    <div className="grid xl:grid-cols-[3.5fr_1.5fr] gap-4 p-4">
-      <Walkthrough runWalkthrough={runWalkthrough} onFinish={handleFinishWalkthrough} />
-      <div className="overflow-scroll max-h-[90vh]">
+    <div className="grid xl:grid-cols-[3.5fr_1.5fr]  gap-4 p-4 ">
+      <div className="overflow-scroll p-4 max-h-[90vh]">
         <div className="flex flex-col gap-2">
-          <div className="flex justify-between items-center px-2 step1">
-            <h2 className="text-2xl font-extrabold">User Dashboard</h2>
-            {/* <Button className="text-main border-main p-1" variant="outlined">
+          <div className="flex justify-between items-center px-2 step-1">
+            <h2 className="text-xl font-semibold">User Dashboard</h2>
+            {/* <Button className=" text-main border-main p-1" variant="outlined">
               More
             </Button> */}
           </div>
-          <div className="">
+          <div>
             <HeroComponent amt={amt} pieChartData={pieChartData} />
           </div>
-          <div className="">
-            <h2 className="text-2xl font-extrabold">Recent Bills</h2>
+          <div>
+            <h2 className="text-xl font-semibold mt-2">Recent Bills</h2>
             <DCardContainer bills={bills} />
           </div>
         </div>
-        <div>
-          <div className="flex justify-between mt-2 ">
+        <div className="">
+          <div className="flex justify-between mt-2">
             <div>
-              <h2 className="text-2xl font-extrabold mt-2">Overview</h2>
+              <h2 className="text-xl font-semibold mt-2">Overview</h2>
             </div>
             {/* <div>put buttons</div> */}
           </div>
@@ -93,7 +100,7 @@ const DashboardPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="step7">
+      <div className="step-7">
         <TransactionContainer />
       </div>
     </div>

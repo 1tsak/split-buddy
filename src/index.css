@@ -29,3 +29,10 @@ html,body{
   .introjs-helperLayer, .introjs-tooltipReferenceLayer {
     @apply border;
   }
+/* width */
+::-webkit-scrollbar {
+    display: none;
+    
+  }
+  
+  
