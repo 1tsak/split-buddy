@@ -5,7 +5,6 @@ import {
   or,
   orderBy,
   query,
-  query,
   Timestamp,
   where,
 } from "firebase/firestore";
@@ -165,7 +164,7 @@ const getUserTransactoins = async (
 
 const getDataForLineChart = async (
   userId: string,
-  dateR: DateRange
+  dateR: DateRange|null
 ): Promise<LineChartGroupType> => {
   if (!dateR || dateR==null) return { "16": 22 };
   console.log("called"
