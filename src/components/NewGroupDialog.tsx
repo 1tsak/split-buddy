@@ -1,21 +1,21 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import { MdOutlinePeopleAlt } from 'react-icons/md';
-import { createNewGroup } from '../services/groupService';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../firebaseConfig';
+import * as React from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import { MdOutlinePeopleAlt } from "react-icons/md";
+import { createNewGroup } from "../services/groupService";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../firebaseConfig";
 
-interface INewGroupModalProps{
-    fetchData:()=>void
+interface INewGroupModalProps {
+  fetchData: () => void;
 }
 
-export default function NewGroupModal(props:INewGroupModalProps) {
-    const {fetchData} = props;
+export default function NewGroupModal(props: INewGroupModalProps) {
+  const { fetchData } = props;
   const [open, setOpen] = React.useState(false);
   const [user, loading] = useAuthState(auth);
 
@@ -29,23 +29,28 @@ export default function NewGroupModal(props:INewGroupModalProps) {
 
   return (
     <React.Fragment>
-      <Button className='text-center flex  items-center gap-2 bg-main text-white p-2 rounded-lg'  onClick={handleClickOpen}>
-      <MdOutlinePeopleAlt className='text-lg'/>
-        Add New Group
-      </Button>
+      <button
+        type="button"
+        className="text-center flex  items-center gap-2 bg-main text-white py-2 px-3 rounded-sm"
+        onClick={handleClickOpen}
+      >
+        <MdOutlinePeopleAlt className="text-lg" />
+        <span className="font-semibold ">Add a Group</span>
+      </button>
       <Dialog
         open={open}
         onClose={handleClose}
         fullWidth={true}
         PaperProps={{
-          component: 'form',
+          component: "form",
           onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries((formData as any).entries());
             const groupName = formJson.groupName;
-            await createNewGroup(groupName,user?.uid as string);
-            await fetchData()
+            const groupDescription = formJson.groupDescription;
+            await createNewGroup(groupName,groupDescription, user?.uid as string);
+            await fetchData();
             handleClose();
           },
         }}
@@ -59,7 +64,16 @@ export default function NewGroupModal(props:INewGroupModalProps) {
             id="name"
             name="groupName"
             label="Enter New Group Name"
-            type='text'
+            type="text"
+            fullWidth
+          />
+          <TextField
+            required
+            margin="dense"
+            id="description"
+            name="groupDescription"
+            label="Enter Description"
+            type="text"
             fullWidth
           />
         </DialogContent>

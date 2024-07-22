@@ -72,12 +72,13 @@ const Sider = () => {
     navigate("/group");
   };
 
-  const handleLeave = async ()=>{
-    if (groupData && groupData.id && auth.currentUser) await leaveGroup(groupData?.id,auth.currentUser?.uid);
+  const handleLeave = async () => {
+    if (groupData && groupData.id && auth.currentUser)
+      await leaveGroup(groupData?.id, auth.currentUser?.uid);
     setOpen(false);
     alert("Group left !! You are no longer member of this group.");
     navigate("/group");
-  }
+  };
 
   return (
     <div className="h-full w-1/4 bg-slate-100 pt-4 flex flex-col">
@@ -139,7 +140,7 @@ const Sider = () => {
           )}
         </div>
       </div>
-      <p className="text-sm text-center text-slate-500">
+      <p className="text-sm text-start px-4 py-2 font-light text-slate-500">
         {groupData?.description}
       </p>
       <div className="flex flex-col flex-1 overflow-hidden mt-12">

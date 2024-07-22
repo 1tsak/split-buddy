@@ -35,9 +35,9 @@ const GroupHomePage: FC = () => {
           <CircularProgress className="text-main" />
         </Box>
       ) : (
-        <div className="m-2">
+        <div className="my-4 mx-2">
           <div className="flex justify-between items-center mx-4">
-            <h1 className="text-2xl font-bold">Your Groups</h1>
+            <h1 className="text-xl font-bold">Your Groups</h1>
 
             <NewGroupModal fetchData={fetchData} />
           </div>

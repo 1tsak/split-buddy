@@ -60,11 +60,11 @@ const getGroup = async (groupId: string): Promise<IGroup> => {
   return group.data() as IGroup;
 };
 
-const createNewGroup = async (groupName: string, userId: string) => {
+const createNewGroup = async (groupName: string,groupDescription:string, userId: string) => {
   const groupRef = doc(dbCollection.groups);
   await setDoc(groupRef, {
     id: groupRef.id,
-    description: "",
+    description: groupDescription,
     name: groupName,
     createdBy: userId,
     members: [userId],
