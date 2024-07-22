@@ -10,6 +10,7 @@ import useGroup from "../hooks/useGroup";
 import { BsToggle2On } from "react-icons/bs";
 import { BsToggle2Off } from "react-icons/bs";
 import { Box, CircularProgress } from "@mui/material";
+import { FaPlus } from "react-icons/fa";
 
 const auth = getAuth();
 type Split = {
@@ -229,17 +230,21 @@ const BillCreation = () => {
       }, 6000);
       setAddBillLoading(false);
       return;
-     
     }
 
     const ActualSplit: any = formData.splits
       .map((split, index) => {
-       
         const updatedSplit = {
           userId: split.userId,
-          amount: !split.checked ? 0 : (!custom ? split.amount : Number(customBill[index])),
+          amount: !split.checked
+            ? 0
+            : !custom
+            ? split.amount
+            : Number(customBill[index]),
           paid:
-            split.userId === auth.currentUser?.uid || !split.checked ? true : split.paid || false,
+            split.userId === auth.currentUser?.uid || !split.checked
+              ? true
+              : split.paid || false,
         };
         return updatedSplit as Split;
       })
@@ -257,7 +262,6 @@ const BillCreation = () => {
         setErrorMessage("");
       }, 8000);
       return;
-
     }
 
     const expenseData: any = {
@@ -321,7 +325,7 @@ const BillCreation = () => {
       }
     };
     fetchGroups();
-  }, [auth?.currentUser?.uid,groupId]);
+  }, [auth?.currentUser?.uid, groupId]);
   useEffect(() => {
     if (!groupData?.id || !groupId) {
       setFormData({
@@ -349,11 +353,12 @@ const BillCreation = () => {
     getGroupMember(groupId);
   }, [groupData, userGroups]);
   return (
-    <div>
+    <div className="step5">
       <button
-        className="bg-transparent text-white rounded"
         onClick={handleClickOpen}
+        className="bg-main px-4 py-2 text-sm font-semibold rounded-sm text-white flex items-center gap-2"
       >
+        <FaPlus size={16} />
         Split a Bill
       </button>
       {open && (
@@ -504,25 +509,25 @@ const BillCreation = () => {
                   Cancel
                 </button>
                 <button
-            type="submit"
-            className="text-white bg-main"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "8px 16px",
-              color:'white',
-              borderRadius: "4px",
-              fontSize: "16px",
-            }}
-          >
-            Add
-            {addBillLoading && (
-              <span style={{ marginLeft: "8px" }}>
-                <CircularProgress size={16} style={{ color: "white" }} />
-              </span>
-            )}
-          </button>
+                  type="submit"
+                  className="text-white bg-main"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "8px 16px",
+                    color: "white",
+                    borderRadius: "4px",
+                    fontSize: "16px",
+                  }}
+                >
+                  Add
+                  {addBillLoading && (
+                    <span style={{ marginLeft: "8px" }}>
+                      <CircularProgress size={16} style={{ color: "white" }} />
+                    </span>
+                  )}
+                </button>
               </div>
             </form>
           </div>

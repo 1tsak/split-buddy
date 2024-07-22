@@ -17,3 +17,15 @@ html,body{
 #root{
     height: 100%;
 }
+/* Custom styles for intro.js */
+.custom-tooltip {
+    @apply bg-white text-black p-4 rounded-lg shadow-lg;
+  }
+  
+  .custom-highlight {
+    @apply border ;
+  }
+  
+  .introjs-helperLayer, .introjs-tooltipReferenceLayer {
+    @apply border;
+  }

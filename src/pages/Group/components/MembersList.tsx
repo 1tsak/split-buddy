@@ -132,8 +132,8 @@ const MembersList = () => {
           </Box>
         ) : (
           members &&
-          members.map((member: User) => (
-            <li className="p-2 flex items-center  border border-slate-300 gap-2 rounded">
+          members.map((member: User, index) => (
+            <li key={index} className="p-2 flex items-center  border border-slate-300 gap-2 rounded">
               {member.displayName}
               {member.id !== user?.uid && (
                 <RiDeleteBin6Line

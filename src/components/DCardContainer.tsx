@@ -26,7 +26,7 @@ const DCardContainer:FC<DcardContainerProps> = ({bills}) => {
     </div>
   }
   return (
-    <div className="">
+    <div className="step6">
       {bills ? (
         <div className="grid grid-cols-2 min-h-8 lg:grid-cols-4 gap-4">
           {bills.map((bill, i) => {
