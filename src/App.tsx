@@ -15,6 +15,9 @@ import RedirectToDashboard from "./components/RedirectToDashboard";
 import NotificationPage from "./components/NotificationPage";
 import Chat from "./pages/Group/components/Chat";
 import 'rsuite/dist/rsuite.min.css'; 
+import { requestPermission } from "./services/notiService";
+
+requestPermission()
 
 function App() {
   return (

@@ -10,6 +10,7 @@ export interface User {
   groupsIn: string[];
   createdAt: string;
   updatedAt: string;
+  deviceToken:string;
 }
 
 export interface Group {
