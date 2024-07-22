@@ -47,11 +47,17 @@ const DashboardPage: React.FC = () => {
 
   useEffect(() => {
     fetchData();
+    const hasShownWalkthrough = localStorage.getItem(`shown${userId}`);
+    if (hasShownWalkthrough === userId) {
+      setRunWalkthrough(false);
+    }else{
+      setRunWalkthrough(true);
+    }
   }, []);
 
   const handleFinishWalkthrough = () => {
     setRunWalkthrough(false);
-    console.log('Walkthrough finished');
+    localStorage.setItem(`shown${userId}`, userId);
   };
 
   if (loading) {
@@ -72,6 +78,7 @@ const DashboardPage: React.FC = () => {
 
   return (
     <div className="grid xl:grid-cols-[3.5fr_1.5fr]  gap-4 p-4 ">
+      <Walkthrough runWalkthrough={runWalkthrough} onFinish={handleFinishWalkthrough} />
       <div className="overflow-scroll p-4 max-h-[90vh]">
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center px-2 step-1">
