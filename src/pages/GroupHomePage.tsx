@@ -6,7 +6,7 @@ import { auth } from "../firebaseConfig";
 import { Group as IGroup } from "../utils/types";
 import { getGroupMembers, getGroups } from "../services/groupService";
 import { Box, CircularProgress } from "@mui/material";
-import Walkthrough from "../components/WalkThrough";
+// import Walkthrough from "../components/WalkThrough";
 
 const GroupHomePage: FC = () => {
   const [user, loading] = useAuthState(auth);
