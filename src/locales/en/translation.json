@@ -150,7 +150,37 @@
     "unpaid": "Unpaid",
     "markPaid": "Mark Paid",
     "close": "Close"
-  }
+  },
+  "chat": {
+    "groupChat": "Group Chat",
+    "anonymousUser": "Anonymous",
+    "waitingForMessages": "Waiting for messages...",
+    "typeMessage": "Type a message...",
+    "send": "Send"
+  },
+  "noExpensesFound": "No Expenses Found",
+  "totalExpenses": "Total Expenses",
+  "share": "Share",
+  "unknownUser": "Unknown User",
+  "userExpensesChart": "User Expenses Chart",
+  "members": "Members",
+  "addMember": "Add a Member",
+  "addMemberDialogTitle": "Add a Member",
+  "addMemberDialogContent": "Add a member to this group",
+  "emailAddress": "Email Address",
+
+  "userAdded": "User added Successfully!",
+  "userRemoved": "User removed Successfully!",
+  "errorFetchingUser": "An error occurred while fetching the user",
+ 
+  "bills": "Bills",
+  "deleteGroup": "Delete",
+  "leaveGroup": "Leave",
+  "deleteGroupDialogTitle": "Delete Group!",
+  "deleteGroupDialogContent": "Do you really want to delete this group?",
+  "leaveGroupDialogTitle": "Leave Group!",
+  "leaveGroupDialogContent": "Do you really want to leave this group?",
+  "noExpenses": "No expenses to show!"
  
     
   }

@@ -8,9 +8,10 @@ import { LineChart } from "@mui/x-charts";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebaseConfig.ts";
 import { AiOutlineUser } from "react-icons/ai";
+import { useTranslation } from "react-i18next";
 
 const GroupHome = () => {
-  // const [expenses, setExpenses] = useState<Expense[]>([]);
+  const { t } = useTranslation();
   const { groupData, expenses } = useGroup();
   const totalExpenses = expenses
     ? expenses.reduce((total, expense) => {
@@ -69,7 +70,7 @@ const GroupHome = () => {
           const userData = userDoc.data();
           if (userData) {
             expensesMap[userId].username =
-              userData.displayName || "Unknown User";
+              userData.displayName || t('unknownUser');
           }
         })
       );
@@ -96,12 +97,12 @@ const GroupHome = () => {
     <div className="flex flex-col p-5 ">
       <div className="w-full pt-5 flex px-8 justify-between items-center">
         {Object.keys(expensesMap).length === 0 ? (
-          <p className="font-regular">No Expenses Found</p>
+          <p className="font-regular">{t('noExpensesFound')}</p>
         ) : (
           <div className="font-light">
             {totalExpenses && (
               <p className="text-lg font-semibold">
-                Total Expenses: ₹{totalExpenses}
+                {t('totalExpenses')}: ₹{totalExpenses}
               </p>
             )}
             <br />
@@ -109,25 +110,14 @@ const GroupHome = () => {
               <div key={userData.userId} className="flex items-center gap-2">
                 <AiOutlineUser size={20} />
                 <span>{userData.username}</span>
-                <span>Share: ₹{userData.totalAmountShared} </span>
+                <span>{t('share')}: ₹{userData.totalAmountShared} </span>
               </div>
             ))}
           </div>
         )}
         <MembersList />
       </div>
-      <div className=" w-full flex px-2 justify-between items-center gap-5">
-        {/* <LineChart
-          xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-          series={[
-            {
-              data: [2, 5.5, 2, 8.5, 1.5, 5],
-            },
-          ]}
-          width={500}
-          colors={["#687EEF"]}
-          height={300}
-        /> */}
+      <div className="w-full flex px-2 justify-between items-center gap-5">
         <div className="w-full flex flex-col mt-16 items-center mr-[5rem] justify-center">
           {expenses && expensesMap && (
             <ExpensesGraph
@@ -135,7 +125,7 @@ const GroupHome = () => {
               expensesMap={expensesMap as any}
             />
           )}
-          <p className="p-2 font-light text-gray-400">User Expenses Chart</p>
+          <p className="p-2 font-light text-gray-400">{t('userExpensesChart')}</p>
         </div>
       </div>
     </div>

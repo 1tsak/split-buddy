@@ -149,7 +149,39 @@
     "unpaid": "अदायगी नहीं",
     "markPaid": "भुगतान चिह्नित करें",
     "close": "बंद करें"
-  }
+  },
+  "chat": {
+    "groupChat": "ग्रुप चैट",
+    "anonymousUser": "गुमनाम",
+    "waitingForMessages": "संदेशों का इंतजार है...",
+    "typeMessage": "एक संदेश टाइप करें...",
+    "send": "भेजें"
+  },
+  "noExpensesFound": "कोई खर्चा नहीं मिला",
+  "totalExpenses": "कुल खर्चा",
+  "share": "शेयर",
+  "unknownUser": "अज्ञात उपयोगकर्ता",
+  "userExpensesChart": "उपयोगकर्ता खर्च चार्ट",
+
+
+  "members": "सदस्य",
+  "addMember": "एक सदस्य जोड़ें",
+  "addMemberDialogTitle": "एक सदस्य जोड़ें",
+  "addMemberDialogContent": "इस समूह में एक सदस्य जोड़ें",
+  "emailAddress": "ईमेल पता",
+
+  "userAdded": "उपयोगकर्ता सफलतापूर्वक जोड़ा गया!",
+  "userRemoved": "उपयोगकर्ता सफलतापूर्वक हटा दिया गया!",
+  "errorFetchingUser": "उपयोगकर्ता को प्राप्त करते समय एक त्रुटि हुई",
+
+  "bills": "बिल",
+  "deleteGroup": "हटाएँ",
+  "leaveGroup": "छोड़ें",
+  "deleteGroupDialogTitle": "समूह हटाएँ!",
+  "deleteGroupDialogContent": "क्या आप वास्तव में इस समूह को हटाना चाहते हैं?",
+  "leaveGroupDialogTitle": "समूह छोड़ें!",
+  "leaveGroupDialogContent": "क्या आप वास्तव में इस समूह को छोड़ना चाहते हैं?",
+  "noExpenses": "दिखाने के लिए कोई खर्च नहीं!"
  
   }
   

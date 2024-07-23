@@ -5,7 +5,6 @@ import {
   addDoc,
   query,
   orderBy,
-  onSnapshot,
   doc,
 } from "firebase/firestore";
 import {
@@ -18,12 +17,14 @@ import {
   Typography,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const user = auth.currentUser;
   const { groupId } = useParams<{ groupId: string }>();
+  const { t } = useTranslation(); // Add translation hook
 
   useEffect(() => {
     if (!groupId) return;
@@ -50,7 +51,7 @@ const Chat = () => {
 
       await addDoc(chatCollectionRef, {
         userId: user?.uid,
-        username: user?.displayName || "Anonymous",
+        username: user?.displayName || t('chat.anonymousUser'),
         message: newMessage,
         timestamp: new Date(),
       });
@@ -70,10 +71,10 @@ const Chat = () => {
       }}
     >
       <Typography variant="h6" color={"gray"} align="center">
-        Group Chat
+        {t('chat.groupChat')}
       </Typography>
       <List sx={{ overflow: "auto", flex: "1" }}>
-        {messages.length >0 ?messages.map((msg: any) => (
+        {messages.length > 0 ? messages.map((msg: any) => (
           <ListItem key={msg.id}>
             <ListItemText
               style={{
@@ -83,9 +84,13 @@ const Chat = () => {
               secondary={msg.message}
             />
           </ListItem>
-        )):(<p className="text-center self-center m-10 text-sm text-gray-400">Waiting for a messages...</p>)}
+        )) : (
+          <Typography variant="body2" color="textSecondary" align="center" sx={{ mt: 2 }}>
+            {t('chat.waitingForMessages')}
+          </Typography>
+        )}
       </List>
-      <Box sx={{ display: "flex", marginTop: 2, diaplay: "flex", gap: "1rem" }}>
+      <Box sx={{ display: "flex", marginTop: 2, gap: "1rem" }}>
         <TextField
           fullWidth
           variant="outlined"
@@ -94,12 +99,12 @@ const Chat = () => {
               handleSendMessage();
             }
           }}
-          placeholder="Type a message..."
+          placeholder={t('chat.typeMessage')}
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
         />
         <Button variant="outlined" color="primary" onClick={handleSendMessage}>
-          Send
+          {t('chat.send')}
         </Button>
       </Box>
     </Box>
