@@ -31,10 +31,14 @@ const Header: React.FC = () => {
         </div>
         
         {authenticated ? (
+           <div className="flex gap-5 items-center">
           <Link to='/dashboard'>
             <img src={userPhoto} alt="userPhoto" className="h-10 rounded-full" />
-            <LanguageSwitcher />
+           
           </Link>
+          <LanguageSwitcher />
+          </div>
+          
         ) : (
           <div className="flex gap-5 items-center">
             <Link to="/signup">{t('signup')}</Link>

@@ -1,35 +1,17 @@
 import { PieChart, PieValueType } from "@mui/x-charts";
-import React, { FC, useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../firebaseConfig";
-import {
-  getUserAmtData,
-  getUserTotalPaidAmt,
-} from "../services/dashboardServices";
+import React, { FC } from "react";
 import { Box, CircularProgress } from "@mui/material";
 import { PieChartDataType } from "../utils/types";
 import { MakeOptional } from "@mui/x-charts/internals";
+import { useTranslation } from "react-i18next";
 
-interface IHeroComponetProps{
-  amt:number;
-  pieChartData:PieChartDataType[],
+interface IHeroComponetProps {
+  amt: number;
+  pieChartData: PieChartDataType[];
 }
 
-const HeroComponent:FC<IHeroComponetProps> = ({amt,pieChartData}) => {
-  // const [loading, setLoading] = useState(true);
-  // const [user,_] = useAuthState(auth);
-  // const [amt, setAmt] = useState<number>(0);
-  // const [pieChartData, setPieChartData] = useState<PieChartDataType[]>();
-  // async function fetchData() {
-  //   const data = await getUserTotalPaidAmt(user?.uid as string);
-  //   const chartData = await getUserAmtData(user?.uid as string);
-  //   setAmt(data);
-  //   setPieChartData(chartData);
-  //   setLoading(false);
-  // }
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+const HeroComponent: FC<IHeroComponetProps> = ({ amt, pieChartData }) => {
+  const { t } = useTranslation();
 
   return (
     <div className="bg-main rounded-lg h-[30vh] flex flex-col sm:flex-row overflow-hidden">
@@ -39,8 +21,14 @@ const HeroComponent:FC<IHeroComponetProps> = ({amt,pieChartData}) => {
             sx={{ height: "100px", color: "white" }}
             slotProps={{
               noDataOverlay: {
-                message: "No Data Available",
-                sx: { color: "white",fill:'white',display:'flex',justifyContent:'center',alignItems:'center'},
+                message: t('noDataAvailable'),
+                sx: {
+                  color: "white",
+                  fill: 'white',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                },
               },
             }}
             width={300}
@@ -77,14 +65,12 @@ const HeroComponent:FC<IHeroComponetProps> = ({amt,pieChartData}) => {
       <div className="flex-auto flex items-center text-white">
         <div className="text-center sm:text-start flex-grow">
           <p className="font-thin text-lg min-w-64">
-            Your Paid Amount Till Now
+            {t('yourPaidAmountTillNow')}
           </p>
           <p className="text-4xl sm:text-6xl 2xl:text-8xl font-bold flex items-center overflow-hidden">
-
-            ₹
-            {amt}
+            ₹{amt}
           </p>
-          <p className="font-thin text-lg">Showing your Amount in INR</p>
+          <p className="font-thin text-lg">{t('showingAmountInINR')}</p>
         </div>
       </div>
       <div className="shrink-0 mt-8">

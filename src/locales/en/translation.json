@@ -81,7 +81,18 @@
       "allTime": "All time",
       "placeholder": "Pick a date range"
     },
-    "noRecentBills": "No Recent bill Data Available"
+    "noRecentBills": "No Recent bill Data Available",
+
+    "noDataAvailable": "No Data Available",
+    "yourPaidAmountTillNow": "Your Paid Amount Till Now",
+    "showingAmountInINR": "Showing your Amount in INR",
+    "greeting": "Hello!",
+    "welcomeMessage": "Welcome to",
+    "appName": "Split Buddy",
+    "description": "Sharing expenses with friends is simpler than ever with Split Buddy. Make sure everyone gets paid back. This is completely free!",
+    "startNow": "Start Now"
+      
+      
   
   
   }
