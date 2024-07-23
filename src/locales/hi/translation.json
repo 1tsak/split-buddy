@@ -19,7 +19,7 @@
     "dont_have_account": "क्या आपका खाता नहीं है",
     "have_account": "खाता है? ",
     "dashboard": {
-      "title": "उपयोगकर्ता डैशबोर्ड",
+     "userDashboard": "यूजर डैशबोर्ड",
       "recentBills": "हालिया बिल",
       "overview": "सारांश",
       "loading": "लोड हो रहा है...",

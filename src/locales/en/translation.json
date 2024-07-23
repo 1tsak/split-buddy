@@ -19,7 +19,7 @@
     "dont_have_account": "Dont't have account",
     "have_account":"have account ? ",
     "dashboard": {
-        "title": "User Dashboard",
+        "userDashboard": "User Dashboard",
         "recentBills": "Recent Bills",
         "overview": "Overview",
         "loading": "Loading...",
