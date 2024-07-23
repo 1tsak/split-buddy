@@ -1,12 +1,15 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { signUp, signInWithGoogle, signInWithGithub, updateUserProfile } from "../services/firebaseAuth"; 
 import { createUserDocument } from "../services/firestore";
 import { User } from "../utils/types";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 import { useNavigate } from "react-router-dom"; 
 import { FaGoogle, FaGithub } from "react-icons/fa";
+import { getClientCurrentToken } from "../services/notiService";
 
 const SignUpForm: React.FC = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -47,13 +50,13 @@ const SignUpForm: React.FC = () => {
     setLoading(true);
 
     if (!validatePassword(formData.password)) {
-      setError("Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.");
+      setError(t("signUpForm.passwordError"));
       setLoading(false);
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+      setError(t("signUpForm.passwordMismatchError"));
       setLoading(false);
       return;
     }
@@ -61,18 +64,22 @@ const SignUpForm: React.FC = () => {
     try {
       const userCredential = await signUp(formData.email, formData.password);
       const user = userCredential.user;
+      const token = await getClientCurrentToken();
+      const newUser: User = {
+        id: user.uid,
+        email: user.email as string,
+        displayName: user.displayName as string,
+        groupsIn: [],
+        photoURL: "",
+        createdAt: Date(),
+        updatedAt: Date(),
+        deviceToken: token,
+      };
+      await createUserDocument(newUser);
 
       await updateUserProfile(user, {
         displayName: `${formData.firstName} ${formData.lastName}`,
         photoURL: "",
-      });
-
-      await createUserDocument({
-        id: user.uid,
-        email: user.email,
-        displayName: user.displayName,
-        photoURL: user.photoURL,
-        groupsIn: [],
       });
 
       setLoading(false);
@@ -103,13 +110,13 @@ const SignUpForm: React.FC = () => {
 
   return (
     <div className="w-full max-w-md mx-auto py-4 md:p-6 lg:px-10">
-      <h1 className="text-2xl font-bold mb-2">Sign Up</h1>
-      <p className="text-gray-600 mb-6">Create your account. It's free and only takes a minute.</p>
+      <h1 className="text-2xl font-bold mb-2">{t("signUpForm.title")}</h1>
+      <p className="text-gray-600 mb-6">{t("signUpForm.description")}</p>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
           name="firstName"
-          placeholder="First Name"
+          placeholder={t("signUpForm.firstNamePlaceholder")}
           value={formData.firstName}
           onChange={handleChange}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:translate-x-2 duration-700"
@@ -118,7 +125,7 @@ const SignUpForm: React.FC = () => {
         <input
           type="text"
           name="lastName"
-          placeholder="Last Name"
+          placeholder={t("signUpForm.lastNamePlaceholder")}
           value={formData.lastName}
           onChange={handleChange}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:translate-x-2 duration-700"
@@ -127,7 +134,7 @@ const SignUpForm: React.FC = () => {
         <input
           type="email"
           name="email"
-          placeholder="Email"
+          placeholder={t("signUpForm.emailPlaceholder")}
           value={formData.email}
           onChange={handleChange}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:translate-x-2 duration-700"
@@ -137,7 +144,7 @@ const SignUpForm: React.FC = () => {
           <input
             type={showPassword ? "text" : "password"}
             name="password"
-            placeholder="Password"
+            placeholder={t("signUpForm.passwordPlaceholder")}
             value={formData.password}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:translate-x-2 duration-700"
@@ -155,7 +162,7 @@ const SignUpForm: React.FC = () => {
           <input
             type={showConfirmPassword ? "text" : "password"}
             name="confirmPassword"
-            placeholder="Confirm Password"
+            placeholder={t("signUpForm.confirmPasswordPlaceholder")}
             value={formData.confirmPassword}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:translate-x-2 duration-700"
@@ -175,7 +182,7 @@ const SignUpForm: React.FC = () => {
           disabled={loading}
           className="w-full px-4 py-2 font-bold text-white bg-[#576cce] rounded-md hover:bg-blue-600 disabled:opacity-50"
         >
-          {loading ? "Signing up..." : "Sign Up"}
+          {loading ? t("signUpForm.signingUpButton") : t("signUpForm.signUpButton")}
         </button>
         <div className="flex gap-4 mt-4 w-full justify-center">
           <button
@@ -184,13 +191,15 @@ const SignUpForm: React.FC = () => {
             className="p-4 font-bold text-white bg-red-600 rounded-3xl duration-700 hover:opacity-75 flex items-center justify-center"
           >
             <FaGoogle className="" />
+            
           </button>
           <button
             type="button"
             onClick={handleGithubSignIn}
-            className=" p-4 font-bold text-white bg-gray-800 rounded-full  duration-700 hover:opacity-75 flex items-center justify-center"
+            className="p-4 font-bold text-white bg-gray-800 rounded-full duration-700 hover:opacity-75 flex items-center justify-center"
           >
             <FaGithub className="" />
+           
           </button>
         </div>
       </form>

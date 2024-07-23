@@ -1,0 +1,44 @@
+{
+    "welcome_back": "स्वागत है!",
+    "please_log_in": "जारी रखने के लिए कृपया लॉग इन करें।",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "log_in": "लॉग इन करें",
+    "logging_in": "लॉग इन हो रहा है...",
+    "forgot_password": "पासवर्ड याद नहीं आया? पासवर्ड भूल गए",
+    "sign_up": "साइन अप करें",
+    "create_account": "अपना खाता बनाएं। यह मुफ्त है और केवल एक मिनट लगता है।",
+    "first_name": "पहला नाम",
+    "last_name": "अंतिम नाम",
+    "confirm_password": "पासवर्ड की पुष्टि करें",
+    "signing_up": "साइन अप हो रहा है...",
+    "password_mismatch": "पासवर्ड मेल नहीं खाते",
+    "invalid_password": "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए और इसमें बड़े अक्षर, छोटे अक्षर, संख्या, और विशेष पात्र शामिल होने चाहिए।",
+    "google_sign_in": "Google के साथ साइन इन करें",
+    "github_sign_in": "Github के साथ साइन इन करें",
+    "dont_have_account": "खाता नहीं है?",
+    "have_account": "खाता है?",
+    "dashboard": {
+      "title": "उपयोगकर्ता डैशबोर्ड",
+      "recentBills": "हाल की बिल्लियाँ",
+      "overview": "अवलोकन",
+      "loading": "लोड हो रहा है...",
+      "walkthroughFinished": "वॉकथ्रू समाप्त हो गया"
+    },
+    "signUpForm": {
+      "title": "साइन अप करें",
+      "description": "अपना खाता बनाएं। यह मुफ्त है और केवल एक मिनट लगता है।",
+      "firstNamePlaceholder": "पहला नाम",
+      "lastNamePlaceholder": "अंतिम नाम",
+      "emailPlaceholder": "ईमेल",
+      "passwordPlaceholder": "पासवर्ड",
+      "confirmPasswordPlaceholder": "पासवर्ड की पुष्टि करें",
+      "passwordError": "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए और इसमें बड़े अक्षर, छोटे अक्षर, संख्या, और विशेष पात्र शामिल होने चाहिए।",
+      "passwordMismatchError": "पासवर्ड मेल नहीं खाते",
+      "signUpButton": "साइन अप करें",
+      "signingUpButton": "साइन अप हो रहा है...",
+      "googleSignInButton": "Google के साथ साइन इन करें",
+      "githubSignInButton": "GitHub के साथ साइन इन करें"
+    }
+  }
+  

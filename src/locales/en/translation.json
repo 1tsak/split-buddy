@@ -1,0 +1,44 @@
+{
+    "welcome_back": "Welcome Back!",
+    "please_log_in": "Please log in to continue.",
+    "email": "Email",
+    "password": "Password",
+    "log_in": "Log in",
+    "logging_in": "Logging in...",
+    "forgot_password": "Didn't remember Password? Forgot Password",
+    "sign_up": "Sign Up",
+    "create_account": "Create your account. It's free and only takes a minute.",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "confirm_password": "Confirm Password",
+    "signing_up": "Signing up...",
+    "password_mismatch": "Passwords do not match",
+    "invalid_password": "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.",
+    "google_sign_in": "Sign in with Google",
+    "github_sign_in": "Sign in with Github",
+    "dont_have_account": "Dont't have account",
+    "have_account":"have account ? ",
+    "dashboard": {
+        "title": "User Dashboard",
+        "recentBills": "Recent Bills",
+        "overview": "Overview",
+        "loading": "Loading...",
+        "walkthroughFinished": "Walkthrough finished"
+      },
+      "signUpForm": {
+        "title": "Sign Up",
+        "description": "Create your account. It's free and only takes a minute.",
+        "firstNamePlaceholder": "First Name",
+        "lastNamePlaceholder": "Last Name",
+        "emailPlaceholder": "Email",
+        "passwordPlaceholder": "Password",
+        "confirmPasswordPlaceholder": "Confirm Password",
+        "passwordError": "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.",
+        "passwordMismatchError": "Passwords do not match",
+        "signUpButton": "Sign Up",
+        "signingUpButton": "Signing up...",
+        "googleSignInButton": "Sign in with Google",
+        "githubSignInButton": "Sign in with GitHub"
+      }
+  }
+  

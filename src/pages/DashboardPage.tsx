@@ -18,8 +18,11 @@ import {
   LineChartGroupType,
   PieChartDataType,
 } from "../utils/types";
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from "../components/LanguageSwitcher";
 
 const DashboardPage: React.FC = () => {
+  const { t } = useTranslation();
   const [user, _] = useAuthState(auth);
   const [loading, setLoading] = useState<boolean>(true);
   const [amt, setAmt] = useState<number>(0);
@@ -51,7 +54,7 @@ const DashboardPage: React.FC = () => {
 
   const handleFinishWalkthrough = () => {
     setRunWalkthrough(false);
-    console.log('Walkthrough finished');
+    console.log(t('dashboard.walkthroughFinished'));
   };
 
   if (loading) {
@@ -66,17 +69,24 @@ const DashboardPage: React.FC = () => {
         }}
       >
         <CircularProgress className="text-main text-5xl" />
+        <Typography variant="body1" className="ml-2">
+          {t('dashboard.loading')}
+        </Typography>
       </Box>
     );
   }
 
   return (
-    <div className="grid xl:grid-cols-[3.5fr_1.5fr]  gap-4 p-4 ">
+    <div className="grid xl:grid-cols-[3.5fr_1.5fr] gap-4 p-4">
+    
       <div className="overflow-scroll p-4 max-h-[90vh]">
+
         <div className="flex flex-col gap-2">
+          
           <div className="flex justify-between items-center px-2 step-1">
-            <h2 className="text-xl font-semibold">User Dashboard</h2>
-            {/* <Button className=" text-main border-main p-1" variant="outlined">
+            <h2 className="text-xl font-semibold">{t('dashboard.title')}</h2>
+            
+            {/* <Button className="text-main border-main p-1" variant="outlined">
               More
             </Button> */}
           </div>
@@ -84,14 +94,14 @@ const DashboardPage: React.FC = () => {
             <HeroComponent amt={amt} pieChartData={pieChartData} />
           </div>
           <div>
-            <h2 className="text-xl font-semibold mt-2">Recent Bills</h2>
+            <h2 className="text-xl font-semibold mt-2">{t('dashboard.recentBills')}</h2>
             <DCardContainer bills={bills} />
           </div>
         </div>
         <div className="">
           <div className="flex justify-between mt-2">
             <div>
-              <h2 className="text-xl font-semibold mt-2">Overview</h2>
+              <h2 className="text-xl font-semibold mt-2">{t('dashboard.overview')}</h2>
             </div>
             {/* <div>put buttons</div> */}
           </div>
