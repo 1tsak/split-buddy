@@ -2,6 +2,7 @@ import {
   addDoc,
   collection,
   doc,
+  getDoc,
   getDocs,
   query,
   serverTimestamp,
@@ -9,7 +10,8 @@ import {
   where,
 } from "firebase/firestore";
 import { Expense, Split } from "../utils/types";
-import { db } from "../firebaseConfig";
+import { db, storage } from "../firebaseConfig";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export const fetchExpenses = async (groupId: string): Promise<Expense[]> => {
   const expensesCollection = collection(db, "expenses");
@@ -43,6 +45,31 @@ export const addExpense = async (expense: Expense) => {
   }
 };
 
+export const uploadImage = async (file:File) => {
+  try {
+    const storageRef = ref(storage, `images/${file.name}`);
+    const snapshot = await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(snapshot.ref);
+    return url;
+  } catch (error) {
+    console.error("Error uploading image: ", error);
+    throw new Error("Error uploading image");
+  }
+};
+
+export const addBillImage = async (url : string, expenseId: string)=>{
+  try {
+    const expenseDocRef = doc(db, "expenses", expenseId);
+    await updateDoc(expenseDocRef, {
+      billUrl: url,
+      updatedAt: serverTimestamp(),
+    });
+
+  } catch (error) {
+    console.error("Error adding expense img: ", error);
+    throw new Error("Error adding image ");
+  }
+}
 export const markBillPaid = async (
   expenseId: string,
   updatedSplits: Split[]

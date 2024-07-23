@@ -4,21 +4,16 @@ import { getAuth } from "firebase/auth";
 import { Group, User } from "../utils/types";
 import { getUser } from "../services/authService";
 import { addExpense } from "../services/expenseService";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { notificationService } from "../services/notificationService";
 import useGroup from "../hooks/useGroup";
 import { BsToggle2On } from "react-icons/bs";
 import { BsToggle2Off } from "react-icons/bs";
 import { Box, CircularProgress } from "@mui/material";
 import { FaPlus } from "react-icons/fa";
-
+import { Split, validateBill,countMember } from "../services/billCreateLogics";
 const auth = getAuth();
-type Split = {
-  userId: string;
-  amount: number;
-  paid: boolean;
-  checked: boolean;
-};
+
 type FormDataType = {
   title: string;
   amount: number;
@@ -74,15 +69,9 @@ const BillCreation = () => {
     setCustomBill([]);
     setCustom(false);
   };
-  const countMember = () => {
-    let count = 0;
-    for (let i = 0; i < formData.splits.length; i++) {
-      if (formData.splits[i].checked) count++;
-    }
-    return count;
-  };
+  
   const splitEqually = () => {
-    const splitsMember = countMember();
+    const splitsMember = countMember(formData.splits);
     let remainingAmount = formData.amount;
     const splits: Split[] = groupMember.map((user, index) => {
       let amount = formData.splits[index]?.checked
@@ -174,7 +163,6 @@ const BillCreation = () => {
     }
   };
 
-  // custombillcChange
 
   const customBillChange = (e: any, index: number) => {
     const { value } = e.target;
@@ -182,7 +170,6 @@ const BillCreation = () => {
     if (customAmount > formData.amount || customAmount < 0) {
       return;
     }
-    // console.log("click", value, index);
     let billArry = new Array();
     customBill.forEach((bill, ind) => {
       if (index == ind) {
@@ -198,26 +185,7 @@ const BillCreation = () => {
     setCustomBill(billArry);
   };
 
-  const validateBill = (splits: Split[], amount: number) => {
-    if (!splits) {
-      return { success: false, message: `Error While Generating Bill` };
-    }
-    const totalCustomAmount = splits.reduce((acc, split) => {
-      return acc + split.amount;
-    }, 0);
-    if (Math.ceil(totalCustomAmount) === Number(amount)) {
-      return { success: true };
-    } else {
-      const msg =
-        Math.ceil(totalCustomAmount) === 0
-          ? "At least one member is required in the expense."
-          : totalCustomAmount < amount
-          ? "Total expenses are less than amount."
-          : "Total expenses are greater than amount.";
-
-      return { success: false, message: msg };
-    }
-  };
+  
 
   // handlleing submit
   const handleSubmit = async (e: any) => {
@@ -340,7 +308,7 @@ const BillCreation = () => {
 
     if (!userGroups) return;
     const groupName = userGroups.find((group) => group.id === groupData.id);
-    // console.log(groupName);
+    
     if (groupName) {
       setFormData({
         ...formData,

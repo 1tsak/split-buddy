@@ -30,6 +30,7 @@ export interface Expense {
   category: string;
   createdBy: string;
   groupId:string;
+  billUrl : string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
   splits: Split[];

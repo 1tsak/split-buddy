@@ -32,7 +32,7 @@ const DashboardLineChart: FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [dateValue]);
 
   // data manipulation
   let seriesData: number[] = [];
@@ -51,8 +51,7 @@ const DashboardLineChart: FC = () => {
     event: SyntheticEvent<Element, Event>
   ) => {
     setDateValue(value);
-    fetchData();
-    console.log(value);
+    
   };
 
   return (
