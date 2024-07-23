@@ -1,37 +1,31 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import DCard from "./DCard";
 import { DCardType } from "../utils/types";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../firebaseConfig";
-import { getUserRecentBills } from "../services/dashboardServices";
 import { Box, CircularProgress } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
-interface DcardContainerProps{
-  bills:DCardType[]
+interface DcardContainerProps {
+  bills: DCardType[];
 }
 
-const DCardContainer:FC<DcardContainerProps> = ({bills}) => {
-  // const [bills, setBills] = useState<DCardType[]>();
-  // const [user, _] = useAuthState(auth);
-  // const fetchData = async () => {
-  //   const billsData = await getUserRecentBills(user?.uid as string);
-  //   setBills(billsData);
-  // };
-  // useEffect(() => {
-  //   // fetchData();
-  // },[]);
-  if(bills && bills.length==0){
-    return <div className="flex items-center justify-center">
-        No Recent bill Data Available
-    </div>
+const DCardContainer: FC<DcardContainerProps> = ({ bills }) => {
+  const { t } = useTranslation();
+
+  if (bills && bills.length === 0) {
+    return (
+      <div className="flex items-center justify-center">
+        {t('noRecentBills')}
+      </div>
+    );
   }
+
   return (
     <div className="step6">
       {bills ? (
         <div className="grid grid-cols-2 min-h-8 lg:grid-cols-4 gap-4">
-          {bills.map((bill, i) => {
-            return <DCard data={bill} key={i} />;
-          })}
+          {bills.map((bill, i) => (
+            <DCard data={bill} key={i} />
+          ))}
         </div>
       ) : (
         <Box

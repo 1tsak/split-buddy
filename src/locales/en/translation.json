@@ -80,7 +80,8 @@
       "lastYear": "Last year",
       "allTime": "All time",
       "placeholder": "Pick a date range"
-    }
+    },
+    "noRecentBills": "No Recent bill Data Available"
   
   
   }
