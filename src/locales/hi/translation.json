@@ -64,6 +64,21 @@
     },
     "notification": {
       "createdBill": "ने एक नया बिल बनाया"
-    }
+    },
+    "datePicker": {
+    "today": "आज",
+    "yesterday": "कल",
+    "thisWeek": "इस सप्ताह",
+    "lastWeek": "पिछले सप्ताह",
+    "nextWeek": "अगले सप्ताह",
+    "last7Days": "पिछले 7 दिन",
+    "last30Days": "पिछले 30 दिन",
+    "thisMonth": "इस माह",
+    "lastMonth": "पिछले माह",
+    "thisYear": "इस वर्ष",
+    "lastYear": "पिछले वर्ष",
+    "allTime": "सभी समय",
+    "placeholder": "तारीख की श्रृंखला चुनें"
+  }
   }
   

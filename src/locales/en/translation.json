@@ -64,6 +64,24 @@
   },
   "notification": {
     "createdBill": "created a new bill"
-  }
+  },
+  
+    "datePicker": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "thisWeek": "This week",
+      "lastWeek": "Last week",
+      "nextWeek": "Next week",
+      "last7Days": "Last 7 days",
+      "last30Days": "Last 30 days",
+      "thisMonth": "This month",
+      "lastMonth": "Last month",
+      "thisYear": "This year",
+      "lastYear": "Last year",
+      "allTime": "All time",
+      "placeholder": "Pick a date range"
+    }
+  
+  
   }
   
