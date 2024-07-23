@@ -26,6 +26,7 @@ const Sider = () => {
   const { groupData, expenses, loading } = useGroup();
   const location = useLocation(); // Get current location using useLocation()
   const [open, setOpen] = useState(false);
+  const [deletingOrLeaving, setDeletingOrLeaving] = useState(false);
   const auth = getAuth();
   const navigate = useNavigate();
 
@@ -67,15 +68,23 @@ const Sider = () => {
   };
 
   const handleDelete = async () => {
-    if (groupData && groupData.id) await deleteGroup(groupData?.id);
+    if (groupData && groupData.id) {
+      setDeletingOrLeaving(true);
+      await deleteGroup(groupData?.id);
+      setDeletingOrLeaving(false);
+    }
     setOpen(false);
+
     alert("Group Deleted Succefully");
     navigate("/group");
   };
 
   const handleLeave = async () => {
-    if (groupData && groupData.id && auth.currentUser)
+    if (groupData && groupData.id && auth.currentUser) {
+      setDeletingOrLeaving(true);
       await leaveGroup(groupData?.id, auth.currentUser?.uid);
+      setDeletingOrLeaving(false);
+    }
     setOpen(false);
     alert("Group left !! You are no longer member of this group.");
     navigate("/group");
@@ -108,7 +117,22 @@ const Sider = () => {
                     Cancel
                   </Button>
                   <Button onClick={handleDelete} color="primary" autoFocus>
-                    Yes
+                    Yes{" "}
+                    {deletingOrLeaving && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          height: "50%",
+                          width: "100%",
+                          color: "blue",
+                          fontSize:"12px"
+                        }}
+                      >
+                        <CircularProgress size={16} />
+                      </Box>
+                    )}
                   </Button>
                 </DialogActions>
               </Dialog>
