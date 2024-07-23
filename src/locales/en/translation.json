@@ -90,10 +90,12 @@
     "welcomeMessage": "Welcome to",
     "appName": "Split Buddy",
     "description": "Sharing expenses with friends is simpler than ever with Split Buddy. Make sure everyone gets paid back. This is completely free!",
-    "startNow": "Start Now"
-      
-      
-  
-  
+    "startNow": "Start Now",
+    "addGroup": "Add a Group",
+    "createNewGroup": "Create New Group",
+    "groupName": "Enter New Group Name",
+    "groupDescription": "Enter Description",
+    "cancel": "Cancel",
+    "create": "Create"
   }
   
