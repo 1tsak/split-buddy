@@ -7,10 +7,10 @@ import { addExpense } from "../services/expenseService";
 import { useNavigate, useParams } from "react-router-dom";
 import { notificationService } from "../services/notificationService";
 import useGroup from "../hooks/useGroup";
-import { BsToggle2On } from "react-icons/bs";
-import { BsToggle2Off } from "react-icons/bs";
+import { BsToggle2On, BsToggle2Off } from "react-icons/bs";
 import { Box, CircularProgress } from "@mui/material";
 import { FaPlus } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const auth = getAuth();
 type Split = {
@@ -29,7 +29,9 @@ type FormDataType = {
   };
   splits: Split[];
 };
+
 const BillCreation = () => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState<User>();
   const [userGroups, setUserGroups] = useState<Group[]>([]);
@@ -123,7 +125,6 @@ const BillCreation = () => {
       setLoading(false);
     }
   };
-  // handleling field change
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     if (name === "amount" && parseFloat(value) <= 0) {
@@ -154,8 +155,6 @@ const BillCreation = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  // handleling checkbox
-
   const handleCheckboxChange = (e: any) => {
     const { name, checked } = e.target;
     let splits = formData.splits.map((split, index) => {
@@ -174,15 +173,12 @@ const BillCreation = () => {
     }
   };
 
-  // custombillcChange
-
   const customBillChange = (e: any, index: number) => {
     const { value } = e.target;
     const customAmount = parseFloat(value);
     if (customAmount > formData.amount || customAmount < 0) {
       return;
     }
-    // console.log("click", value, index);
     let billArry = new Array();
     customBill.forEach((bill, ind) => {
       if (index == ind) {
@@ -200,7 +196,7 @@ const BillCreation = () => {
 
   const validateBill = (splits: Split[], amount: number) => {
     if (!splits) {
-      return { success: false, message: `Error While Generating Bill` };
+      return { success: false, message: t('error.generatingBill') };
     }
     const totalCustomAmount = splits.reduce((acc, split) => {
       return acc + split.amount;
@@ -210,21 +206,20 @@ const BillCreation = () => {
     } else {
       const msg =
         Math.ceil(totalCustomAmount) === 0
-          ? "At least one member is required in the expense."
+          ? t("error.noMember")
           : totalCustomAmount < amount
-          ? "Total expenses are less than amount."
-          : "Total expenses are greater than amount.";
+          ? t("error.expenseLess")
+          : t("error.expenseMore");
 
       return { success: false, message: msg };
     }
   };
 
-  // handlleing submit
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setAddBillLoading(true);
     if (!formData.group.id) {
-      setErrorMessage("No Group Found");
+      setErrorMessage(t("error.noGroup"));
       setTimeout(() => {
         setErrorMessage("");
       }, 6000);
@@ -251,8 +246,8 @@ const BillCreation = () => {
       .filter(Boolean);
 
     if (!ActualSplit) {
-      return;
       setAddBillLoading(false);
+      return;
     }
     const validate = validateBill(ActualSplit, formData.amount);
     if (!validate.success) {
@@ -276,7 +271,7 @@ const BillCreation = () => {
     try {
       await addExpense(expenseData);
       await notificationService({
-        title: `${userInfo?.displayName} created a new bill`,
+        title: `${userInfo?.displayName} ${t('notification.createdBill')}`,
         message: `${expenseData.title} ${expenseData.category}`,
         groupId: expenseData.groupId,
       });
@@ -289,7 +284,6 @@ const BillCreation = () => {
     }
   };
 
-  // useEffects
   useEffect(() => {
     if (!custom) {
       splitEqually();
@@ -340,7 +334,6 @@ const BillCreation = () => {
 
     if (!userGroups) return;
     const groupName = userGroups.find((group) => group.id === groupData.id);
-    // console.log(groupName);
     if (groupName) {
       setFormData({
         ...formData,
@@ -359,7 +352,7 @@ const BillCreation = () => {
         className="bg-main px-4 py-2 text-sm font-semibold rounded-sm text-white flex items-center gap-2"
       >
         <FaPlus size={16} />
-        Split a Bill
+        {t('button.splitBill')}
       </button>
       {open && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
@@ -371,7 +364,7 @@ const BillCreation = () => {
               &times;
             </button>
             <form onSubmit={handleSubmit} className="text-gray-900">
-              <h2 className="text-xl mb-3">Split the Payment</h2>
+              <h2 className="text-xl mb-3">{t('form.splitPayment')}</h2>
               <h4 className="text-lg mb-4 text-red-500">{errorMessage}</h4>
               <div className="mb-4">
                 <input
@@ -379,7 +372,7 @@ const BillCreation = () => {
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
-                  placeholder="What's this payment for? (Title)"
+                  placeholder={t('form.titlePlaceholder')}
                   className="w-full px-3 py-2 border rounded"
                   required
                 />
@@ -390,7 +383,7 @@ const BillCreation = () => {
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
-                  placeholder="Description"
+                  placeholder={t('form.descriptionPlaceholder')}
                   className="w-full px-3 py-2 border rounded"
                   required
                 />
@@ -401,7 +394,7 @@ const BillCreation = () => {
                   name="amount"
                   value={formData.amount}
                   onChange={handleChange}
-                  placeholder="Amount"
+                  placeholder={t('form.amountPlaceholder')}
                   className="w-full px-3 py-2 border rounded"
                   required
                 />
@@ -413,7 +406,7 @@ const BillCreation = () => {
                   onChange={handleChange}
                   className="w-full px-3 py-2 text-gray-700 border rounded"
                 >
-                  <option value="">Select Group</option>
+                  <option value="">{t('form.selectGroup')}</option>
                   {userGroups.length > 0 &&
                     userGroups.map((group: Group, index) => (
                       <option key={index} id={group.id} value={group.name}>
@@ -426,13 +419,13 @@ const BillCreation = () => {
                 <div className="mb-4">
                   <div className="flex justify-between items-center">
                     <span className="block text-left mb-2 text-gray-700">
-                      Add Members:
+                      {t('form.addMembers')}:
                     </span>
                     <span
                       className="flex gap-1 items-center"
                       onClick={() => setCustom((prev) => !prev)}
                     >
-                      {!custom ? `Equal` : `Custom`}
+                      {!custom ? t('form.equal') : t('form.custom')}
                       {custom ? (
                         <BsToggle2On className="text-2xl" />
                       ) : (
@@ -475,7 +468,7 @@ const BillCreation = () => {
                                     : customBill[index]
                                 }
                                 onChange={(e) => customBillChange(e, index)}
-                                placeholder="Amount"
+                                placeholder={t('form.amountPlaceholder')}
                                 disabled={
                                   !formData.splits[index]?.checked || !custom
                                 }
@@ -506,7 +499,7 @@ const BillCreation = () => {
                   onClick={handleClose}
                   className="px-4 py-2 bg-gray-500 text-white rounded"
                 >
-                  Cancel
+                  {t('button.cancel')}
                 </button>
                 <button
                   type="submit"
@@ -521,7 +514,7 @@ const BillCreation = () => {
                     fontSize: "16px",
                   }}
                 >
-                  Add
+                  {t('button.add')}
                   {addBillLoading && (
                     <span style={{ marginLeft: "8px" }}>
                       <CircularProgress size={16} style={{ color: "white" }} />
@@ -536,4 +529,5 @@ const BillCreation = () => {
     </div>
   );
 };
+
 export default BillCreation;

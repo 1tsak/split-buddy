@@ -39,6 +39,31 @@
         "signingUpButton": "Signing up...",
         "googleSignInButton": "Sign in with Google",
         "githubSignInButton": "Sign in with GitHub"
-      }
+      },
+      "button": {
+    "splitBill": "Split a Bill",
+    "cancel": "Cancel",
+    "add": "Add"
+  },
+  "form": {
+    "splitPayment": "Split the Payment",
+    "titlePlaceholder": "What's this payment for? (Title)",
+    "descriptionPlaceholder": "Description",
+    "amountPlaceholder": "Amount",
+    "selectGroup": "Select Group",
+    "addMembers": "Add Members",
+    "equal": "Equal",
+    "custom": "Custom"
+  },
+  "error": {
+    "generatingBill": "Error While Generating Bill",
+    "noGroup": "No Group Found",
+    "noMember": "At least one member is required in the expense.",
+    "expenseLess": "Total expenses are less than amount.",
+    "expenseMore": "Total expenses are greater than amount."
+  },
+  "notification": {
+    "createdBill": "created a new bill"
+  }
   }
   

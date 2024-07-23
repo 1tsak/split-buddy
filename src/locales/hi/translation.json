@@ -7,38 +7,63 @@
     "logging_in": "लॉग इन हो रहा है...",
     "forgot_password": "पासवर्ड याद नहीं आया? पासवर्ड भूल गए",
     "sign_up": "साइन अप करें",
-    "create_account": "अपना खाता बनाएं। यह मुफ्त है और केवल एक मिनट लगता है।",
+    "create_account": "अपना खाता बनाएं। यह मुफ्त है और इसमें केवल एक मिनट लगता है।",
     "first_name": "पहला नाम",
     "last_name": "अंतिम नाम",
     "confirm_password": "पासवर्ड की पुष्टि करें",
     "signing_up": "साइन अप हो रहा है...",
     "password_mismatch": "पासवर्ड मेल नहीं खाते",
-    "invalid_password": "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए और इसमें बड़े अक्षर, छोटे अक्षर, संख्या, और विशेष पात्र शामिल होने चाहिए।",
-    "google_sign_in": "Google के साथ साइन इन करें",
-    "github_sign_in": "Github के साथ साइन इन करें",
-    "dont_have_account": "खाता नहीं है?",
-    "have_account": "खाता है?",
+    "invalid_password": "पासवर्ड कम से कम 8 अक्षरों लंबा होना चाहिए और इसमें अपरकेस, लोअरकेस, नंबर और विशेष पात्र शामिल होना चाहिए।",
+    "google_sign_in": "गूगल के साथ साइन इन करें",
+    "github_sign_in": "गिटहब के साथ साइन इन करें",
+    "dont_have_account": "क्या आपका खाता नहीं है",
+    "have_account": "खाता है? ",
     "dashboard": {
       "title": "उपयोगकर्ता डैशबोर्ड",
-      "recentBills": "हाल की बिल्लियाँ",
-      "overview": "अवलोकन",
+      "recentBills": "हालिया बिल",
+      "overview": "सारांश",
       "loading": "लोड हो रहा है...",
-      "walkthroughFinished": "वॉकथ्रू समाप्त हो गया"
+      "walkthroughFinished": "वॉकथ्रू समाप्त"
     },
     "signUpForm": {
-      "title": "साइन अप करें",
-      "description": "अपना खाता बनाएं। यह मुफ्त है और केवल एक मिनट लगता है।",
+      "title": "साइन अप",
+      "description": "अपना खाता बनाएं। यह मुफ्त है और इसमें केवल एक मिनट लगता है।",
       "firstNamePlaceholder": "पहला नाम",
       "lastNamePlaceholder": "अंतिम नाम",
       "emailPlaceholder": "ईमेल",
       "passwordPlaceholder": "पासवर्ड",
       "confirmPasswordPlaceholder": "पासवर्ड की पुष्टि करें",
-      "passwordError": "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए और इसमें बड़े अक्षर, छोटे अक्षर, संख्या, और विशेष पात्र शामिल होने चाहिए।",
+      "passwordError": "पासवर्ड कम से कम 8 अक्षरों लंबा होना चाहिए और इसमें अपरकेस, लोअरकेस, नंबर और विशेष पात्र शामिल होना चाहिए।",
       "passwordMismatchError": "पासवर्ड मेल नहीं खाते",
       "signUpButton": "साइन अप करें",
       "signingUpButton": "साइन अप हो रहा है...",
-      "googleSignInButton": "Google के साथ साइन इन करें",
-      "githubSignInButton": "GitHub के साथ साइन इन करें"
+      "googleSignInButton": "गूगल के साथ साइन इन करें",
+      "githubSignInButton": "गिटहब के साथ साइन इन करें"
+    },
+    "button": {
+      "splitBill": "बिल विभाजित करें",
+      "cancel": "रद्द करें",
+      "add": "जोड़ें"
+    },
+    "form": {
+      "splitPayment": "भुगतान को विभाजित करें",
+      "titlePlaceholder": "यह भुगतान किसलिए है? (शीर्षक)",
+      "descriptionPlaceholder": "विवरण",
+      "amountPlaceholder": "राशि",
+      "selectGroup": "समूह चुनें",
+      "addMembers": "सदस्यों को जोड़ें",
+      "equal": "समान",
+      "custom": "कस्टम"
+    },
+    "error": {
+      "generatingBill": "बिल बनाने में त्रुटि",
+      "noGroup": "कोई समूह नहीं मिला",
+      "noMember": "खर्च में कम से कम एक सदस्य आवश्यक है।",
+      "expenseLess": "कुल खर्च राशि से कम है।",
+      "expenseMore": "कुल खर्च राशि से अधिक है।"
+    },
+    "notification": {
+      "createdBill": "ने एक नया बिल बनाया"
     }
   }
   
