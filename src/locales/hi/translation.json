@@ -95,6 +95,17 @@
   "groupName": "नया ग्रुप नाम दर्ज करें",
   "groupDescription": "विवरण दर्ज करें",
   "cancel": "रद्द करें",
-  "create": "बनाएं"
+  "create": "बनाएं",
+  "resetPassword": "पासवर्ड रीसेट करें",
+ 
+  "userNotFound": "उपयोगकर्ता नहीं मिला।",
+  "resetEmailSent": "पासवर्ड रीसेट ईमेल भेजा गया।",
+  "sendResetEmail": "रीसेट ईमेल भेजें",
+  "home": "मुखपृष्ठ",
+  "groups": "समूह",
+  "notifications": "सूचनाएँ",
+  "recentTransactions": "हाल की लेन-देन",
+  "noRecentTransactionData": "कोई हाल की लेन-देन डेटा उपलब्ध नहीं है"
+ 
   }
   

@@ -96,6 +96,17 @@
     "groupName": "Enter New Group Name",
     "groupDescription": "Enter Description",
     "cancel": "Cancel",
-    "create": "Create"
+    "create": "Create",
+    "resetPassword": "Reset Password",
+  
+    "userNotFound": "User not found.",
+    "resetEmailSent": "Password reset email sent.",
+    "sendResetEmail": "Send Reset Email",
+    "home": "Home",
+    "groups": "Groups",
+    "notifications": "Notifications",
+    "recentTransactions": "Recent Transactions",
+  "noRecentTransactionData": "No Recent Transaction Data Available"
+    
   }
   

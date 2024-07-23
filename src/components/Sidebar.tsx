@@ -9,8 +9,10 @@ import { User } from '../utils/types';
 import HomeIcon from '@mui/icons-material/Home';
 import GroupIcon from '@mui/icons-material/Group';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import { useTranslation } from 'react-i18next';
 
 const Sidebar: React.FC = () => {
+  const { t } = useTranslation();
   const [authUser, loading] = useAuthState(auth);
   const [user, setUser] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,9 +42,9 @@ const Sidebar: React.FC = () => {
   };
 
   const navLinks = [
-    { path: '/dashboard', name: 'Home', icon: <HomeIcon /> },
-    { path: '/group', name: 'Groups', icon: <GroupIcon /> },
-    { path: '/notifications', name: 'Notifications', icon: <NotificationsIcon /> },
+    { path: '/dashboard', name: t('home'), icon: <HomeIcon /> },
+    { path: '/group', name: t('groups'), icon: <GroupIcon /> },
+    { path: '/notifications', name: t('notifications'), icon: <NotificationsIcon /> },
   ];
 
   return (
@@ -59,20 +61,21 @@ const Sidebar: React.FC = () => {
       }}
     >
       {/* Navigation Links */}
-      <Box className="flex-grow overflow-y-auto ">
+      <Box className="flex-grow overflow-y-auto">
         {navLinks.map((link) => (
           <NavLink
             to={link.path}
             key={link.name}
-            className={`text-white mb-4 block ${link.name==='Groups' && 'step3'}`}
+            className={`text-white mb-4 block ${link.name === t('groups') && 'step3'}`}
             style={{
-              color: location.pathname === link.path ? '#576cce' : '#9ca3af',textDecoration:"none"
+              color: location.pathname === link.path ? '#576cce' : '#9ca3af',
+              textDecoration: 'none'
             }}
           >
             <Box 
               display="flex" 
               alignItems="center" 
-              className={`p-2 rounded-full `}
+              className={`p-2 rounded-full`}
             >
               {link.icon}
               <Typography variant="subtitle1" style={{ marginLeft: '10px' }}>{link.name}</Typography>
