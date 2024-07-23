@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -8,7 +7,6 @@ import {
   CircularProgress,
   LinearProgress,
   Typography,
-  Grid,
   Paper
 } from '@mui/material';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -17,8 +15,10 @@ import { updateUserProfile } from '../services/firebaseAuth';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { User } from '../utils/types';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { useTranslation } from 'react-i18next';
 
 const UserProfile: React.FC = () => {
+  const { t } = useTranslation();
   const [authUser, loading] = useAuthState(auth);
   const [user, setUser] = useState<User | null>(null);
   const [displayName, setDisplayName] = useState<string>('');
@@ -115,7 +115,7 @@ const UserProfile: React.FC = () => {
     <Box sx={{ padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <Paper elevation={3} sx={{ padding: '20px', width: '100%', maxWidth: '600px', borderRadius: '12px' }}>
         <Typography variant="h4" gutterBottom align="center">
-          User Profile
+          {t('userProfile')}
         </Typography>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 3 }}>
           <Avatar src={photoURL} alt={displayName} sx={{ width: 120, height: 120, mb: 2 }} />
@@ -128,10 +128,10 @@ const UserProfile: React.FC = () => {
             {uploading ? (
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <CircularProgress size={24} sx={{ mr: 2 }} />
-                {`Uploading ${uploadProgress}%`}
+                {`${t('uploading')} ${uploadProgress}%`}
               </Box>
             ) : (
-              'Upload Photo'
+              t('uploadPhoto')
             )}
             <input type="file" hidden accept="image/*" onChange={handlePhotoUpload} />
           </Button>
@@ -144,7 +144,7 @@ const UserProfile: React.FC = () => {
           )}
         </Box>
         <TextField
-          label="Name"
+          label={t('name')}
           value={displayName}
           onChange={handleNameChange}
           fullWidth
@@ -160,7 +160,7 @@ const UserProfile: React.FC = () => {
           disabled={uploading}
           sx={{ mb: 2 }}
         >
-          Save
+          {t('save')}
         </Button>
         <Box sx={{ height: '300px', width: '100%' }}>
           {location && (
@@ -181,4 +181,3 @@ const UserProfile: React.FC = () => {
 };
 
 export default UserProfile;
-
