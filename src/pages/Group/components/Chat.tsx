@@ -5,6 +5,7 @@ import {
   addDoc,
   query,
   orderBy,
+  onSnapshot,
   doc,
 } from "firebase/firestore";
 import {
@@ -17,14 +18,14 @@ import {
   Typography,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
 
 const Chat = () => {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const user = auth.currentUser;
   const { groupId } = useParams<{ groupId: string }>();
-  const { t } = useTranslation(); // Add translation hook
 
   useEffect(() => {
     if (!groupId) return;
@@ -51,7 +52,7 @@ const Chat = () => {
 
       await addDoc(chatCollectionRef, {
         userId: user?.uid,
-        username: user?.displayName || t('chat.anonymousUser'),
+        username: user?.displayName || "Anonymous",
         message: newMessage,
         timestamp: new Date(),
       });
@@ -74,20 +75,22 @@ const Chat = () => {
         {t('chat.groupChat')}
       </Typography>
       <List sx={{ overflow: "auto", flex: "1" }}>
-        {messages.length > 0 ? messages.map((msg: any) => (
-          <ListItem key={msg.id}>
-            <ListItemText
-              style={{
-                textAlign: msg.userId === user?.uid ? "end" : "start",
-              }}
-              primary={msg.username}
-              secondary={msg.message}
-            />
-          </ListItem>
-        )) : (
-          <Typography variant="body2" color="textSecondary" align="center" sx={{ mt: 2 }}>
+        {messages.length > 0 ? (
+          messages.map((msg: any) => (
+            <ListItem key={msg.id}>
+              <ListItemText
+                style={{
+                  textAlign: msg.userId === user?.uid ? "end" : "start",
+                }}
+                primary={msg.username}
+                secondary={msg.message}
+              />
+            </ListItem>
+          ))
+        ) : (
+          <p className="text-center self-center m-10 text-sm text-gray-400">
             {t('chat.waitingForMessages')}
-          </Typography>
+          </p>
         )}
       </List>
       <Box sx={{ display: "flex", marginTop: 2, gap: "1rem" }}>
@@ -99,7 +102,7 @@ const Chat = () => {
               handleSendMessage();
             }
           }}
-          placeholder={t('chat.typeMessage')}
+          placeholder={t('chat.placeholder')}
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
         />

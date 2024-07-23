@@ -155,7 +155,8 @@
     "anonymousUser": "गुमनाम",
     "waitingForMessages": "संदेशों का इंतजार है...",
     "typeMessage": "एक संदेश टाइप करें...",
-    "send": "भेजें"
+    "send": "भेजें",
+    "placeholder": "एक संदेश टाइप करें..."
   },
   "noExpensesFound": "कोई खर्चा नहीं मिला",
   "totalExpenses": "कुल खर्चा",
@@ -181,7 +182,19 @@
   "deleteGroupDialogContent": "क्या आप वास्तव में इस समूह को हटाना चाहते हैं?",
   "leaveGroupDialogTitle": "समूह छोड़ें!",
   "leaveGroupDialogContent": "क्या आप वास्तव में इस समूह को छोड़ना चाहते हैं?",
-  "noExpenses": "दिखाने के लिए कोई खर्च नहीं!"
+  "noExpenses": "दिखाने के लिए कोई खर्च नहीं!",
+  "sider": {
+    "home": "होम",
+    "chat": "चैट",
+    "bills": "बिल",
+    "deleteGroup": "हटाएँ",
+    "leaveGroup": "छोड़ें",
+    "deleteGroupDialogTitle": "समूह हटाएँ!",
+    "deleteGroupDialogContent": "क्या आप वास्तव में इस समूह को हटाना चाहते हैं?",
+    "leaveGroupDialogTitle": "समूह छोड़ें!",
+    "leaveGroupDialogContent": "क्या आप वास्तव में इस समूह को छोड़ना चाहते हैं?",
+    "noExpenses": "दिखाने के लिए कोई खर्च नहीं!"
+  }
  
   }
   

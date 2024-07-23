@@ -156,7 +156,9 @@
     "anonymousUser": "Anonymous",
     "waitingForMessages": "Waiting for messages...",
     "typeMessage": "Type a message...",
-    "send": "Send"
+    "send": "Send",
+    "placeholder": "Type a message..."
+
   },
   "noExpensesFound": "No Expenses Found",
   "totalExpenses": "Total Expenses",
@@ -180,7 +182,19 @@
   "deleteGroupDialogContent": "Do you really want to delete this group?",
   "leaveGroupDialogTitle": "Leave Group!",
   "leaveGroupDialogContent": "Do you really want to leave this group?",
-  "noExpenses": "No expenses to show!"
+  "noExpenses": "No expenses to show!",
+  "sider": {
+    "home": "Home",
+    "chat": "Chat",
+    "bills": "Bills",
+    "deleteGroup": "Delete",
+    "leaveGroup": "Leave",
+    "deleteGroupDialogTitle": "Delete Group!",
+    "deleteGroupDialogContent": "Do you really want to delete this group?",
+    "leaveGroupDialogTitle": "Leave Group!",
+    "leaveGroupDialogContent": "Do you really want to leave this group?",
+    "noExpenses": "No expenses to show!"
+  }
  
     
   }

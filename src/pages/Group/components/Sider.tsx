@@ -30,8 +30,8 @@ const Sider = () => {
 
   const getExpenseLabel = (timestamp: any) => {
     const date = new Date(timestamp.seconds * 1000);
-    if (isToday(date)) return "Today";
-    if (isYesterday(date)) return "Yesterday";
+    if (isToday(date)) return t('sider.today'); // Add translation key if needed
+    if (isYesterday(date)) return t('sider.yesterday'); // Add translation key if needed
     return format(date, "MMMM dd, yyyy");
   };
 
@@ -57,7 +57,7 @@ const Sider = () => {
   const handleDelete = async () => {
     if (groupData && groupData.id) await deleteGroup(groupData?.id);
     setOpen(false);
-    alert("Group Deleted Successfully");
+    alert(t('sider.groupDeletedSuccessfully'));
     navigate("/group");
   };
 
@@ -65,7 +65,7 @@ const Sider = () => {
     if (groupData && groupData.id && auth.currentUser)
       await leaveGroup(groupData?.id, auth.currentUser?.uid);
     setOpen(false);
-    alert("Group left! You are no longer a member of this group.");
+    alert(t('sider.groupLeft'));
     navigate("/group");
   };
 
@@ -82,13 +82,13 @@ const Sider = () => {
                 onClick={handleOpen}
                 className="bg-slate-800 text-white rounded-sm text-sm py-1 px-2"
               >
-                {t('deleteGroup')}
+                {t('sider.deleteGroup')}
               </button>
               <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>{t('deleteGroupDialogTitle')}</DialogTitle>
+                <DialogTitle>{t('sider.deleteGroupDialogTitle')}</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
-                    {t('deleteGroupDialogContent')}
+                    {t('sider.deleteGroupDialogContent')}
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -107,13 +107,13 @@ const Sider = () => {
                 onClick={handleOpen}
                 className="bg-slate-800 text-white rounded-sm text-sm py-1 px-2"
               >
-                {t('leaveGroup')}
+                {t('sider.leaveGroup')}
               </button>
               <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>{t('leaveGroupDialogTitle')}</DialogTitle>
+                <DialogTitle>{t('sider.leaveGroupDialogTitle')}</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
-                    {t('leaveGroupDialogContent')}
+                    {t('sider.leaveGroupDialogContent')}
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -141,7 +141,7 @@ const Sider = () => {
               }`}
             >
               <CiHome />
-              <span>{t('home')}</span>
+              <span>{t('sider.home')}</span>
             </div>
           </Link>
           <Link to={`/group/${groupData?.id}/chat`}>
@@ -151,11 +151,11 @@ const Sider = () => {
               }`}
             >
               <CiChat2 />
-              <span>{t('chat')}</span>
+              <span>{t('sider.chat')}</span>
             </div>
           </Link>
         </div>
-        <h2 className="px-2 mt-4 text-lg text-center text-gray-500">{t('bills')}</h2>
+        <h2 className="px-2 mt-4 text-lg text-center text-gray-500">{t('sider.bills')}</h2>
         {loading ? (
           <Box
             sx={{
@@ -187,7 +187,7 @@ const Sider = () => {
             ))}
             {sortedExpenses.length === 0 && (
               <p className="text-center text-sm text-gray-400">
-                {t('noExpenses')}
+                {t('sider.noExpenses')}
               </p>
             )}
           </ul>
