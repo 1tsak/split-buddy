@@ -17,9 +17,8 @@ import {
 import { addBillImage, uploadImage } from "../../../services/expenseService";
 
 const BillDetails = () => {
-  const { expenses } = useGroup();
+  const { expenses, groupData,fetchExpensesData } = useGroup();
   const { billId } = useParams<{ billId: string }>();
-  const { groupData } = useGroup();
   const [expense, setExpense] = useState<Expense | undefined>(undefined);
   const auth = getAuth();
 
@@ -34,16 +33,18 @@ const BillDetails = () => {
     }
   };
 
-  const handleUpload = async (expenseId:string) => {
+  const handleUpload = async (expenseId: string) => {
     if (!file) return;
-
     setUploading(true);
-    const fileUrl = await uploadImage(file);
-    console.log(fileUrl);
-    await addBillImage(fileUrl, expenseId);
-    setUploading(false);
-    setOpen(false);
-    
+    try {
+      const fileUrl = await uploadImage(file);
+      await addBillImage(fileUrl, expenseId);
+      setUploading(false);
+      setOpen(false);
+      if(groupData?.id) fetchExpensesData(groupData?.id);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -51,7 +52,6 @@ const BillDetails = () => {
       const foundExpense = expenses.find(
         (expense: Expense) => expense.id === billId
       );
-      console.log('jo',foundExpense);
       setExpense(foundExpense);
     }
   }, [expenses, billId]);
@@ -76,14 +76,15 @@ const BillDetails = () => {
       </div>
       <div className="btn">
         <div className="flex pt-4 gap-4">
-          {!expense?.billUrl && expense?.createdBy === auth.currentUser?.uid && (
-            <button
-              onClick={() => setOpen(true)}
-              className="px-5 py-1 text-white rounded-md bg-main hover:bg-blue-900"
-            >
-              Attach a bill
-            </button>
-          )}
+          {!expense?.billUrl &&
+            expense?.createdBy === auth.currentUser?.uid && (
+              <button
+                onClick={() => setOpen(true)}
+                className="px-5 py-1 text-white rounded-md bg-main hover:bg-blue-900"
+              >
+                Attach a bill
+              </button>
+            )}
           {expense?.billUrl && (
             <button
               onClick={() => setPreviewOpen(true)}
@@ -97,16 +98,22 @@ const BillDetails = () => {
         <Dialog open={open} onClose={() => setOpen(false)}>
           <DialogTitle>Upload File</DialogTitle>
           <DialogContent>
-            <input type="file" onChange={handleFileChange} />
+            <input type="file" onChange={handleFileChange} accept="image/*" />
             {uploading && <CircularProgress />}
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setOpen(false)} color="primary">
               Cancel
             </Button>
-            {expense && <Button onClick={() => handleUpload(expense?.id)} color="primary" disabled={uploading}>
-              {uploading ? "Uploading..." : "Upload"}
-            </Button>}
+            {expense && (
+              <Button
+                onClick={() => handleUpload(expense?.id)}
+                color="primary"
+                disabled={uploading}
+              >
+                {uploading ? "Uploading..." : "Upload"}
+              </Button>
+            )}
           </DialogActions>
         </Dialog>
 
