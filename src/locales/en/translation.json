@@ -115,7 +115,18 @@
   "save": "Save",
   "logOut": "Log Out",
   "viewProfile": "View Profile",
-  "userProfile": "User Profile"
+  "userProfile": "User Profile",
+  "walkthrough": {
+    "welcomeTitle": "Welcome to Split-Buddy!",
+    "welcomeDescription": "This walkthrough will guide you through the main features of our app.",
+    "dashboard": "This is your dashboard, where you can get an overview of all your activities.",
+    "sidebar": "This is the sidebar. Use it to navigate through the different sections of the app effortlessly.",
+    "groups": "Here, you can view all your groups. Manage your groups and see the members involved.",
+    "notifications": "Check out the latest notifications here. Stay updated with the most recent activities and updates.",
+    "expenses": "In this section, you can easily split your expenses. Create new bills and manage your shared expenses.",
+    "billDetails": "Here, you can review your latest bill details.",
+    "transactions": "This section shows your most recent transactions. Keep track of your expenses here."
+  }
  
     
   }

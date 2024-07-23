@@ -1,46 +1,48 @@
-// src/components/Walkthrough.js
 import React, { useEffect } from 'react';
 import introJs from 'intro.js';
 import 'intro.js/introjs.css';
+import { useTranslation } from 'react-i18next';
 
-const Walkthrough = ({ runWalkthrough, onFinish }:any) => {
+const Walkthrough = ({ runWalkthrough, onFinish }: any) => {
+  const { t } = useTranslation();
+
   useEffect(() => {
     if (runWalkthrough) {
       const intro = introJs();
       intro.setOptions({
         steps: [
-            {
-              intro: '<h2>Welcome to Split-Buddy!</h2><p>This walkthrough will guide you through the main features of our app.</p>',
-            },
-            {
-              element: '.step1',
-              intro: 'This is your dashboard, where you can get an overview of all your activities.',
-            },
-            {
-              element: '.step2',
-              intro: 'This is the sidebar. Use it to navigate through the different sections of the app effortlessly.',
-            },
-            {
-              element: '.step3',
-              intro: 'Here, you can view all your groups. Manage your groups and see the members involved.',
-            },
-            {
-              element: '.step4',
-              intro: 'Check out the latest notifications here. Stay updated with the most recent activities and updates.',
-            },
-            {
-              element: '.step5',
-              intro: 'In this section, you can easily split your expenses. Create new bills and manage your shared expenses.',
-            },
-            {
-              element: '.step6',
-              intro: 'Here, you can review your latest bill details.',
-            },
-            {
-              element: '.step7',
-              intro: 'This section shows your most recent transactions. Keep track of your expenses here.',
-            }
-          ],
+          {
+            intro: `<h2>${t('walkthrough.welcomeTitle')}</h2><p>${t('walkthrough.welcomeDescription')}</p>`,
+          },
+          {
+            element: '.step1',
+            intro: t('walkthrough.dashboard'),
+          },
+          {
+            element: '.step2',
+            intro: t('walkthrough.sidebar'),
+          },
+          {
+            element: '.step3',
+            intro: t('walkthrough.groups'),
+          },
+          {
+            element: '.step4',
+            intro: t('walkthrough.notifications'),
+          },
+          {
+            element: '.step5',
+            intro: t('walkthrough.expenses'),
+          },
+          {
+            element: '.step6',
+            intro: t('walkthrough.billDetails'),
+          },
+          {
+            element: '.step7',
+            intro: t('walkthrough.transactions'),
+          }
+        ],
         showProgress: true,
         showBullets: false,
         exitOnEsc: true,
@@ -55,7 +57,7 @@ const Walkthrough = ({ runWalkthrough, onFinish }:any) => {
 
       intro.start();
     }
-  }, [runWalkthrough, onFinish]);
+  }, [runWalkthrough, onFinish, t]);
 
   return null;
 };
