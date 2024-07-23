@@ -4,6 +4,7 @@ import useGroup from "../../../hooks/useGroup";
 import { useParams } from "react-router-dom";
 import { Expense, Split } from "../../../utils/types";
 import { getAuth } from "firebase/auth";
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const BillDetails = () => {
   const { expenses } = useGroup();
@@ -11,6 +12,7 @@ const BillDetails = () => {
   const { groupData } = useGroup();
   const [expense, setExpense] = useState<Expense | undefined>(undefined);
   const auth = getAuth();
+  const { t } = useTranslation(); // Add translation hook
 
   useEffect(() => {
     if (expenses && billId) {
@@ -22,7 +24,7 @@ const BillDetails = () => {
   return (
     <div className="p-5 h-full w-full flex flex-col">
       <h1 className="text-center text-lg font-semibold text-gray-600">
-        {groupData?.name}
+        {groupData?.name || t('billDetails.groupNamePlaceholder')}
       </h1>
       <div className="grid">
         {expense && expense.splits && expense.splits

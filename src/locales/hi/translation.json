@@ -131,6 +131,24 @@
     "sent": "भेजा",
     "by": "द्वारा: ",
     "to": "को: "
+  },
+  "billDetails": {
+    "groupNamePlaceholder": "समूह का नाम"
+  },
+  "billSplit": {
+    "splittingBill": "₹{{amount}} का बिल बांट रहे हैं",
+    "yourShare": "{{title}} के लिए आपका हिस्सा",
+    "settleBill": "बिल चुकाएँ",
+    "alreadyPaid": "पहले ही चुकाया",
+    "unknownUser": "अनजान उपयोगकर्ता",
+    "settledBillTitle": "बिल चुकाया",
+    "category": "श्रेणी: {{category}}",
+    "amount": "राशि: ₹{{amount}}",
+    "amountLabel": "राशि: ₹{{amount}}",
+    "paid": "भुगतान किया",
+    "unpaid": "अदायगी नहीं",
+    "markPaid": "भुगतान चिह्नित करें",
+    "close": "बंद करें"
   }
  
   }

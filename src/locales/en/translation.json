@@ -132,6 +132,24 @@
     "sent": "Sent",
     "by": "By: ",
     "to": "To: "
+  },
+  "billDetails": {
+    "groupNamePlaceholder": "Group Name"
+  },
+  "billSplit": {
+    "splittingBill": "Splitting bill of Rs {{amount}}",
+    "yourShare": "Your share for {{title}}",
+    "settleBill": "Settle Bill",
+    "alreadyPaid": "Already Paid",
+    "unknownUser": "Unknown User",
+    "settledBillTitle": "settled a bill",
+    "category": "Category: {{category}}",
+    "amount": "Amount: Rs {{amount}}",
+    "amountLabel": "Amount: Rs {{amount}}",
+    "paid": "Paid",
+    "unpaid": "Unpaid",
+    "markPaid": "Mark Paid",
+    "close": "Close"
   }
  
     
