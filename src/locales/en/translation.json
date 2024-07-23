@@ -126,6 +126,12 @@
     "expenses": "In this section, you can easily split your expenses. Create new bills and manage your shared expenses.",
     "billDetails": "Here, you can review your latest bill details.",
     "transactions": "This section shows your most recent transactions. Keep track of your expenses here."
+  },
+  "transaction": {
+    "received": "Received",
+    "sent": "Sent",
+    "by": "By: ",
+    "to": "To: "
   }
  
     
