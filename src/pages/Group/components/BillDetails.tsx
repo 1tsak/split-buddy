@@ -51,6 +51,7 @@ const BillDetails = () => {
       const foundExpense = expenses.find(
         (expense: Expense) => expense.id === billId
       );
+      console.log('jo',foundExpense);
       setExpense(foundExpense);
     }
   }, [expenses, billId]);
@@ -86,7 +87,7 @@ const BillDetails = () => {
           {expense?.billUrl && (
             <button
               onClick={() => setPreviewOpen(true)}
-              className="px-5 py-1 text-white rounded-md bg-green-500 hover:bg-green-600"
+              className="px-5 py-1 text-white rounded-md bg-black hover:bg-gray-600"
             >
               Preview Bill
             </button>

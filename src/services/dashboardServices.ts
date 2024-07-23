@@ -170,19 +170,21 @@ const getDataForLineChart = async (
   if (!dateR || dateR==null) return { "16": 22 };
   console.log("called"
   )
+  console.log(dateR)
+  console.log('date',dateR);
   const fromDate = Timestamp.fromDate(dateR[0]);
   const toDate = Timestamp.fromDate(dateR[1])
   const query1 = query(
     dbCollection.expenses,
-    and(where("createdAt","<",new Date('2024-7-18')),where("createdAt", ">", new Date('2024-7-15')),
-    ),orderBy("createdAt", "desc"),
+  where("createdAt","<=",dateR[1]),where("createdAt", ">=", dateR[0]),
+   
   );
-  console.log("first")
+  // console.log("first")
   const snapShot = await getDocs(query1);
+  console.log('jjd',snapShot.docs);
   const data = new Array<LineChartType>();
   snapShot.forEach((expense) => {
     const exp = expense.data() as Expense;
-    console.log(exp,"exp");
     const splits = exp.splits;
     if (exp.createdBy == userId) {
       splits.forEach((split) => {
