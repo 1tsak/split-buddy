@@ -106,7 +106,15 @@
     "groups": "Groups",
     "notifications": "Notifications",
     "recentTransactions": "Recent Transactions",
-  "noRecentTransactionData": "No Recent Transaction Data Available"
+  "noRecentTransactionData": "No Recent Transaction Data Available",
+   "editProfile": "Edit Profile",
+  "name": "Name",
+  "nameRequired": "Name cannot be empty",
+  "uploadPhoto": "Upload Photo",
+  "uploading": "Uploading",
+  "save": "Save",
+  "logOut": "Log Out",
+  "viewProfile": "View Profile"
     
   }
   

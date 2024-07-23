@@ -105,7 +105,15 @@
   "groups": "समूह",
   "notifications": "सूचनाएँ",
   "recentTransactions": "हाल की लेन-देन",
-  "noRecentTransactionData": "कोई हाल की लेन-देन डेटा उपलब्ध नहीं है"
+  "noRecentTransactionData": "कोई हाल की लेन-देन डेटा उपलब्ध नहीं है",
+  "editProfile": "प्रोफाइल संपादित करें",
+  "name": "नाम",
+  "nameRequired": "नाम खाली नहीं हो सकता",
+  "uploadPhoto": "फोटो अपलोड करें",
+  "uploading": "अपलोड हो रहा है",
+  "save": "सहेजें",
+  "logOut": "लॉग आउट",
+  "viewProfile": "प्रोफाइल देखें"
  
   }
   

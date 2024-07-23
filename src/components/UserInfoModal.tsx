@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -15,6 +14,7 @@ import { updateUserProfile } from '../services/firebaseAuth';
 import { storage } from '../firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface UserInfoModalProps {
   isOpen: boolean;
@@ -31,6 +31,7 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
   onLogout,
   onUserProfileUpdate,
 }) => {
+  const { t } = useTranslation();
   const [displayName, setDisplayName] = useState<string>('');
   const [photoURL, setPhotoURL] = useState<string>('');
   const [uploading, setUploading] = useState<boolean>(false);
@@ -86,7 +87,7 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
   const handleSave = async () => {
     if (user) {
       try {
-         updateUserProfile(user, { displayName, photoURL });
+        await updateUserProfile(user, { displayName, photoURL });
         onUserProfileUpdate({ ...user, displayName, photoURL });
         onClose();
       } catch (error) {
@@ -129,16 +130,16 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
           }}
         />
         <Typography variant="h6" sx={{ mb: 2 }}>
-          Edit Profile
+          {t('editProfile')}
         </Typography>
         <TextField
-          label="Name"
+          label={t('name')}
           value={displayName}
           onChange={handleNameChange}
           fullWidth
           sx={{ mb: 2 }}
           error={!displayName.trim()}
-          helperText={!displayName.trim() && 'Name cannot be empty'}
+          helperText={!displayName.trim() && t('nameRequired')}
         />
         <Button
           variant="contained"
@@ -150,10 +151,10 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
           {uploading ? (
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <CircularProgress size={24} sx={{ mr: 2 }} />
-              {`Uploading ${uploadProgress}%`}
+              {`${t('uploading')} ${uploadProgress}%`}
             </Box>
           ) : (
-            'Upload Photo'
+            t('uploadPhoto')
           )}
           <input type="file" hidden accept="image/*" onChange={handlePhotoUpload} />
         </Button>
@@ -172,7 +173,7 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
           disabled={uploading || !displayName.trim()}
           sx={{ mb: 2 }}
         >
-          Save
+          {t('save')}
         </Button>
         <Button
           variant="outlined"
@@ -181,7 +182,7 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
           onClick={onLogout}
           sx={{ mb: 2 }}
         >
-          Log Out
+          {t('logOut')}
         </Button>
         <Button
           variant="text"
@@ -189,7 +190,7 @@ const UserInfoModal: React.FC<UserInfoModalProps> = ({
           fullWidth
           onClick={handleViewProfile}
         >
-          View Profile
+          {t('viewProfile')}
         </Button>
       </Box>
     </Modal>
