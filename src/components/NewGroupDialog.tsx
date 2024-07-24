@@ -11,6 +11,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebaseConfig";
 import { useTranslation } from "react-i18next";
 
+import { Box, CircularProgress } from "@mui/material";
 interface INewGroupModalProps {
   fetchData: () => void;
 }
@@ -20,6 +21,7 @@ export default function NewGroupModal(props: INewGroupModalProps) {
   const [open, setOpen] = React.useState(false);
   const [user, loading] = useAuthState(auth);
   const { t } = useTranslation();
+  const [creating, setCreating] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -47,12 +49,18 @@ export default function NewGroupModal(props: INewGroupModalProps) {
           component: "form",
           onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
+            setCreating(true);
             const formData = new FormData(event.currentTarget);
             const formJson = Object.fromEntries((formData as any).entries());
             const groupName = formJson.groupName;
             const groupDescription = formJson.groupDescription;
-            await createNewGroup(groupName, groupDescription, user?.uid as string);
+            await createNewGroup(
+              groupName,
+              groupDescription,
+              user?.uid as string
+            );
             await fetchData();
+            setCreating(false);
             handleClose();
           },
         }}
@@ -81,7 +89,24 @@ export default function NewGroupModal(props: INewGroupModalProps) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>{t('cancel')}</Button>
-          <Button type="submit">{t('create')}</Button>
+          <Button type="submit">{t('create')}
+            Create{" "}
+            {creating && (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "50%",
+                  width: "100%",
+                  color: "blue",
+                  fontSize: "12px",
+                }}
+              >
+                <CircularProgress size={16} />
+              </Box>
+            )}
+          </Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

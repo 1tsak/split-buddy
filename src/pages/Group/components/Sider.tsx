@@ -5,7 +5,18 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Expense } from "../../../utils/types";
 import { Box, CircularProgress } from "@mui/material";
 import { format, isToday, isYesterday } from "date-fns";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import Toast from "../../../components/Toast";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  Typography,
+} from "@mui/material";
+import { Delete as DeleteIcon } from "@mui/icons-material";
 import { getAuth } from "firebase/auth";
 import { deleteGroup, leaveGroup } from "../../../services/groupService";
 import { useTranslation } from 'react-i18next';
@@ -15,6 +26,7 @@ const Sider = () => {
   const { groupData, expenses, loading } = useGroup();
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const [deletingOrLeaving, setDeletingOrLeaving] = useState(false);
   const auth = getAuth();
   const navigate = useNavigate();
 
@@ -53,20 +65,56 @@ const Sider = () => {
   const handleClose = () => {
     setOpen(false);
   };
+  const [toast, setToast] = useState<{
+    type: 'success' | 'error' | 'info' | 'warning';
+    message: string;
+    show: boolean;
+  }>({
+    type: 'info',
+    message: '',
+    show: false,
+  });
 
+  const triggerToast = (
+    type: 'success' | 'error' | 'info' | 'warning',
+    message: string
+  ) => {
+    if (message === "") {
+      return;
+    }
+    setToast({
+      type,
+      message,
+      show: true,
+    });
+    setTimeout(() => {
+      setToast((prev) => ({ ...prev, show: false }));
+    }, 3000);
+  };
   const handleDelete = async () => {
-    if (groupData && groupData.id) await deleteGroup(groupData?.id);
+    if (groupData && groupData.id) {
+      setDeletingOrLeaving(true);
+      await deleteGroup(groupData?.id);
+      setDeletingOrLeaving(false);
+    }
     setOpen(false);
-    alert(t('sider.groupDeletedSuccessfully'));
-    navigate("/group");
+    triggerToast("success",t('sider.groupDeletedSuccessfully'));
+    setTimeout(()=>{
+      navigate("/group");
+    },700);
   };
 
   const handleLeave = async () => {
-    if (groupData && groupData.id && auth.currentUser)
+    if (groupData && groupData.id && auth.currentUser) {
+      setDeletingOrLeaving(true);
       await leaveGroup(groupData?.id, auth.currentUser?.uid);
+      setDeletingOrLeaving(false);
+    }
     setOpen(false);
-    alert(t('sider.groupLeft'));
-    navigate("/group");
+    triggerToast("success",t('sider.groupLeft'));
+    setTimeout(()=>{
+      navigate("/group");
+    },700);
   };
 
   return (
@@ -96,7 +144,22 @@ const Sider = () => {
                     {t('cancel')}
                   </Button>
                   <Button onClick={handleDelete} color="primary" autoFocus>
-                    {t('yes')}
+                  {t('yes')}
+                    {deletingOrLeaving && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          height: "50%",
+                          width: "100%",
+                          color: "blue",
+                          fontSize:"12px"
+                        }}
+                      >
+                        <CircularProgress size={16} />
+                      </Box>
+                    )}
                   </Button>
                 </DialogActions>
               </Dialog>
@@ -193,6 +256,12 @@ const Sider = () => {
           </ul>
         )}
       </div>
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        show={toast.show}
+        onClose={() => setToast((prev) => ({ ...prev, show: false }))}
+      />
     </div>
   );
 };
