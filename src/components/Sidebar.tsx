@@ -53,7 +53,6 @@ const Sidebar: React.FC = () => {
       sx={{ 
         display: 'flex',
         flexDirection: 'column',
-        width: '250px',
         backgroundColor: '#f1f5f9',
         padding: '20px',
         justifyContent: 'space-between',
@@ -78,7 +77,7 @@ const Sidebar: React.FC = () => {
               className={`p-2 rounded-full`}
             >
               {link.icon}
-              <Typography variant="subtitle1" style={{ marginLeft: '10px' }}>{link.name}</Typography>
+              <Typography className='hidden sm:inline' variant="subtitle1" style={{ marginLeft: '10px' }}>{link.name}</Typography>
             </Box>
           </NavLink>
         ))}
