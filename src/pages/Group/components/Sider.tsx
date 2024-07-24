@@ -42,8 +42,8 @@ const Sider = () => {
 
   const getExpenseLabel = (timestamp: any) => {
     const date = new Date(timestamp.seconds * 1000);
-    if (isToday(date)) return t('sider.today'); // Add translation key if needed
-    if (isYesterday(date)) return t('sider.yesterday'); // Add translation key if needed
+    if (isToday(date)) return t('today'); // Add translation key if needed
+    if (isYesterday(date)) return t('yesterday'); // Add translation key if needed
     return format(date, "MMMM dd, yyyy");
   };
 
