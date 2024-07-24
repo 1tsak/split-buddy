@@ -4,7 +4,7 @@ import {
   getDataForLineChart,
   getUserAmtData,
 } from "../services/dashboardServices";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, hslToRgb } from "@mui/material";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebaseConfig";
 import { LineChartGroupType } from "../utils/types";
@@ -67,7 +67,7 @@ const DashboardLineChart: FC = () => {
             margin={{left:100,right:100}}
             xAxis={[{ data: dayData, tickMinStep: 1 }]}
             series={[
-              { label: "Day wise Expense", data: seriesData, color: "#687EEF" },
+              {area:true, label: "Day wise Expense", data: seriesData, color: hslToRgb('hsl(230, 81%, 90%)') },
             ]}
           />
         </div>

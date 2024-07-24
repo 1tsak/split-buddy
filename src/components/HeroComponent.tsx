@@ -13,12 +13,13 @@ interface IHeroComponetProps {
 const HeroComponent: FC<IHeroComponetProps> = ({ amt, pieChartData }) => {
   const { t } = useTranslation();
 
+
   return (
-    <div className="bg-main rounded-lg h-[30vh] flex flex-col sm:flex-row overflow-hidden">
+    <div className="bg-main rounded-lg h-[32vh] sm:h-[30vh] flex flex-col sm:flex-row overflow-hidden">
       <div className="flex justify-center items-center">
         {pieChartData ? (
           <PieChart
-            sx={{ height: "100px", color: "white" }}
+          
             slotProps={{
               noDataOverlay: {
                 message: t('noDataAvailable'),
@@ -31,20 +32,21 @@ const HeroComponent: FC<IHeroComponetProps> = ({ amt, pieChartData }) => {
                 },
               },
             }}
-            width={300}
-            height={200}
+            width={(20/100) * window.innerWidth}
+            height={(20/100) *window.innerHeight}
             className="text-white"
             colors={["white"]}
             series={[
               {
                 data: pieChartData as MakeOptional<PieValueType, "id">[],
-                innerRadius: 70,
-                outerRadius: 100,
+                innerRadius: '80%',
+                outerRadius: '100%',
                 paddingAngle: 5,
                 cornerRadius: 5,
                 startAngle: -90,
                 endAngle: 360,
-                cx: 140,
+                cx:'80%',
+                
               },
             ]}
           />
@@ -67,8 +69,9 @@ const HeroComponent: FC<IHeroComponetProps> = ({ amt, pieChartData }) => {
           <p className="font-thin text-lg min-w-64">
             {t('yourPaidAmountTillNow')}
           </p>
-          <p className="text-4xl sm:text-6xl 2xl:text-8xl font-bold flex items-center overflow-hidden">
-            ₹{amt}
+          <p className="text-3xl sm:text-6xl 2xl:text-8xl font-bold flex justify-center items-center overflow-hidden">
+            ₹
+            {amt}
           </p>
           <p className="font-thin text-lg">{t('showingAmountInINR')}</p>
         </div>
