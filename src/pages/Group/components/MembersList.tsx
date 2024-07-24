@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getUser, getUserByEmail } from "../../../services/authService.ts";
-import { addMember, removeMembers } from "../../../services/groupService.ts";
+import { getUser, getUserByEmail } from "../../../services/authService";
+import { addMember, removeMembers } from "../../../services/groupService";
 import { User } from "../../../utils/types";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -10,21 +10,49 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { FaPlus } from "react-icons/fa6";
-import useGroup from "../../../hooks/useGroup.ts";
+import useGroup from "../../../hooks/useGroup";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../../../firebaseConfig.ts";
+import { auth } from "../../../firebaseConfig";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Box, CircularProgress } from "@mui/material";
-import { notificationService } from "../../../services/notificationService.ts";
+import { notificationService } from "../../../services/notificationService";
+import Toast from "../../../components/Toast";
 
 const MembersList = () => {
-  const [members, setMembers] = useState<User[] | null>();
-  const { groupData,fetchGroupsData } = useGroup();
-  const [error, setError] = useState<string | null>(null);
-  const [open, setOpen] = React.useState(false);
+  const [members, setMembers] = useState<User[] | null>([]);
+  const { groupData, fetchGroupsData } = useGroup();
+  const [open, setOpen] = useState(false);
   const [user] = useAuthState(auth);
   const [loading, setLoading] = useState(false);
   const [addMemberLoading, setAddMemberLoading] = useState<boolean>(false);
+
+  const [toast, setToast] = useState<{
+    type: 'success' | 'error' | 'info' | 'warning';
+    message: string;
+    show: boolean;
+  }>({
+    type: 'info',
+    message: '',
+    show: false,
+  });
+
+  const triggerToast = (
+    type: 'success' | 'error' | 'info' | 'warning',
+    message: string
+  ) => {
+    if (message === "") {
+      return;
+    }
+    setToast({
+      type,
+      message,
+      show: true,
+    });
+    setTimeout(() => {
+      setToast((prev) => ({ ...prev, show: false }));
+    }, 3000);
+  };
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -32,10 +60,11 @@ const MembersList = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  console.log(auth);
+
   useEffect(() => {
-    setError(null);
+    triggerToast("info", "");
   }, [open]);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setAddMemberLoading(true);
@@ -46,37 +75,39 @@ const MembersList = () => {
     try {
       const user = await getUserByEmail(email);
       if (!user) {
-        setError("User not found");
+        setOpen(false);
+        triggerToast("error", "User not found");
         setAddMemberLoading(false);
       } else {
         const userPresent = members?.find((member) => member.id === user.id);
         if (userPresent) {
-          alert("User already present");
+          setOpen(false);
+          triggerToast("warning", "User already present");
           setAddMemberLoading(false);
           return;
         }
         await addMember(groupData?.id as string, email);
-
         await notificationService({
           title: "New Member Added",
           message: `${user.displayName} has been added to ${groupData?.name}`,
           groupId: `${groupData?.id}`,
         });
-        setMembers((prevState: any) => [...prevState, user]);
+        triggerToast("success", "User added successfully!");
+        setTimeout(() => {
+          setMembers((prevState) => (prevState ? [...prevState, user] : [user]));
+          if (groupData) fetchGroupsData(groupData?.id);
+        }, 900);
         setAddMemberLoading(false);
-        if(groupData)
-        fetchGroupsData(groupData?.id);
-        alert("User added Successfully!");
         handleClose();
       }
     } catch (error) {
       setAddMemberLoading(false);
       console.error("Error fetching user:", error);
-      setError("An error occurred while fetching the user");
+      triggerToast("error", "An error occurred while fetching the user");
     }
   };
+
   const getMembers = async () => {
-    console.log(groupData);
     setLoading(true);
     const members: User[] = [];
     if (groupData?.members) {
@@ -93,27 +124,25 @@ const MembersList = () => {
     }
     setMembers(members);
     setLoading(false);
-    console.log(members);
   };
+
   const deleteMember = async (memberId: string) => {
     try {
-      const response = await removeMembers(groupData?.id as string, memberId);
-      console.log({ response });
-      setMembers((prevState: any) =>
-        prevState.filter((member: User) => member.id !== memberId)
+      await removeMembers(groupData?.id as string, memberId);
+      setMembers((prevState) =>
+        prevState ? prevState.filter((member) => member.id !== memberId) : []
       );
-      alert("User removed Successfully!");
-      handleClose();
+      triggerToast("success", "User removed successfully!");
     } catch (error) {
-      console.error("Error fetching user:", error);
-      setError("An error occurred while fetching the user");
+      console.error("Error removing user:", error);
+      triggerToast("error", "An error occurred while removing the user");
     }
   };
 
   useEffect(() => {
-    // For now, we use sample data
     getMembers();
   }, [groupData]);
+
   return (
     <div className="flex flex-col items-start gap-3 rounded-md w-[400px] h-fit bg-slate-100 p-5">
       <h2 className="py-2 text-slate-500">Members</h2>
@@ -133,7 +162,10 @@ const MembersList = () => {
         ) : (
           members &&
           members.map((member: User, index) => (
-            <li key={index} className="p-2 flex items-center  border border-slate-300 gap-2 rounded">
+            <li
+              key={index}
+              className="p-2 flex items-center  border border-slate-300 gap-2 rounded"
+            >
               {member.displayName}
               {member.id !== user?.uid && (
                 <RiDeleteBin6Line
@@ -164,7 +196,7 @@ const MembersList = () => {
           },
         }}
       >
-        <DialogTitle>Add a Member </DialogTitle>
+        <DialogTitle>Add a Member</DialogTitle>
         <DialogContent>
           <DialogContentText>Add a member to this group</DialogContentText>
           <TextField
@@ -179,17 +211,6 @@ const MembersList = () => {
             variant="standard"
           />
         </DialogContent>
-        {error && (
-          <DialogContentText
-            style={{
-              color: "red",
-              paddingLeft: "1.25rem",
-              fontSize: "0.75rem",
-            }}
-          >
-            {error}
-          </DialogContentText>
-        )}
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button
@@ -200,7 +221,6 @@ const MembersList = () => {
               alignItems: "center",
               justifyContent: "center",
               padding: "8px 16px",
-
               borderRadius: "4px",
               fontSize: "16px",
             }}
@@ -214,6 +234,12 @@ const MembersList = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        show={toast.show}
+        onClose={() => setToast((prev) => ({ ...prev, show: false }))}
+      />
     </div>
   );
 };
