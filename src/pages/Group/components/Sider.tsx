@@ -98,7 +98,7 @@ const Sider = () => {
       setDeletingOrLeaving(false);
     }
     setOpen(false);
-    triggerToast("success",t('sider.groupDeletedSuccessfully'));
+    triggerToast("success","Group Deleted Successfully!");
     setTimeout(()=>{
       navigate("/group");
     },700);
@@ -111,7 +111,7 @@ const Sider = () => {
       setDeletingOrLeaving(false);
     }
     setOpen(false);
-    triggerToast("success",t('sider.groupLeft'));
+    triggerToast("success",t('Group Left!'));
     setTimeout(()=>{
       navigate("/group");
     },700);

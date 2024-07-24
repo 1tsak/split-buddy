@@ -101,8 +101,6 @@ const MembersList = () => {
           if (groupData) fetchGroupsData(groupData?.id);
         }, 900);
         setAddMemberLoading(false);
-        if (groupData) fetchGroupsData(groupData?.id);
-        alert(t('userAdded'));
         handleClose();
       }
     } catch (error) {

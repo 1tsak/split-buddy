@@ -90,7 +90,6 @@ export default function NewGroupModal(props: INewGroupModalProps) {
         <DialogActions>
           <Button onClick={handleClose}>{t('cancel')}</Button>
           <Button type="submit">{t('create')}
-            Create{" "}
             {creating && (
               <Box
                 sx={{
