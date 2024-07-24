@@ -1,30 +1,19 @@
-import { CiMoneyBill } from "react-icons/ci";
-import { CiHome } from "react-icons/ci";
+import { CiMoneyBill, CiHome, CiChat2 } from "react-icons/ci";
 import useGroup from "../../../hooks/useGroup";
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom"; // Import useLocation from react-router-dom
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Expense } from "../../../utils/types";
 import { Box, CircularProgress } from "@mui/material";
 import { format, isToday, isYesterday } from "date-fns";
-import { CiChat2 } from "react-icons/ci";
-
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  IconButton,
-  Typography,
-} from "@mui/material";
-import { Delete as DeleteIcon } from "@mui/icons-material";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { getAuth } from "firebase/auth";
 import { deleteGroup, leaveGroup } from "../../../services/groupService";
+import { useTranslation } from 'react-i18next';
 
 const Sider = () => {
+  const { t } = useTranslation();
   const { groupData, expenses, loading } = useGroup();
-  const location = useLocation(); // Get current location using useLocation()
+  const location = useLocation();
   const [open, setOpen] = useState(false);
   const auth = getAuth();
   const navigate = useNavigate();
@@ -41,8 +30,8 @@ const Sider = () => {
 
   const getExpenseLabel = (timestamp: any) => {
     const date = new Date(timestamp.seconds * 1000);
-    if (isToday(date)) return "Today";
-    if (isYesterday(date)) return "Yesterday";
+    if (isToday(date)) return t('sider.today'); // Add translation key if needed
+    if (isYesterday(date)) return t('sider.yesterday'); // Add translation key if needed
     return format(date, "MMMM dd, yyyy");
   };
 
@@ -53,7 +42,6 @@ const Sider = () => {
     return acc;
   }, {});
 
-  // Function to determine if a link is active
   const isActiveLink = (path: string) => {
     return location.pathname === path;
   };
@@ -69,7 +57,7 @@ const Sider = () => {
   const handleDelete = async () => {
     if (groupData && groupData.id) await deleteGroup(groupData?.id);
     setOpen(false);
-    alert("Group Deleted Succefully");
+    alert(t('sider.groupDeletedSuccessfully'));
     navigate("/group");
   };
 
@@ -77,14 +65,14 @@ const Sider = () => {
     if (groupData && groupData.id && auth.currentUser)
       await leaveGroup(groupData?.id, auth.currentUser?.uid);
     setOpen(false);
-    alert("Group left !! You are no longer member of this group.");
+    alert(t('sider.groupLeft'));
     navigate("/group");
   };
 
   return (
     <div className="h-full w-1/4 bg-slate-100 pt-4 flex flex-col">
       <div className="flex justify-between px-2">
-        <h1 className="text-center  font-light pl-2 text-xl text-slate-700">
+        <h1 className="text-center font-light pl-2 text-xl text-slate-700">
           {groupData?.name}
         </h1>
         <div>
@@ -94,21 +82,21 @@ const Sider = () => {
                 onClick={handleOpen}
                 className="bg-slate-800 text-white rounded-sm text-sm py-1 px-2"
               >
-                Delete
+                {t('sider.deleteGroup')}
               </button>
               <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Delete Group!</DialogTitle>
+                <DialogTitle>{t('sider.deleteGroupDialogTitle')}</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
-                    Do you really want to delete this group?
+                    {t('sider.deleteGroupDialogContent')}
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleClose} color="primary">
-                    Cancel
+                    {t('cancel')}
                   </Button>
                   <Button onClick={handleDelete} color="primary" autoFocus>
-                    Yes
+                    {t('yes')}
                   </Button>
                 </DialogActions>
               </Dialog>
@@ -119,21 +107,21 @@ const Sider = () => {
                 onClick={handleOpen}
                 className="bg-slate-800 text-white rounded-sm text-sm py-1 px-2"
               >
-                Leave
+                {t('sider.leaveGroup')}
               </button>
               <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Leave Group!</DialogTitle>
+                <DialogTitle>{t('sider.leaveGroupDialogTitle')}</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
-                    Do you really want to leave this group?
+                    {t('sider.leaveGroupDialogContent')}
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleClose} color="primary">
-                    Cancel
+                    {t('cancel')}
                   </Button>
                   <Button onClick={handleLeave} color="primary" autoFocus>
-                    Yes
+                    {t('yes')}
                   </Button>
                 </DialogActions>
               </Dialog>
@@ -153,7 +141,7 @@ const Sider = () => {
               }`}
             >
               <CiHome />
-              <span>Home</span>
+              <span>{t('sider.home')}</span>
             </div>
           </Link>
           <Link to={`/group/${groupData?.id}/chat`}>
@@ -163,11 +151,11 @@ const Sider = () => {
               }`}
             >
               <CiChat2 />
-              <span>Chat</span>
+              <span>{t('sider.chat')}</span>
             </div>
           </Link>
         </div>
-        <h2 className="px-2 mt-4 text-lg text-center text-gray-500">Bills</h2>
+        <h2 className="px-2 mt-4 text-lg text-center text-gray-500">{t('sider.bills')}</h2>
         {loading ? (
           <Box
             sx={{
@@ -199,7 +187,7 @@ const Sider = () => {
             ))}
             {sortedExpenses.length === 0 && (
               <p className="text-center text-sm text-gray-400">
-                No expenses to show!
+                {t('sider.noExpenses')}
               </p>
             )}
           </ul>

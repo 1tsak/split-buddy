@@ -22,6 +22,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { markBillPaid } from "../../../services/expenseService";
 import { notificationService } from "../../../services/notificationService";
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 interface BillSplitProp {
   expenseData: Expense;
@@ -38,6 +39,7 @@ const BillSplit = ({ expenseData: initialExpense, splitData }: BillSplitProp) =>
   const currentUserPaid = expenseData.splits.some(
     (split) => split.userId === user?.uid && split.paid
   );
+  const { t } = useTranslation(); // Add translation hook
 
   useEffect(() => {
     setExpenseData(initialExpense);
@@ -50,7 +52,7 @@ const BillSplit = ({ expenseData: initialExpense, splitData }: BillSplitProp) =>
         const userData = userDoc.data();
         return {
           userId: split.userId,
-          name: userData?.displayName || "Unknown User",
+          name: userData?.displayName || t('billSplit.unknownUser'),
           amount: split.amount,
           paid: split.paid,
         };
@@ -63,6 +65,7 @@ const BillSplit = ({ expenseData: initialExpense, splitData }: BillSplitProp) =>
   const handleClose = () => {
     setOpen(false);
   };
+
   const markPaid = async (userId: string) => {
     const updatedSplits = expenseData.splits.map((split: Split) => {
       if (split.userId === userId) {
@@ -74,7 +77,7 @@ const BillSplit = ({ expenseData: initialExpense, splitData }: BillSplitProp) =>
     setExpenseData((prevExpense) => ({ ...prevExpense, splits: updatedSplits }));
     await markBillPaid(expenseData.id, updatedSplits);
     await notificationService({
-      title: `${user?.displayName} settled a bill`,
+      title: `${user?.displayName} ${t('billSplit.settledBillTitle')}`,
       message: `${expenseData.title} ${expenseData.category}`,
       groupId: expenseData.groupId,
     });
@@ -84,7 +87,7 @@ const BillSplit = ({ expenseData: initialExpense, splitData }: BillSplitProp) =>
   return (
     <div className="bg-white rounded-md p-5 border border-slate-200 flex flex-col w-[400px]">
       <div className="flex flex-row justify-between items-center">
-        <p>Splitting bill of Rs {expenseData.amount}</p>
+        <p>{t('billSplit.splittingBill', { amount: expenseData.amount })}</p>
         <IoIosArrowForward
           onClick={handleClickOpen}
           className="cursor-pointer"
@@ -96,19 +99,19 @@ const BillSplit = ({ expenseData: initialExpense, splitData }: BillSplitProp) =>
         <span className="text-sm">Rs</span>
       </div>
       <p className="text-sm text-gray-500 py-1 font-light">
-        Your share for {expenseData.title}
+        {t('billSplit.yourShare', { title: expenseData.title })}
       </p>
       {expenseData.splits.some((split) => split.userId === user?.uid) &&
       !currentUserPaid ? (
         <button
           className="bg-main px-4 py-2 my-2 text-sm font-semibold rounded-md w-fit text-white flex items-center gap-2"
-          onClick={()=>markPaid(auth.currentUser?.uid!)}
+          onClick={() => markPaid(auth.currentUser?.uid!)}
         >
-          <span>Settle Bill</span>
+          <span>{t('billSplit.settleBill')}</span>
           <MdKeyboardDoubleArrowRight />
         </button>
       ) : (
-        <p className="py-2 text-gray-400">Already Paid</p>
+        <p className="py-2 text-gray-400">{t('billSplit.alreadyPaid')}</p>
       )}
       <Dialog
         open={open}
@@ -129,12 +132,12 @@ const BillSplit = ({ expenseData: initialExpense, splitData }: BillSplitProp) =>
               </Grid>
               <Grid item>
                 <Typography variant="body1" color="textSecondary">
-                  Category: {expenseData.category}
+                  {t('billSplit.category', { category: expenseData.category })}
                 </Typography>
               </Grid>
             </Grid>
             <Typography variant="body1" color="textSecondary">
-              Amount: Rs {expenseData.amount}
+              {t('billSplit.amount', { amount: expenseData.amount })}
             </Typography>
           </div>
         </DialogTitle>
@@ -149,8 +152,8 @@ const BillSplit = ({ expenseData: initialExpense, splitData }: BillSplitProp) =>
                 </ListItemAvatar>
                 <ListItemText
                   primary={member.name}
-                  secondary={`Amount: Rs ${member.amount} - ${
-                    member.paid ? "Paid" : "Unpaid"
+                  secondary={`${t('billSplit.amountLabel', { amount: member.amount })} - ${
+                    member.paid ? t('billSplit.paid') : t('billSplit.unpaid')
                   }`}
                 />
                 {expenseData.createdBy === user?.uid && !member.paid && (
@@ -158,7 +161,7 @@ const BillSplit = ({ expenseData: initialExpense, splitData }: BillSplitProp) =>
                     onClick={() => markPaid(member.userId)}
                     className="bg-red"
                   >
-                    Mark Paid
+                    {t('billSplit.markPaid')}
                   </Button>
                 )}
               </ListItem>
@@ -166,7 +169,7 @@ const BillSplit = ({ expenseData: initialExpense, splitData }: BillSplitProp) =>
           </List>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={handleClose}>{t('billSplit.close')}</Button>
         </DialogActions>
       </Dialog>
     </div>

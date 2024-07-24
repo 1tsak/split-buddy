@@ -18,8 +18,10 @@ import {
   LineChartGroupType,
   PieChartDataType,
 } from "../utils/types";
+import { useTranslation } from "react-i18next";
 
 const DashboardPage: React.FC = () => {
+  const { t } = useTranslation(); // Add translation hook
   const [user, _] = useAuthState(auth);
   const [loading, setLoading] = useState<boolean>(true);
   const [amt, setAmt] = useState<number>(0);
@@ -30,12 +32,13 @@ const DashboardPage: React.FC = () => {
   const [runWalkthrough, setRunWalkthrough] = useState(false); // State for Walkthrough
 
   const userId = user?.uid as string;
+
   const fetchData = () => {
     Promise.all([
       getUserTotalPaidAmt(userId),
       getUserAmtData(userId),
       getUserRecentBills(userId),
-      getDataForLineChart(userId,null),
+      getDataForLineChart(userId, null),
     ]).then((values) => {
       setAmt(values[0]);
       setPieChartData(values[1]);
@@ -82,23 +85,26 @@ const DashboardPage: React.FC = () => {
       <div className="overflow-scroll p-4 max-h-[90vh]">
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center px-2 step-1">
-            <h2 className="text-xl font-semibold">User Dashboard</h2>
-            {/* <Button className=" text-main border-main p-1" variant="outlined">
-              More
-            </Button> */}
+            <Typography variant="h6" fontWeight="bold">
+              {t('dashboard.userDashboard')}
+            </Typography>
           </div>
           <div>
             <HeroComponent amt={amt} pieChartData={pieChartData} />
           </div>
           <div>
-            <h2 className="text-xl font-semibold mt-2">Recent Bills</h2>
+            <Typography variant="h6" fontWeight="bold" mt={2}>
+              {t('dashboard.recentBills')}
+            </Typography>
             <DCardContainer bills={bills} />
           </div>
         </div>
         <div className="">
           <div className="flex justify-between mt-2">
             <div>
-              <h2 className="text-xl font-semibold mt-2">Overview</h2>
+              <Typography variant="h6" fontWeight="bold" mt={2}>
+                {t('dashboard.overview')}
+              </Typography>
             </div>
             {/* <div>put buttons</div> */}
           </div>

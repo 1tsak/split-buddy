@@ -9,6 +9,7 @@ import { MdOutlinePeopleAlt } from "react-icons/md";
 import { createNewGroup } from "../services/groupService";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../firebaseConfig";
+import { useTranslation } from "react-i18next";
 
 interface INewGroupModalProps {
   fetchData: () => void;
@@ -18,6 +19,7 @@ export default function NewGroupModal(props: INewGroupModalProps) {
   const { fetchData } = props;
   const [open, setOpen] = React.useState(false);
   const [user, loading] = useAuthState(auth);
+  const { t } = useTranslation();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -31,11 +33,11 @@ export default function NewGroupModal(props: INewGroupModalProps) {
     <React.Fragment>
       <button
         type="button"
-        className="text-center flex  items-center gap-2 bg-main text-white py-2 px-3 rounded-sm"
+        className="text-center flex items-center gap-2 bg-main text-white py-2 px-3 rounded-sm"
         onClick={handleClickOpen}
       >
         <MdOutlinePeopleAlt className="text-lg" />
-        <span className="font-semibold ">Add a Group</span>
+        <span className="font-semibold">{t('addGroup')}</span>
       </button>
       <Dialog
         open={open}
@@ -49,13 +51,13 @@ export default function NewGroupModal(props: INewGroupModalProps) {
             const formJson = Object.fromEntries((formData as any).entries());
             const groupName = formJson.groupName;
             const groupDescription = formJson.groupDescription;
-            await createNewGroup(groupName,groupDescription, user?.uid as string);
+            await createNewGroup(groupName, groupDescription, user?.uid as string);
             await fetchData();
             handleClose();
           },
         }}
       >
-        <DialogTitle>Create New Group</DialogTitle>
+        <DialogTitle>{t('createNewGroup')}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -63,7 +65,7 @@ export default function NewGroupModal(props: INewGroupModalProps) {
             margin="dense"
             id="name"
             name="groupName"
-            label="Enter New Group Name"
+            label={t('groupName')}
             type="text"
             fullWidth
           />
@@ -72,14 +74,14 @@ export default function NewGroupModal(props: INewGroupModalProps) {
             margin="dense"
             id="description"
             name="groupDescription"
-            label="Enter Description"
+            label={t('groupDescription')}
             type="text"
             fullWidth
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Create</Button>
+          <Button onClick={handleClose}>{t('cancel')}</Button>
+          <Button type="submit">{t('create')}</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

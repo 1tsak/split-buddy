@@ -15,12 +15,14 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { addBillImage, uploadImage } from "../../../services/expenseService";
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const BillDetails = () => {
   const { expenses, groupData,fetchExpensesData } = useGroup();
   const { billId } = useParams<{ billId: string }>();
   const [expense, setExpense] = useState<Expense | undefined>(undefined);
   const auth = getAuth();
+  const { t } = useTranslation(); // Add translation hook
 
   const [open, setOpen] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
@@ -59,7 +61,7 @@ const BillDetails = () => {
   return (
     <div className="p-5 h-full w-full flex flex-col">
       <h1 className="text-center text-lg font-semibold text-gray-600">
-        {groupData?.name}
+        {groupData?.name || t('billDetails.groupNamePlaceholder')}
       </h1>
       <div className="grid">
         {expense &&
