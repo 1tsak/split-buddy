@@ -7,7 +7,7 @@ import { Expense } from "../../../utils/types";
 import { Box, CircularProgress } from "@mui/material";
 import { format, isToday, isYesterday } from "date-fns";
 import { CiChat2 } from "react-icons/ci";
-
+import Toast from "../../../components/Toast";
 import {
   Button,
   Dialog,
@@ -66,7 +66,32 @@ const Sider = () => {
   const handleClose = () => {
     setOpen(false);
   };
+  const [toast, setToast] = useState<{
+    type: 'success' | 'error' | 'info' | 'warning';
+    message: string;
+    show: boolean;
+  }>({
+    type: 'info',
+    message: '',
+    show: false,
+  });
 
+  const triggerToast = (
+    type: 'success' | 'error' | 'info' | 'warning',
+    message: string
+  ) => {
+    if (message === "") {
+      return;
+    }
+    setToast({
+      type,
+      message,
+      show: true,
+    });
+    setTimeout(() => {
+      setToast((prev) => ({ ...prev, show: false }));
+    }, 3000);
+  };
   const handleDelete = async () => {
     if (groupData && groupData.id) {
       setDeletingOrLeaving(true);
@@ -74,9 +99,10 @@ const Sider = () => {
       setDeletingOrLeaving(false);
     }
     setOpen(false);
-
-    alert("Group Deleted Succefully");
-    navigate("/group");
+    triggerToast("success","Group Deleted Succefully");
+    setTimeout(()=>{
+      navigate("/group");
+    },700);
   };
 
   const handleLeave = async () => {
@@ -86,8 +112,10 @@ const Sider = () => {
       setDeletingOrLeaving(false);
     }
     setOpen(false);
-    alert("Group left !! You are no longer member of this group.");
-    navigate("/group");
+    triggerToast("success","Group left !! You are no longer member of this group.");
+    setTimeout(()=>{
+      navigate("/group");
+    },700);
   };
 
   return (
@@ -229,6 +257,12 @@ const Sider = () => {
           </ul>
         )}
       </div>
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        show={toast.show}
+        onClose={() => setToast((prev) => ({ ...prev, show: false }))}
+      />
     </div>
   );
 };
