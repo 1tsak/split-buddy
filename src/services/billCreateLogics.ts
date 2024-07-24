@@ -4,7 +4,7 @@ export type Split = {
     paid: boolean;
     checked: boolean;
 };
-export const validateBill = (splits: Split[], amount: number) => {
+export const validateBill = (splits: Split[] | [], amount: number) => {
     if (!splits) {
       return { success: false, message: `Error While Generating Bill` };
     }

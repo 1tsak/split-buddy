@@ -70,6 +70,19 @@ export const addBillImage = async (url : string, expenseId: string)=>{
     throw new Error("Error adding image ");
   }
 }
+export const updateExpenseAmounts =async (expenseId:string,updatedSplits:Split[])=>{
+  try {
+    const expenseDocRef = doc(db, "expenses", expenseId);
+    await updateDoc(expenseDocRef, {
+      splits:updatedSplits,
+      updatedAt: serverTimestamp(),
+    });
+
+  } catch (error) {
+    console.error("Error adding expense img: ", error);
+    throw new Error("Error adding image ");
+  }
+}
 export const markBillPaid = async (
   expenseId: string,
   updatedSplits: Split[]
