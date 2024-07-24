@@ -170,7 +170,7 @@ const MembersList = () => {
               className="p-2 flex items-center  border border-slate-300 gap-2 rounded"
             >
               {member.displayName}
-              {member.id !== user?.uid && (
+              {groupData && groupData?.createdBy === user?.uid && member.id !== user?.uid &&  (
                 <RiDeleteBin6Line
                   onClick={() => deleteMember(member.id)}
                   className="cursor-pointer"
