@@ -1,6 +1,6 @@
 import { Box, CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { addMember, removeMembers } from "../../services/groupService.ts";
+import { addMember, getGroupMemberByGroupId, removeMembers } from "../../services/groupService.ts";
 import { getUser, getUserByEmail } from "../../services/authService.ts";
 
 import Button from "@mui/material/Button";
@@ -113,19 +113,10 @@ const MembersList = () => {
 
   const getMembers = async () => {
     setLoading(true);
-    const members: User[] = [];
-    if (groupData?.members) {
-      for (const userId of groupData.members) {
-        try {
-          const user = await getUser(userId);
-          if (user !== null) {
-            members.push(user);
-          }
-        } catch (error) {
-          console.error(`Error fetching user with ID ${userId}:`, error);
-        }
-      }
+    if(!groupData || !groupData.id){
+      return ;
     }
+    const members: User[] = await getGroupMemberByGroupId(groupData?.id);
     setMembers(members);
     setLoading(false);
   };

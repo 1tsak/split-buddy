@@ -1,3 +1,5 @@
+import { User } from "../types/types";
+
 export type Split = {
     userId: string;
     amount: number;
@@ -32,3 +34,45 @@ export const validateBill = (splits: Split[] | [], amount: number) => {
     }
     return count;
   };
+  export const splitEqually = (splits: Split[], amount:number, groupMember:User[]) => {
+    const splitsMember = countMember(splits);
+    let remainingAmount = amount;
+    const updatedSplits: Split[] = groupMember.map((user, index) => {
+      let amount = splits[index]?.checked
+        ? splitsMember > 0
+          ? parseFloat((remainingAmount / (splitsMember || 1)).toFixed(2))
+          : 0
+        : 0;
+      return {
+        userId: user.id,
+        amount: amount,
+        paid: false,
+        checked: splits[index]?.checked || false,
+      } as Split;
+    });
+   return updatedSplits;
+  };
+
+
+  export const generateActualExpense = (splits: Split[], custom:boolean, customBill:number[], creatingId:string| undefined)=>{
+    const ActualSplit: any = splits
+      .map((split, index) => {
+        const updatedSplit = {
+          userId: split.userId,
+          amount: !split.checked
+            ? 0
+            : !custom
+            ? split.amount
+            : Number(customBill[index]),
+          paid:
+            split.userId === creatingId || !split.checked
+              ? true
+              : split.paid || false,
+        };
+        return updatedSplit as Split;
+      })
+      .filter(Boolean);
+
+
+      return ActualSplit;
+  }
