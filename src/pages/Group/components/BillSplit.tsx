@@ -36,7 +36,7 @@ const validateBill = (splits: any, amount: number) => {
   if (!splits) {
     return { success: false, message: `Error While Generating Bill` };
   }
-  const totalCustomAmount = splits.reduce((acc, split) => {
+  const totalCustomAmount = splits.reduce((acc:any, split:any) => {
     return acc + split.amount;
   }, 0);
   if (Math.ceil(totalCustomAmount) === Number(amount)) {
@@ -146,7 +146,7 @@ const BillSplit = ({
     const validation = validateBill(updatedSplits, Number(expenseData.amount));
     if (!validation.success) {
       // console.error(validation.message);
-      handleAddError(validation?.message);
+      if(validation.message) handleAddError(validation?.message);
       setEditingAmounts({});
       return;
     }

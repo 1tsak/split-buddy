@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getGroupById, getGroups } from "../services/groupService";
+import { getGroupById, getGroupMemberByGroupId,getGroups } from "../services/groupService";
 import { getAuth } from "firebase/auth";
 import { Group, User } from "../utils/types";
 import { getUser } from "../services/authService";
@@ -10,7 +10,7 @@ import useGroup from "../hooks/useGroup";
 import { BsToggle2On, BsToggle2Off } from "react-icons/bs";
 import { Box, CircularProgress } from "@mui/material";
 import { FaPlus } from "react-icons/fa";
-import { Split, validateBill,countMember } from "../services/billCreateLogics";
+import { Split, validateBill,countMember } from "../utils/billCreateLogics";
 import { useTranslation } from "react-i18next";
 
 const auth = getAuth();
@@ -94,27 +94,20 @@ const BillCreation = () => {
       splits: splits,
     }));
   };
-  const getGroupMember = async (groupId: string) => {
-    try {
-      const res = await getGroupById(groupId);
-      if (!res) {
-        return;
-      }
-      const userPromises = res.members.map((_id) => getUser(_id));
-      const users = await Promise.all(userPromises);
 
-      const validUsers = users.filter((user): user is User => user !== null);
+  const getGroupMember = async (groupId: string):Promise<void> => {
+    try {
+      const validUsers = await getGroupMemberByGroupId(groupId);
       const arr = Array(validUsers.length).fill(0);
-      if (arr) {
-        setCustomBill(arr);
-      }
+      if(arr) setCustomBill(arr);
       setGroupMember(validUsers);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching group members:", error);
+    } finally {
       setLoading(false);
     }
   };
+  
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     if (name === "amount" && parseFloat(value) <= 0) {
@@ -268,7 +261,6 @@ const BillCreation = () => {
           return;
         }
         const data = await getUser(auth?.currentUser?.uid);
-
         if (!data) {
           return;
         }
@@ -317,6 +309,7 @@ const BillCreation = () => {
     }
     getGroupMember(groupId);
   }, [groupData, userGroups]);
+  
   return (
     <div className="step5">
       <button

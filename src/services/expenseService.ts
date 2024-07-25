@@ -79,8 +79,8 @@ export const updateExpenseAmounts =async (expenseId:string,updatedSplits:Split[]
     });
 
   } catch (error) {
-    console.error("Error adding expense img: ", error);
-    throw new Error("Error adding image ");
+    console.error("Error updating expense: ", error);
+    throw new Error("Error updating expense. ");
   }
 }
 export const markBillPaid = async (
