@@ -5,6 +5,7 @@ import {
   Split,
   validateBill,
   splitEqually,
+  generateActualExpense,
 } from "../../utils/billCreateLogics";
 import {
   getGroupMemberByGroupId,
@@ -179,24 +180,10 @@ const BillCreation = () => {
       setAddBillLoading(false);
       return;
     }
-
-    const ActualSplit: any = formData.splits
-      .map((split, index) => {
-        const updatedSplit = {
-          userId: split.userId,
-          amount: !split.checked
-            ? 0
-            : !custom
-            ? split.amount
-            : Number(customBill[index]),
-          paid:
-            split.userId === auth.currentUser?.uid || !split.checked
-              ? true
-              : split.paid || false,
-        };
-        return updatedSplit as Split;
-      })
-      .filter(Boolean);
+    if(!auth?.currentUser?.uid){
+      return ;
+    }
+    const ActualSplit = generateActualExpense(formData.splits,custom,customBill,auth.currentUser?.uid);
 
     if (!ActualSplit) {
       setAddBillLoading(false);

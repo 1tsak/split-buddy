@@ -52,3 +52,27 @@ export const validateBill = (splits: Split[] | [], amount: number) => {
     });
    return updatedSplits;
   };
+
+
+  export const generateActualExpense = (splits: Split[], custom:boolean, customBill:number[], creatingId:string| undefined)=>{
+    const ActualSplit: any = splits
+      .map((split, index) => {
+        const updatedSplit = {
+          userId: split.userId,
+          amount: !split.checked
+            ? 0
+            : !custom
+            ? split.amount
+            : Number(customBill[index]),
+          paid:
+            split.userId === creatingId || !split.checked
+              ? true
+              : split.paid || false,
+        };
+        return updatedSplit as Split;
+      })
+      .filter(Boolean);
+
+
+      return ActualSplit;
+  }
