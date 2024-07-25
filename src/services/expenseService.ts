@@ -1,3 +1,4 @@
+import { Expense, Split } from "../types/types";
 import {
   addDoc,
   collection,
@@ -9,9 +10,8 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { Expense, Split } from "../utils/types";
 import { db, storage } from "../firebaseConfig";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 export const fetchExpenses = async (groupId: string): Promise<Expense[]> => {
   const expensesCollection = collection(db, "expenses");

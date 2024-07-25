@@ -1,5 +1,5 @@
 // utils/calculateExpenses.ts
-import { Expense } from "./types";
+import { Expense } from "../types/types";
 
 export const calculateTotalExpenses = (expenses: Expense[]) => {
   return expenses.reduce((total, expense) => total + expense.amount, 0);

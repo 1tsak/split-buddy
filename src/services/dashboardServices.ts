@@ -1,16 +1,4 @@
 import {
-  and,
-  collection,
-  getDocs,
-  limit,
-  or,
-  orderBy,
-  query,
-  Timestamp,
-  where,
-} from "firebase/firestore";
-import { db } from "../firebaseConfig";
-import {
   DCardType,
   Expense,
   LineChartGroupType,
@@ -18,9 +6,22 @@ import {
   PieChartDataType,
   TransactionCardType,
   TransactionGroupType,
-} from "../utils/types";
-import moment from "moment";
+} from "../types/types";
+import {
+  Timestamp,
+  and,
+  collection,
+  getDocs,
+  limit,
+  or,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
+
 import { DateRange } from "rsuite/esm/DateRangePicker";
+import { db } from "../firebaseConfig";
+import moment from "moment";
 
 const dbCollection = {
   expenses: collection(db, "expenses"),

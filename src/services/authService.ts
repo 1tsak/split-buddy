@@ -1,7 +1,8 @@
 // write your firebase services here!
 
-import { User } from "../utils/types";
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+
+import { User } from "../types/types";
 import { db } from "../firebaseConfig";
 
 export const getUser = async (userId: string): Promise<User | null> => {

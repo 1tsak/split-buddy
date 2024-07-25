@@ -1,11 +1,12 @@
-import React, { createContext, useEffect, useState } from "react";
 import {
   Expense,
   ExpenseMember,
   Group,
   GroupContextType,
   Split,
-} from "../utils/types";
+} from "../types/types";
+import React, { createContext, useEffect, useState } from "react";
+
 import { fetchExpenses } from "../services/expenseService";
 import { getGroupById } from "../services/groupService";
 import { getUser } from "../services/authService";

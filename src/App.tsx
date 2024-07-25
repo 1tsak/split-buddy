@@ -1,20 +1,23 @@
-import { Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import SignUpPage from "./pages/SignUpPage";
-import DashboardPage from "./pages/DashboardPage";
-import ProtectedRoute from "./components/ProtectedRoute";
-import LayoutWrapper from "./components/LayoutWrapper";
-import GroupPage from "./pages/Group/GroupPage";
+import 'rsuite/dist/rsuite.min.css';
+
+import { Route, Routes } from "react-router-dom";
+
+import BillDetails from "./components/Bill/BillDetails";
+import Chat from "./components/Group/Chat";
+import DashboardPage from "./pages/Dashboard/DashboardPage";
+import GroupHome from "./pages/Group/GroupHomePage";
+import GroupHomePage from './pages/Group/GroupHomePage';
+import GroupLayout from './layouts/GroupLayout';
 import GroupProvider from "./context/GroupProvider";
-import HomePage from "./pages/HomePage";
-import UserProfile from './components/UserProfile';
-import GroupHomePage from "./pages/GroupHomePage";
-import GroupHome from "./pages/Group/components/GroupHome";
-import BillDetails from "./pages/Group/components/BillDetails";
-import RedirectToDashboard from "./components/RedirectToDashboard";
-import NotificationPage from "./components/NotificationPage";
-import Chat from "./pages/Group/components/Chat";
-import 'rsuite/dist/rsuite.min.css'; 
+import GroupsPage from './pages/Group/GroupsPage';
+import HomePage from './pages/Home/HomePage';
+import LayoutWrapper from "./layouts/LayoutWrapper";
+import LoginPage from "./pages/Login/LoginPage";
+import NotificationPage from "./components/Notification/NotificationPage";
+import ProtectedRoute from "./components/Auth/ProtectedRoute";
+import RedirectToDashboard from "./components/Auth/RedirectToDashboard";
+import SignUpPage from "./pages/Signup/SignUpPage";
+import UserProfile from './components/Profile/UserProfile';
 import { requestPermission } from "./services/notiService";
 
 requestPermission()
@@ -51,12 +54,12 @@ function App() {
           <Route path="/profile" element={<UserProfile />} />
 
           <Route path="/notifications" element={<NotificationPage />} />
-          <Route path="/group/:groupId" element={<GroupPage />}>
+          <Route path="/group/:groupId" element={<GroupLayout />}>
             <Route index element={<GroupHome />} />
             <Route path="bill/:billId" element={<BillDetails />} />
             <Route path="chat" element={<Chat />} />
           </Route>
-          <Route path="/group" element={<GroupHomePage />} />
+          <Route path="/group" element={<GroupsPage />} />
         </Route>
       </Route>
       <Route path="/" element={<HomePage />} />

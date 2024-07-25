@@ -1,8 +1,9 @@
 // Write your firebase services here!
 
+import { addDoc, collection, doc, getDoc, getDocs, query, where, } from "firebase/firestore";
+
+import { Notification } from "../types/types";
 import { db } from "../firebaseConfig"; // Adjust the import if necessary
-import { collection, addDoc, query, where, getDoc,doc,getDocs, } from "firebase/firestore";
-import { Notification } from "../utils/types";
 type AddNotificationProp = {
   title: string;
   message: string;

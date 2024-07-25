@@ -1,5 +1,6 @@
 // write your firebase services here!
 
+import { Group as IGroup, User } from "../types/types";
 import {
   arrayRemove,
   arrayUnion,
@@ -15,9 +16,9 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
+
+import { User as IUser } from "../types/types";
 import { db } from "../firebaseConfig";
-import { Group as IGroup, User } from "../utils/types";
-import { User as IUser } from "../utils/types";
 import { getUser } from "./authService";
 import { ref } from "firebase/storage";
 
