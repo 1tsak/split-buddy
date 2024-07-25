@@ -161,6 +161,18 @@ const leaveGroup = async(groupId: string, userId: string) =>{
 
 }
 
+
+export const getGroupMemberByGroupId = async (groupId: string): Promise<User[]> => {
+  try {
+    const group: IGroup = await getGroup(groupId);
+    return group.members as unknown as User[];
+  } catch (error) {
+    console.error(`Error fetching group by ID ${groupId}:`, error);
+    return [];
+  }
+};
+
+
 const getGroupMembers = async (
   groupId: string,
   userId: string
