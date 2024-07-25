@@ -1,12 +1,12 @@
 import { CiMoneyBill } from "react-icons/ci";
-import { DCardType } from "../../types/types";
 import { FC } from "react";
+import { RecentBillCardType } from "../../types/types";
 
-interface IDCardProps{
-  data:DCardType;
+interface IRecentBillCardProps{
+  data:RecentBillCardType;
 }
 
-const DCard:FC<IDCardProps> = ({data}) => {
+const RecentBillCard:FC<IRecentBillCardProps> = ({data}) => {
   const {amount,title} = data;
   return (
     <div className='flex flex-col items-center justify-center p-8 pr-10 gap-2 rounded-xl bg-card-color'>
@@ -21,4 +21,4 @@ const DCard:FC<IDCardProps> = ({data}) => {
   )
 }
 
-export default DCard
+export default RecentBillCard

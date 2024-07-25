@@ -1,9 +1,9 @@
 import {
-  DCardType,
   Expense,
   LineChartGroupType,
   LineChartType,
   PieChartDataType,
+  RecentBillCardType,
   TransactionCardType,
   TransactionGroupType,
 } from "../types/types";
@@ -75,7 +75,7 @@ const getUserAmtData = async (userId: string): Promise<PieChartDataType[]> => {
   return data;
 };
 
-const getUserRecentBills = async (userId: string): Promise<DCardType[]> => {
+const getUserRecentBills = async (userId: string): Promise<RecentBillCardType[]> => {
   // Update query to order by updatedAt or createdAt field and limit to the most recent 4
   const query1 = query(
     dbCollection.expenses,
@@ -84,7 +84,7 @@ const getUserRecentBills = async (userId: string): Promise<DCardType[]> => {
     limit(4)
   );
 
-  const data: DCardType[] = [];
+  const data: RecentBillCardType[] = [];
   const snapShot = await getDocs(query1);
   snapShot.forEach((expense) => {
     const exp: Expense = expense.data() as Expense;

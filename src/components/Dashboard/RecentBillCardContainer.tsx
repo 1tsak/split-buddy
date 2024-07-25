@@ -1,15 +1,15 @@
 import { Box, CircularProgress } from "@mui/material";
 
-import DCard from "./DCard";
-import { DCardType } from "../../types/types";
 import { FC } from "react";
+import RecentBillCard from "./RecentBillCard";
+import { RecentBillCardType } from "../../types/types";
 import { useTranslation } from "react-i18next";
 
-interface DcardContainerProps {
-  bills: DCardType[];
+interface RecentBillCardContainerProps {
+  bills: RecentBillCardType[];
 }
 
-const DCardContainer: FC<DcardContainerProps> = ({ bills }) => {
+const RecentBillCardContainer: FC<RecentBillCardContainerProps> = ({ bills }) => {
   const { t } = useTranslation();
 
   if (bills && bills.length === 0) {
@@ -25,7 +25,7 @@ const DCardContainer: FC<DcardContainerProps> = ({ bills }) => {
       {bills ? (
         <div className="grid grid-cols-2 min-h-8 lg:grid-cols-4 gap-4">
           {bills.map((bill, i) => (
-            <DCard data={bill} key={i} />
+            <RecentBillCard data={bill} key={i} />
           ))}
         </div>
       ) : (
@@ -44,4 +44,4 @@ const DCardContainer: FC<DcardContainerProps> = ({ bills }) => {
   );
 };
 
-export default DCardContainer;
+export default RecentBillCardContainer;

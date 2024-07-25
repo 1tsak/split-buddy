@@ -1,5 +1,5 @@
-import { PieValueType } from "@mui/x-charts";
 import { MakeOptional } from "@mui/x-charts/internals";
+import { PieValueType } from "@mui/x-charts";
 import { Timestamp } from "firebase/firestore";
 
 export interface User {
@@ -74,7 +74,7 @@ export interface PieChartDataType extends MakeOptional<PieValueType, "id"> {
 
 }
 
-export interface DCardType {
+export interface RecentBillCardType {
   title: string;
   amount: number | string;
   grpId?: string;

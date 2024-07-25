@@ -1,8 +1,8 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
 import {
-  DCardType,
   LineChartGroupType,
   PieChartDataType,
+  RecentBillCardType,
 } from "../../types/types";
 import React, { useEffect, useState } from "react";
 import {
@@ -12,9 +12,9 @@ import {
   getUserTotalPaidAmt,
 } from "../../services/dashboardServices";
 
-import DCardContainer from "../../components/Dashboard/DCardContainer";
 import DashboardLineChart from "../../components/Dashboard/DashboardLineChart";
 import HeroComponent from "../../components/Home/HeroComponent";
+import RecentBillCardContainer from "../../components/Dashboard/RecentBillCardContainer";
 import TransactionContainer from "../../components/Dashboard/TransactionContainer";
 import Walkthrough from "../../components/Common/Walkthrough";
 import { auth } from "../../firebaseConfig";
@@ -27,7 +27,7 @@ const DashboardPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [amt, setAmt] = useState<number>(0);
   const [pieChartData, setPieChartData] = useState<PieChartDataType[]>([]);
-  const [bills, setBills] = useState<DCardType[]>([]);
+  const [bills, setBills] = useState<RecentBillCardType[]>([]);
   // const [chartData, setChartData] = useState<LineChartGroupType>();
 
   const [runWalkthrough, setRunWalkthrough] = useState(false); // State for Walkthrough
@@ -97,7 +97,7 @@ const DashboardPage: React.FC = () => {
             <Typography variant="h6" fontWeight="bold" mt={2}>
               {t('dashboard.recentBills')}
             </Typography>
-            <DCardContainer bills={bills} />
+            <RecentBillCardContainer bills={bills} />
           </div>
         </div>
         <div className="">
