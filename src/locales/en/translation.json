@@ -25,21 +25,35 @@
         "loading": "Loading...",
         "walkthroughFinished": "Walkthrough finished"
       },
-      "signUpForm": {
-        "title": "Sign Up",
-        "description": "Create your account. It's free and only takes a minute.",
-        "firstNamePlaceholder": "First Name",
-        "lastNamePlaceholder": "Last Name",
-        "emailPlaceholder": "Email",
-        "passwordPlaceholder": "Password",
-        "confirmPasswordPlaceholder": "Confirm Password",
-        "passwordError": "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.",
-        "passwordMismatchError": "Passwords do not match",
-        "signUpButton": "Sign Up",
-        "signingUpButton": "Signing up...",
-        "googleSignInButton": "Sign in with Google",
-        "githubSignInButton": "Sign in with GitHub"
-      },
+      
+        "signUpForm": {
+          "title": "Create an Account",
+          "description": "Join us today. It’s quick and easy.",
+          "firstNamePlaceholder": "First Name",
+          "lastNamePlaceholder": "Last Name",
+          "emailPlaceholder": "Email Address",
+          "passwordPlaceholder": "Password",
+          "confirmPasswordPlaceholder": "Confirm Password",
+          "signUpButton": "Sign Up",
+          "signingUpButton": "Signing Up...",
+          "firstNameError": "First name is required.",
+          "lastNameError": "Last name is required.",
+          "emailError": "Email is required.",
+          "passwordError": "Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.",
+          "confirmPasswordError": "Please confirm your password.",
+          "passwordMismatchError": "Passwords do not match."
+        },
+        "logInForm": {
+          "welcome_back": "Welcome Back",
+          "please_log_in": "Please log in to your account",
+          "email": "Email Address",
+          "password": "Password",
+          "log_in": "Log In",
+          "logging_in": "Logging In...",
+          "forgot_password": "Forgot your password?"
+        },
+      
+      
       "button": {
     "splitBill": "Split a Bill",
     "cancel": "Cancel",

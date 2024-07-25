@@ -25,21 +25,32 @@
       "loading": "लोड हो रहा है...",
       "walkthroughFinished": "वॉकथ्रू समाप्त"
     },
-    "signUpForm": {
-      "title": "साइन अप",
-      "description": "अपना खाता बनाएं। यह मुफ्त है और इसमें केवल एक मिनट लगता है।",
-      "firstNamePlaceholder": "पहला नाम",
-      "lastNamePlaceholder": "अंतिम नाम",
-      "emailPlaceholder": "ईमेल",
-      "passwordPlaceholder": "पासवर्ड",
-      "confirmPasswordPlaceholder": "पासवर्ड की पुष्टि करें",
-      "passwordError": "पासवर्ड कम से कम 8 अक्षरों लंबा होना चाहिए और इसमें अपरकेस, लोअरकेस, नंबर और विशेष पात्र शामिल होना चाहिए।",
-      "passwordMismatchError": "पासवर्ड मेल नहीं खाते",
-      "signUpButton": "साइन अप करें",
-      "signingUpButton": "साइन अप हो रहा है...",
-      "googleSignInButton": "गूगल के साथ साइन इन करें",
-      "githubSignInButton": "गिटहब के साथ साइन इन करें"
-    },
+   "signUpForm": {
+    "title": "एक खाता बनाएँ",
+    "description": "आज ही हमसे जुड़ें। यह तेज़ और आसान है।",
+    "firstNamePlaceholder": "पहला नाम",
+    "lastNamePlaceholder": "अंतिम नाम",
+    "emailPlaceholder": "ईमेल पता",
+    "passwordPlaceholder": "पासवर्ड",
+    "confirmPasswordPlaceholder": "पासवर्ड की पुष्टि करें",
+    "signUpButton": "साइन अप करें",
+    "signingUpButton": "साइन अप कर रहे हैं...",
+    "firstNameError": "पहला नाम आवश्यक है।",
+    "lastNameError": "अंतिम नाम आवश्यक है।",
+    "emailError": "ईमेल आवश्यक है।",
+    "passwordError": "पासवर्ड कम से कम 8 वर्ण लंबा होना चाहिए और इसमें एक बड़ा अक्षर, एक छोटा अक्षर, एक संख्या और एक विशेष वर्ण शामिल होना चाहिए।",
+    "confirmPasswordError": "कृपया अपने पासवर्ड की पुष्टि करें।",
+    "passwordMismatchError": "पासवर्ड मेल नहीं खाते।"
+  },
+  "logInForm": {
+    "welcome_back": "वापसी पर स्वागत है",
+    "please_log_in": "कृपया अपने खाते में लॉग इन करें",
+    "email": "ईमेल पता",
+    "password": "पासवर्ड",
+    "log_in": "लॉग इन करें",
+    "logging_in": "लॉग इन हो रहा है...",
+    "forgot_password": "क्या आप अपना पासवर्ड भूल गए?"
+  },
     "button": {
       "splitBill": "बिल विभाजित करें",
       "cancel": "रद्द करें",
