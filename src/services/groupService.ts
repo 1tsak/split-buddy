@@ -21,6 +21,7 @@ import { User as IUser } from "../types/types";
 import { db } from "../firebaseConfig";
 import { getUser } from "./authService";
 import { ref } from "firebase/storage";
+import { use } from "i18next";
 
 export const getGroupById = async (groupId: string): Promise<IGroup | null> => {
   const groupDocRef = doc(db, "groups", groupId);
@@ -165,7 +166,12 @@ const leaveGroup = async(groupId: string, userId: string) =>{
 export const getGroupMemberByGroupId = async (groupId: string): Promise<User[]> => {
   try {
     const group: IGroup = await getGroup(groupId);
-    return group.members as unknown as User[];
+    const userdetail = group.members.map((userid) => {
+      return getUser(userid);
+    });
+    const groupMember:any = await Promise.all(userdetail);
+    if(!groupMember) return [];
+    else return groupMember;
   } catch (error) {
     console.error(`Error fetching group by ID ${groupId}:`, error);
     return [];

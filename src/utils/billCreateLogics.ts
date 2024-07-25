@@ -1,3 +1,5 @@
+import { User } from "../types/types";
+
 export type Split = {
     userId: string;
     amount: number;
@@ -31,4 +33,22 @@ export const validateBill = (splits: Split[] | [], amount: number) => {
       if (splits[i].checked) count++;
     }
     return count;
+  };
+  export const splitEqually = (splits: Split[], amount:number, groupMember:User[]) => {
+    const splitsMember = countMember(splits);
+    let remainingAmount = amount;
+    const updatedSplits: Split[] = groupMember.map((user, index) => {
+      let amount = splits[index]?.checked
+        ? splitsMember > 0
+          ? parseFloat((remainingAmount / (splitsMember || 1)).toFixed(2))
+          : 0
+        : 0;
+      return {
+        userId: user.id,
+        amount: amount,
+        paid: false,
+        checked: splits[index]?.checked || false,
+      } as Split;
+    });
+   return updatedSplits;
   };

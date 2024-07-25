@@ -1,8 +1,15 @@
 import { Box, CircularProgress } from "@mui/material";
 import { BsToggle2Off, BsToggle2On } from "react-icons/bs";
 import { Group, User } from "../../types/types";
-import { Split, countMember, validateBill } from "../../utils/billCreateLogics";
-import { getGroupById, getGroupMemberByGroupId, getGroups } from "../../services/groupService";
+import {
+  Split,
+  validateBill,
+  splitEqually,
+} from "../../utils/billCreateLogics";
+import {
+  getGroupMemberByGroupId,
+  getGroups,
+} from "../../services/groupService";
 import { useEffect, useState } from "react";
 
 import { FaPlus } from "react-icons/fa";
@@ -73,34 +80,13 @@ const BillCreation = () => {
     setCustomBill([]);
     setCustom(false);
   };
-  
-  const splitEqually = () => {
-    const splitsMember = countMember(formData.splits);
-    let remainingAmount = formData.amount;
-    const splits: Split[] = groupMember.map((user, index) => {
-      let amount = formData.splits[index]?.checked
-        ? splitsMember > 0
-          ? parseFloat((remainingAmount / (splitsMember || 1)).toFixed(2))
-          : 0
-        : 0;
-      return {
-        userId: user.id,
-        amount: amount,
-        paid: false,
-        checked: formData.splits[index]?.checked || false,
-      } as Split;
-    });
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      splits: splits,
-    }));
-  };
 
-  const getGroupMember = async (groupId: string):Promise<void> => {
+  const getGroupMember = async (groupId: string): Promise<void> => {
     try {
       const validUsers = await getGroupMemberByGroupId(groupId);
       const arr = Array(validUsers.length).fill(0);
-      if(arr) setCustomBill(arr);
+      if (arr) setCustomBill(arr);
+      // console.log(validUsers);
       setGroupMember(validUsers);
     } catch (error) {
       console.error("Error fetching group members:", error);
@@ -108,7 +94,7 @@ const BillCreation = () => {
       setLoading(false);
     }
   };
-  
+
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     if (name === "amount" && parseFloat(value) <= 0) {
@@ -153,7 +139,11 @@ const BillCreation = () => {
     });
     setFormData({ ...formData, splits: splits });
     if (!custom) {
-      splitEqually();
+      const split = splitEqually(formData.splits, formData.amount, groupMember);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        splits: split,
+      }));
     }
   };
 
@@ -177,8 +167,6 @@ const BillCreation = () => {
     });
     setCustomBill(billArry);
   };
-
-  
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -236,7 +224,7 @@ const BillCreation = () => {
     try {
       await addExpense(expenseData);
       await notificationService({
-        title: `${userInfo?.displayName} ${t('notification.createdBill')}`,
+        title: `${userInfo?.displayName} ${t("notification.createdBill")}`,
         message: `${expenseData.title} ${expenseData.category}`,
         groupId: expenseData.groupId,
       });
@@ -251,7 +239,11 @@ const BillCreation = () => {
 
   useEffect(() => {
     if (!custom) {
-      splitEqually();
+      const split = splitEqually(formData.splits, formData.amount, groupMember);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        splits: split,
+      }));
     }
   }, [custom, formData.amount]);
 
@@ -298,7 +290,7 @@ const BillCreation = () => {
 
     if (!userGroups) return;
     const groupName = userGroups.find((group) => group.id === groupData.id);
-    
+
     if (groupName) {
       setFormData({
         ...formData,
@@ -310,7 +302,7 @@ const BillCreation = () => {
     }
     getGroupMember(groupId);
   }, [groupData, userGroups]);
-  
+
   return (
     <div className="step5">
       <button
@@ -318,7 +310,7 @@ const BillCreation = () => {
         className="bg-main px-4 py-2 text-sm font-semibold rounded-sm text-white flex items-center gap-2"
       >
         <FaPlus size={16} />
-        {t('button.splitBill')}
+        {t("button.splitBill")}
       </button>
       {open && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
@@ -330,7 +322,7 @@ const BillCreation = () => {
               &times;
             </button>
             <form onSubmit={handleSubmit} className="text-gray-900">
-              <h2 className="text-xl mb-3">{t('form.splitPayment')}</h2>
+              <h2 className="text-xl mb-3">{t("form.splitPayment")}</h2>
               <h4 className="text-lg mb-4 text-red-500">{errorMessage}</h4>
               <div className="mb-4">
                 <input
@@ -338,7 +330,7 @@ const BillCreation = () => {
                   name="title"
                   value={formData.title}
                   onChange={handleChange}
-                  placeholder={t('form.titlePlaceholder')}
+                  placeholder={t("form.titlePlaceholder")}
                   className="w-full px-3 py-2 border rounded"
                   required
                 />
@@ -349,7 +341,7 @@ const BillCreation = () => {
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
-                  placeholder={t('form.descriptionPlaceholder')}
+                  placeholder={t("form.descriptionPlaceholder")}
                   className="w-full px-3 py-2 border rounded"
                   required
                 />
@@ -360,7 +352,7 @@ const BillCreation = () => {
                   name="amount"
                   value={formData.amount}
                   onChange={handleChange}
-                  placeholder={t('form.amountPlaceholder')}
+                  placeholder={t("form.amountPlaceholder")}
                   className="w-full px-3 py-2 border rounded"
                   required
                 />
@@ -372,7 +364,7 @@ const BillCreation = () => {
                   onChange={handleChange}
                   className="w-full px-3 py-2 text-gray-700 border rounded"
                 >
-                  <option value="">{t('form.selectGroup')}</option>
+                  <option value="">{t("form.selectGroup")}</option>
                   {userGroups.length > 0 &&
                     userGroups.map((group: Group, index) => (
                       <option key={index} id={group.id} value={group.name}>
@@ -385,13 +377,13 @@ const BillCreation = () => {
                 <div className="mb-4">
                   <div className="flex justify-between items-center">
                     <span className="block text-left mb-2 text-gray-700">
-                      {t('form.addMembers')}:
+                      {t("form.addMembers")}:
                     </span>
                     <span
                       className="flex gap-1 items-center"
                       onClick={() => setCustom((prev) => !prev)}
                     >
-                      {!custom ? t('form.equal') : t('form.custom')}
+                      {!custom ? t("form.equal") : t("form.custom")}
                       {custom ? (
                         <BsToggle2On className="text-2xl" />
                       ) : (
@@ -434,7 +426,7 @@ const BillCreation = () => {
                                     : customBill[index]
                                 }
                                 onChange={(e) => customBillChange(e, index)}
-                                placeholder={t('form.amountPlaceholder')}
+                                placeholder={t("form.amountPlaceholder")}
                                 disabled={
                                   !formData.splits[index]?.checked || !custom
                                 }
@@ -465,7 +457,7 @@ const BillCreation = () => {
                   onClick={handleClose}
                   className="px-4 py-2 bg-gray-500 text-white rounded"
                 >
-                  {t('button.cancel')}
+                  {t("button.cancel")}
                 </button>
                 <button
                   type="submit"
@@ -480,7 +472,7 @@ const BillCreation = () => {
                     fontSize: "16px",
                   }}
                 >
-                  {t('button.add')}
+                  {t("button.add")}
                   {addBillLoading && (
                     <span style={{ marginLeft: "8px" }}>
                       <CircularProgress size={16} style={{ color: "white" }} />
