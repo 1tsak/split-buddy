@@ -8,18 +8,12 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import {
-  addDoc,
-  collection,
-  doc,
-  onSnapshot,
-  orderBy,
-  query,
-} from "firebase/firestore";
-import { auth, db } from "../../firebaseConfig";
-
+import { getAuth } from "firebase/auth";
 import { useParams } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
+import { getChatMessages, sendMessage } from "../../services/chatService";
+
+const auth = getAuth();
 
 const Chat = () => {
   const { t } = useTranslation();
@@ -31,32 +25,13 @@ const Chat = () => {
   useEffect(() => {
     if (!groupId) return;
 
-    const groupRef = doc(db, "groups", groupId);
-    const chatCollectionRef = collection(groupRef, "chats");
-    const q = query(chatCollectionRef, orderBy("timestamp", "asc"));
-
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const msgs: any = [];
-      querySnapshot.forEach((doc) => {
-        msgs.push({ id: doc.id, ...doc.data() });
-      });
-      setMessages(msgs);
-    });
-
+    const unsubscribe = getChatMessages(groupId, setMessages);
     return () => unsubscribe();
   }, [groupId]);
 
   const handleSendMessage = async () => {
-    if (newMessage.trim() !== "") {
-      const groupRef = doc(db, "groups", groupId);
-      const chatCollectionRef = collection(groupRef, "chats");
-
-      await addDoc(chatCollectionRef, {
-        userId: user?.uid,
-        username: user?.displayName || "Anonymous",
-        message: newMessage,
-        timestamp: new Date(),
-      });
+    if (newMessage.trim() !== "" && groupId) {
+      await sendMessage(groupId, newMessage.trim());
       setNewMessage("");
     }
   };
