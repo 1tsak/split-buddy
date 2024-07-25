@@ -1,0 +1,57 @@
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { RecentBillCardType } from "../../types/types"
+import {  getUserRecentBills, getUserTotalPaidAmt } from "../../services/dashboardServices"
+import {getAuth} from 'firebase/auth'
+import { auth } from "../../firebaseConfig"
+
+
+
+export interface DashboardState {
+    dashBoardState:{
+        amount:number,
+        bills:RecentBillCardType[]
+    }
+    status: 'idle' | 'loading' | 'succeeded' | 'failed',
+}
+
+const initialState:DashboardState={
+    dashBoardState:{
+        amount:0,
+        bills:[]
+    },
+    status:'loading',
+}
+
+export const dashboardSlice = createSlice({
+    name:'dashboardSlice',
+    initialState,
+    reducers:{
+        
+    },extraReducers(builder) {
+        builder.addCase(fetchUserData.pending,(state)=>{
+          
+            state.status = 'loading';
+        }).addCase(fetchUserData.fulfilled,(state,action)=>{
+            state.status = 'succeeded';
+            const {amount,bills} = action.payload;
+            state.dashBoardState.amount = amount;
+            state.dashBoardState.bills = bills
+        }).
+        addCase(fetchUserData.rejected, (state, action) => {
+            state.status = 'failed'
+            
+          })
+    },
+})
+
+export const fetchUserData = createAsyncThunk<{amount:number,bills:RecentBillCardType[]}>('dashboardSlice/fetchUserData',async()=>{
+    const userUid= auth.currentUser?.uid as string;
+    
+    const amount = await getUserTotalPaidAmt(userUid)
+    const bills = await getUserRecentBills(userUid);
+    
+    return {amount,bills}
+}); 
+
+// export const {} = dashboardSlice.actions;
+export default dashboardSlice.reducer
