@@ -87,10 +87,9 @@ const Dialog: React.FC<DialogProps> = ({ isOpen, title, setIsOpen }) => {
                       }`}
                       key={index}
                     >
-                      <div className="flex justify-between w-full">
+                      <div className="flex justify-between gap-4 w-full">
                         <div className="text-md text-gray-600">
-                          {notice.title}
-                          <p className="text-md text-gray-700">{notice.message}</p>
+                          <span >{notice.title} </span> <span className="text-md font-semibold text-gray-700">{notice.message}</span>
                         </div>
                         <p className="text-sm text-gray-400">
                           {moment(notice.createdAt).fromNow()}
