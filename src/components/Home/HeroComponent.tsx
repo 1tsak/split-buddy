@@ -14,6 +14,7 @@ interface IHeroComponetProps {
 const HeroComponent: FC<IHeroComponetProps> = ({ amt, pieChartData }) => {
   const { t } = useTranslation();
 
+  console.log(pieChartData)
 
   return (
     <div className="bg-main rounded-lg h-[32vh] sm:h-[30vh] flex flex-col sm:flex-row overflow-hidden">

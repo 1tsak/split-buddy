@@ -20,37 +20,38 @@ import Walkthrough from "../../components/Common/Walkthrough";
 import { auth } from "../../firebaseConfig";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useTranslation } from "react-i18next";
+import { fetchUserData } from "../../store/features/dashboardSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
 
 const DashboardPage: React.FC = () => {
   const { t } = useTranslation(); // Add translation hook
   const [user, _] = useAuthState(auth);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [amt, setAmt] = useState<number>(0);
-  const [pieChartData, setPieChartData] = useState<PieChartDataType[]>([]);
-  const [bills, setBills] = useState<RecentBillCardType[]>([]);
+  const loading = useAppSelector(state=>state.dashboard.status=='loading');
+  // const [amt, setAmt] = useState<number>(0);
+  // const [pieChartData, setPieChartData] = useState<PieChartDataType[]>([]);
+  // const [bills, setBills] = useState<RecentBillCardType[]>([]);
+  const bills = useAppSelector(state=>state.dashboard.dashBoardState.bills);
+  const amt = useAppSelector(state=>state.dashboard.dashBoardState.amount);
+  const pieChartData = useAppSelector(state=>state.dashboard.dashBoardState.pieChartData)
   // const [chartData, setChartData] = useState<LineChartGroupType>();
 
   const [runWalkthrough, setRunWalkthrough] = useState(false); // State for Walkthrough
 
   const userId = user?.uid as string;
 
-  const fetchData = () => {
-    Promise.all([
-      getUserTotalPaidAmt(userId),
-      getUserAmtData(userId),
-      getUserRecentBills(userId),
-      getDataForLineChart(userId, null),
-    ]).then((values) => {
-      setAmt(values[0]);
-      setPieChartData(values[1]);
-      setBills(values[2]);
-      // setChartData(values[3]);
-      setLoading(false);
-    });
-  };
-
+  // const fetchData = () => {
+  //   Promise.all([
+  //     getUserAmtData(userId),
+  //   ]).then((values) => {
+  //     setPieChartData(values[0]);
+  //     // setChartData(values[3]);
+  //   });
+  // };
+  
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    fetchData();
+    dispatch(fetchUserData())
+    // fetchData();
     const hasShownWalkthrough = localStorage.getItem(`shown${userId}`);
     if (hasShownWalkthrough === userId) {
       setRunWalkthrough(false);
