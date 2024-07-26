@@ -57,7 +57,7 @@ const getUserAmtData = async (userId: string): Promise<PieChartDataType[]> => {
     const splits = (expense.data() as Expense).splits;
     splits.forEach((split) => {
       if (split.userId == userId && split.paid == true) {
-        data.push({ id: Math.random(), value: +split.amount });
+        data.push({ id: Math.random()*10, value: +split.amount });
       }
     });
   });

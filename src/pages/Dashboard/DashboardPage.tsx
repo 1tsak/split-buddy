@@ -28,29 +28,30 @@ const DashboardPage: React.FC = () => {
   const [user, _] = useAuthState(auth);
   const loading = useAppSelector(state=>state.dashboard.status=='loading');
   // const [amt, setAmt] = useState<number>(0);
-  const [pieChartData, setPieChartData] = useState<PieChartDataType[]>([]);
+  // const [pieChartData, setPieChartData] = useState<PieChartDataType[]>([]);
   // const [bills, setBills] = useState<RecentBillCardType[]>([]);
   const bills = useAppSelector(state=>state.dashboard.dashBoardState.bills);
   const amt = useAppSelector(state=>state.dashboard.dashBoardState.amount);
+  const pieChartData = useAppSelector(state=>state.dashboard.dashBoardState.pieChartData)
   // const [chartData, setChartData] = useState<LineChartGroupType>();
 
   const [runWalkthrough, setRunWalkthrough] = useState(false); // State for Walkthrough
 
   const userId = user?.uid as string;
 
-  const fetchData = () => {
-    Promise.all([
-      getUserAmtData(userId),
-    ]).then((values) => {
-      setPieChartData(values[0]);
-      // setChartData(values[3]);
-    });
-  };
+  // const fetchData = () => {
+  //   Promise.all([
+  //     getUserAmtData(userId),
+  //   ]).then((values) => {
+  //     setPieChartData(values[0]);
+  //     // setChartData(values[3]);
+  //   });
+  // };
   
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchUserData())
-    fetchData();
+    // fetchData();
     const hasShownWalkthrough = localStorage.getItem(`shown${userId}`);
     if (hasShownWalkthrough === userId) {
       setRunWalkthrough(false);

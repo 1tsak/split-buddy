@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RecentBillCardType } from "../../types/types"
-import {  getUserRecentBills, getUserTotalPaidAmt } from "../../services/dashboardServices"
+import { PieChartDataType, RecentBillCardType } from "../../types/types"
+import {  getUserAmtData, getUserRecentBills, getUserTotalPaidAmt } from "../../services/dashboardServices"
 import {getAuth} from 'firebase/auth'
 import { auth } from "../../firebaseConfig"
 
@@ -9,7 +9,8 @@ import { auth } from "../../firebaseConfig"
 export interface DashboardState {
     dashBoardState:{
         amount:number,
-        bills:RecentBillCardType[]
+        bills:RecentBillCardType[],
+        pieChartData:PieChartDataType[]
     }
     status: 'idle' | 'loading' | 'succeeded' | 'failed',
 }
@@ -17,7 +18,8 @@ export interface DashboardState {
 const initialState:DashboardState={
     dashBoardState:{
         amount:0,
-        bills:[]
+        bills:[],
+        pieChartData:[]
     },
     status:'loading',
 }
@@ -33,9 +35,10 @@ export const dashboardSlice = createSlice({
             state.status = 'loading';
         }).addCase(fetchUserData.fulfilled,(state,action)=>{
             state.status = 'succeeded';
-            const {amount,bills} = action.payload;
+            const {amount,bills,pieChartData} = action.payload;
             state.dashBoardState.amount = amount;
-            state.dashBoardState.bills = bills
+            state.dashBoardState.bills = bills;
+            state.dashBoardState.pieChartData = pieChartData;
         }).
         addCase(fetchUserData.rejected, (state, action) => {
             state.status = 'failed'
@@ -44,13 +47,14 @@ export const dashboardSlice = createSlice({
     },
 })
 
-export const fetchUserData = createAsyncThunk<{amount:number,bills:RecentBillCardType[]}>('dashboardSlice/fetchUserData',async()=>{
+export const fetchUserData = createAsyncThunk<{amount:number,bills:RecentBillCardType[],pieChartData:PieChartDataType[]}>('dashboardSlice/fetchUserData',async()=>{
     const userUid= auth.currentUser?.uid as string;
     
     const amount = await getUserTotalPaidAmt(userUid)
     const bills = await getUserRecentBills(userUid);
-    
-    return {amount,bills}
+    const pieChartData = await getUserAmtData(userUid);
+    console.log(pieChartData)
+    return {amount,bills,pieChartData}
 }); 
 
 // export const {} = dashboardSlice.actions;
