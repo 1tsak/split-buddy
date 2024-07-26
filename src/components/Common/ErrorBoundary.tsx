@@ -1,22 +1,49 @@
-import React, { Component } from "react";
+import React, { Component, ReactNode, ErrorInfo } from "react";
+import { MdError } from "react-icons/md";
 
-class ErrorBoundary extends Component {
-  constructor(props) {
+interface ErrorBoundaryProps {
+  children: ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true };
   }
 
-  componentDidCatch(error, errorInfo) {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("Uncaught error:", error, errorInfo);
   }
 
+  handleHomeRedirect = () => {
+    this.setState({ hasError: false });
+    window.location.href = "/";
+  };
+
   render() {
     if (this.state.hasError) {
-      return <h1>Something went wrong.</h1>;
+      return (
+        <div className=" h-full flex items-center justify-center">
+          <div className="h-72 w-96 gap-4 flex flex-col items-center justify-center border-2 border-main shadow-md rounded">
+            <MdError className="text-main" size={50} />
+            <h1 className="text-lg">Something went wrong.</h1>
+            <button
+              onClick={this.handleHomeRedirect}
+              className="py-2 px-4 bg-main text-white"
+            >
+              Return Home
+            </button>
+          </div>
+        </div>
+      );
     }
 
     return this.props.children;

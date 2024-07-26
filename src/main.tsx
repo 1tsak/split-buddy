@@ -7,13 +7,17 @@ import "./i18next.ts";
 import "rsuite/dist/rsuite.min.css";
 import { Provider } from "react-redux";
 import { store } from "./store/store.ts";
+import ErrorBoundary from "./components/Common/ErrorBoundary.tsx";
+import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <StyledEngineProvider injectFirst>
-      <Provider store={store}>
-        <App />
-      </Provider>
+      <ErrorBoundary>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </ErrorBoundary>
     </StyledEngineProvider>
   </BrowserRouter>
 );
