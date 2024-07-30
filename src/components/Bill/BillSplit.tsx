@@ -24,7 +24,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { IoIosArrowForward } from "react-icons/io";
-import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+import { Md30Fps, MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { notificationService } from "../../services/notificationService";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useTranslation } from "react-i18next";
@@ -265,7 +265,7 @@ const BillSplit = ({
                         margin="dense"
                         fullWidth
                         disabled={
-                          member.paid || member.userId === expenseData.createdBy
+                          auth?.currentUser?.uid !== expenseData.createdBy || member.paid && member.userId !== expenseData.createdBy
                         }
                       />
                     </Grid>
