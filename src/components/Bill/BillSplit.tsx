@@ -231,6 +231,8 @@ const BillSplit = ({
                 style={{
                   display: "flex",
                   flexDirection: "column",
+                  borderBottom: "1px solid #ededed",
+                  padding: "0.25rem",
                 }}
               >
                 <li
@@ -249,7 +251,11 @@ const BillSplit = ({
                     </Avatar>
                     <div style={{ marginLeft: "1rem" }}>
                       <p style={{ fontSize: "1.0rem" }}>{member.name}</p>
-                      <p>
+                      <p
+                        style={{
+                          color: "#9c9c9c",
+                        }}
+                      >
                         {member.paid
                           ? t("billSplit.paid")
                           : t("billSplit.unpaid")}
@@ -280,8 +286,9 @@ const BillSplit = ({
                   <Button
                     onClick={() => markPaid(member.userId)}
                     style={{
-                      alignSelf: "flex-end",
+                      alignSelf: "flex-start",
                       marginRight: "1rem",
+                      marginLeft: "3rem",
                     }}
                   >
                     {t("billSplit.markPaid")}

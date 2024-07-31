@@ -21,7 +21,7 @@ const GroupProvider = ({ children }: { children: React.ReactNode }) => {
   const [expenses, setExpensesData] = useState<Expense[] | null>(null);
   const [loading, setLoading] = useState(false);
   const { groupId } = useParams<{ groupId: string }>();
-
+return new Error("")
   const setExpenses = (expenses: Expense[]) => {
     setExpensesData(expenses);
   };

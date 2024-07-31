@@ -32,12 +32,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     if (this.state.hasError) {
       return (
         <div className=" h-full flex items-center justify-center">
-          <div className="h-72 w-96 gap-4 flex flex-col items-center justify-center border-2 border-main shadow-md rounded">
-            <MdError className="text-main" size={50} />
+          <div className="h-72 w-96 gap-4 flex flex-col items-center justify-center border-2 border-red-500 shadow-md rounded">
+            <MdError className="text-red-500" size={50} />
             <h1 className="text-lg">Something went wrong.</h1>
             <button
               onClick={this.handleHomeRedirect}
-              className="py-2 px-4 bg-main text-white"
+              className="py-2 px-4 bg-red-500 text-white"
             >
               Return Home
             </button>
