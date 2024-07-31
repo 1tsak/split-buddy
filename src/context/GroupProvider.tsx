@@ -9,7 +9,7 @@ import React, { createContext, useEffect, useState } from "react";
 
 import { fetchExpenses } from "../services/expenseService";
 import { getGroupById } from "../services/groupService";
-import { getUser } from "../services/authService";
+// import { getUser } from "../services/authService";
 import { useParams } from "react-router-dom";
 
 export const GroupContext = createContext<GroupContextType | undefined>(

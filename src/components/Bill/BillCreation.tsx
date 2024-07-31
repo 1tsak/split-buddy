@@ -36,6 +36,7 @@ type FormDataType = {
 };
 
 const BillCreation = () => {
+  console.log('bill add');
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [userInfo, setUserInfo] = useState<User>();

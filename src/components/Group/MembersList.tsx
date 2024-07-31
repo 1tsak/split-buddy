@@ -92,7 +92,7 @@ const MembersList = () => {
         }
         await addMember(groupData?.id as string, email);
         await notificationService({
-          title: t('newMemberAdded'),
+          title: t('New member added'),
           message: `${user.displayName} has been added to ${groupData?.name}`,
           groupId: `${groupData?.id}`,
         });
