@@ -37,7 +37,7 @@ const validateBill = (splits: any, amount: number) => {
   if (!splits) {
     return { success: false, message: `Error While Generating Bill` };
   }
-  const totalCustomAmount = splits.reduce((acc:any, split:any) => {
+  const totalCustomAmount = splits.reduce((acc: any, split: any) => {
     return acc + split.amount;
   }, 0);
   if (Math.ceil(totalCustomAmount) === Number(amount)) {
@@ -147,7 +147,7 @@ const BillSplit = ({
     const validation = validateBill(updatedSplits, Number(expenseData.amount));
     if (!validation.success) {
       // console.error(validation.message);
-      if(validation.message) handleAddError(validation?.message);
+      if (validation.message) handleAddError(validation?.message);
       setEditingAmounts({});
       return;
     }
@@ -225,65 +225,71 @@ const BillSplit = ({
           </div>
         </DialogTitle>
         <DialogContent style={{ width: "600px" }}>
-          <List>
+          <ul>
             {members.map((member) => (
-              <ListItem key={member.userId}>
-                <Grid
-                  container
-                  alignItems="center"
-                  justifyContent="space-between"
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <li
+                  key={member.userId}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    width: "100%",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
                 >
-                  <Grid item xs={6} container alignItems="center">
-                    <ListItemAvatar>
-                      <Avatar>
-                        <AiOutlineUser />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <div style={{ marginLeft: 10, minWidth: 100 }}>
-                      <Typography component="div">{member.name}</Typography>
-                      <Typography component="div">
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <Avatar>
+                      <AiOutlineUser />
+                    </Avatar>
+                    <div style={{ marginLeft: "1rem" }}>
+                      <p style={{ fontSize: "1.0rem" }}>{member.name}</p>
+                      <p>
                         {member.paid
                           ? t("billSplit.paid")
                           : t("billSplit.unpaid")}
-                      </Typography>
+                      </p>
                     </div>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={6}
-                    container
-                    flexDirection="row"
-                    justifyContent="flex-end"
+                  </div>
+
+                  <TextField
+                    label={t("Amount")}
+                    value={editingAmounts[member.userId] || member.amount}
+                    onChange={(e) =>
+                      handleAmountChange(member.userId, e.target.value)
+                    }
+                    margin="dense"
+                    fullWidth
+                    disabled={
+                      auth?.currentUser?.uid !== expenseData.createdBy ||
+                      (member.paid && member.userId !== expenseData.createdBy)
+                    }
+                    style={{
+                      width: "200px",
+                      marginLeft: "1rem",
+                      marginRight: "1rem",
+                    }} // Adjust space around TextField
+                  />
+                </li>
+                {expenseData.createdBy === user?.uid && !member.paid && (
+                  <Button
+                    onClick={() => markPaid(member.userId)}
+                    style={{
+                      alignSelf: "flex-end",
+                      marginRight: "1rem",
+                    }}
                   >
-                    <Grid item>
-                      <TextField
-                        label={t("Amount")}
-                        value={editingAmounts[member.userId] || member.amount}
-                        onChange={(e) =>
-                          handleAmountChange(member.userId, e.target.value)
-                        }
-                        margin="dense"
-                        fullWidth
-                        disabled={
-                          auth?.currentUser?.uid !== expenseData.createdBy || member.paid && member.userId !== expenseData.createdBy
-                        }
-                      />
-                    </Grid>
-                    {expenseData.createdBy === user?.uid && !member.paid && (
-                      <Grid item>
-                        <Button
-                          onClick={() => markPaid(member.userId)}
-                          className="bg-red"
-                        >
-                          {t("billSplit.markPaid")}
-                        </Button>
-                      </Grid>
-                    )}
-                  </Grid>
-                </Grid>
-              </ListItem>
+                    {t("billSplit.markPaid")}
+                  </Button>
+                )}
+              </div>
             ))}
-          </List>
+          </ul>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>{t("billSplit.close")}</Button>
