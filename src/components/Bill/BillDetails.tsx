@@ -10,11 +10,9 @@ import { Expense, Split } from "../../types/types";
 import { Link, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { addBillImage, uploadImage } from "../../services/expenseService";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 import BillSplit from "./BillSplit";
 import { getAuth } from "firebase/auth";
-import { storage } from "../../firebaseConfig";
 import useGroup from "../../hooks/useGroup";
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 
