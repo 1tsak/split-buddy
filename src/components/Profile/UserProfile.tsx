@@ -13,10 +13,11 @@ import React, { useEffect, useState } from 'react';
 import { auth, storage } from '../../firebaseConfig';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
-import { User } from '../../types/types';
+
 import { updateUserProfile } from '../../services/firebaseAuth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useTranslation } from 'react-i18next';
+import { User } from 'firebase/auth';
 
 const UserProfile: React.FC = () => {
   const { t } = useTranslation();
@@ -27,6 +28,7 @@ const UserProfile: React.FC = () => {
   const [uploading, setUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+
 
   useEffect(() => {
     if (authUser) {
@@ -43,7 +45,7 @@ const UserProfile: React.FC = () => {
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const storageRef = ref(storage, `profileImages/${user?.uid}`);
+      const storageRef = ref(storage, `profileImages/${authUser?.uid}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
 
       uploadTask.on(

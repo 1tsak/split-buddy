@@ -11,16 +11,18 @@ import {
 import React, { useEffect, useState } from 'react';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
-import { User } from '../../types/types';
+
 import { storage } from '../../firebaseConfig';
 import { updateUserProfile } from '../../services/firebaseAuth';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { User } from 'firebase/auth';
+
 
 interface UserInfoModalProps {
   isOpen: boolean;
   onClose: () => void;
-  user: User | null;
+  user: User;
   onLogout: () => void;
   onUserProfileUpdate: (updatedUser: User) => void;
 }

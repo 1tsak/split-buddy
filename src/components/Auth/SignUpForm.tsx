@@ -61,7 +61,7 @@ const SignUpForm: React.FC = () => {
     }
 
     try {
-      const userCredential = await signUp(data.email, data.password);
+      const userCredential = await signUp(data.email, data.password,data.firstName,data.lastName);
       const user = userCredential.user;
       const token = await getClientCurrentToken();
       const newUser: User = {

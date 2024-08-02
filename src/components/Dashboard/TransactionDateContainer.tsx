@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { TransactionCardType } from '../utils/types'
+import { TransactionCardType } from '../../types/types'
 import { CiCalendarDate } from 'react-icons/ci'
 import TransactionCard from './TransactionCard'
 
