@@ -10,7 +10,7 @@ import {
   } from "firebase/firestore";
   import { db, auth } from "../firebaseConfig";
   
-  export const getChatMessages = (groupId: string, callback: (messages: any[]) => void) => {
+  export const getChatMessages = (groupId: string, callback: any) => {
     const groupRef = doc(db, "groups", groupId);
     const chatCollectionRef = collection(groupRef, "chats");
     const q = query(chatCollectionRef, orderBy("timestamp", "asc"));
