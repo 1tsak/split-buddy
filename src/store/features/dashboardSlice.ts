@@ -39,6 +39,7 @@ export const dashboardSlice = createSlice({
         state.status = "succeeded";
         const { amount, bills, pieChartData } = action.payload;
         state.dashBoardState.amount = amount;
+        console.log(amount)
         state.dashBoardState.bills = bills;
         state.dashBoardState.pieChartData = pieChartData;
       })
@@ -56,10 +57,13 @@ export const fetchUserData = createAsyncThunk<{
   const userUid = auth.currentUser?.uid as string;
 
   const amount = await getUserTotalPaidAmt(userUid);
-  const bills = await getUserRecentBills(userUid);
+  
+  
+    const bills = await getUserRecentBills(userUid);
   const pieChartData = await getUserAmtData(userUid);
-  console.log(pieChartData);
+  console.log(bills,pieChartData,"pdata")
   return { amount, bills, pieChartData };
+  
 });
 
 // export const {} = dashboardSlice.actions;
