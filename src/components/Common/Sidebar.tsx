@@ -5,10 +5,10 @@ import React, { useEffect, useState } from "react";
 import GroupIcon from "@mui/icons-material/Group";
 import HomeIcon from "@mui/icons-material/Home";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { User } from "../../types/types";
+
 import UserInfoModal from "../Profile/UserInfoModal";
 import { auth } from "../../firebaseConfig";
-import { signOut } from "firebase/auth";
+import { signOut, User } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useTranslation } from "react-i18next";
 
@@ -22,7 +22,7 @@ const Sidebar: React.FC = () => {
 
   useEffect(() => {
     if (authUser) {
-      setUser(authUser as any);
+      setUser(authUser);
     }
   }, [authUser]);
 
@@ -115,7 +115,7 @@ const Sidebar: React.FC = () => {
       <UserInfoModal
         isOpen={isModalOpen}
         onClose={handleModalClose}
-        user={user}
+        user={user as User}
         onLogout={handleLogout}
         onUserProfileUpdate={handleUserProfileUpdate}
       />
